@@ -11,16 +11,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         :root {
-            /* Colores Intro (Sobre) */
+            /* --- VARIABLES DEL INTRO (SOBRE) --- */
             --utpl-navy: #002855;
             --utpl-navy-dark: #001a38;
             --gold-leaf: #d4af37;
+            --gold-shimmer: #f9e59e;
             --bg-gradient-inner: #050a14;
 
-            /* Colores Invitación (Carta Restaurada) */
+            /* --- VARIABLES DE LA INVITACIÓN (CARTA FINAL) --- */
             --primary: #003366; /* Azul UTPL Profundo */
             --primary-dark: #002244;
             --gold: #C5A059;   /* Dorado Elegante */
@@ -37,26 +39,23 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background: radial-gradient(circle at center, #1a2a40 0%, #050a14 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow: hidden; /* Inicialmente oculto para el intro */
         }
 
         /* =========================================
-           1. ESCENA DEL SOBRE (INTRO)
+           1. ESTILOS DEL INTRO (SOBRE ELEGANTE)
            ========================================= */
         #intro-scene {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 2000;
-            perspective: 1500px;
-            transition: opacity 1.2s ease, visibility 1.2s;
+            perspective: 1200px;
+            transition: opacity 1.5s ease, visibility 1.5s;
         }
 
-        /* Nieve */
+        /* Nieve Intro */
         .snowflake {
             position: absolute;
             color: rgba(255, 255, 255, 0.3);
@@ -75,11 +74,10 @@
         /* Contenedor del Sobre */
         .wrapper {
             position: relative;
-            width: 320px; /* Ajustado para móviles */
-            height: 220px;
+            width: 340px; /* Móvil */
+            height: 240px;
             z-index: 10;
             transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
         }
         @media (min-width: 768px) {
             .wrapper { width: 520px; height: 340px; }
@@ -90,143 +88,124 @@
             background: var(--utpl-navy);
             box-shadow: 0 30px 60px rgba(0,0,0,0.6);
             border-radius: 4px;
-            transform-style: preserve-3d; /* Importante para 3D */
+            z-index: 10;
+            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
         }
 
-        /* Interior del sobre */
         .envelope-inner {
             position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
-            background: #0b1424; z-index: 1; border-radius: 3px;
+            background: var(--bg-gradient-inner);
+            z-index: 1; border-radius: 3px;
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.8);
+            display: flex; justify-content: center; align-items: center;
         }
 
-        /* Tarjeta Preview (La que sale del sobre) */
-        .card-preview {
-            position: absolute;
-            width: 90%; height: 90%;
-            left: 5%; top: 50%; 
-            transform: translateY(-50%); /* Centrado verticalmente */
-            background: #fff;
-            z-index: 2; /* Entre el fondo y las solapas */
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-            border-top: 5px solid var(--gold-leaf);
-            display: flex; justify-content: center; padding-top: 30px;
+        /* Luz mágica dentro */
+        .magic-light {
+            width: 10px; height: 10px;
+            background: var(--gold-shimmer);
+            box-shadow: 0 0 60px 30px var(--gold-leaf);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.5s;
         }
-        .card-preview span {
-            font-family: 'Cinzel', serif; font-size: 24px; color: var(--utpl-navy); 
-            font-weight: 700; letter-spacing: 4px; opacity: 0.3;
-        }
+        .wrapper.open .magic-light { opacity: 1; }
 
         /* Solapas */
-        .flap {
-            position: absolute; width: 0; height: 0; border-style: solid; pointer-events: none;
-        }
+        .flap { position: absolute; width: 0; height: 0; border-style: solid; pointer-events: none; }
 
         .flap-left {
             top: 0; left: 0; bottom: 0;
-            border-width: 110px 0 110px 160px; /* Mobile */
+            border-width: 120px 0 120px 170px; /* Móvil */
             border-color: transparent transparent transparent var(--utpl-navy);
             z-index: 20; filter: brightness(1.1);
         }
         .flap-right {
             top: 0; right: 0; bottom: 0;
-            border-width: 110px 160px 110px 0; /* Mobile */
+            border-width: 120px 170px 120px 0; /* Móvil */
             border-color: transparent var(--utpl-navy-dark) transparent transparent;
             z-index: 20;
         }
         .flap-bottom {
             bottom: 0; left: 0;
-            border-width: 0 160px 120px 160px; /* Mobile */
+            border-width: 0 170px 130px 170px; /* Móvil */
             border-color: transparent transparent var(--utpl-navy) transparent;
             z-index: 21; filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.3));
         }
-
-        /* Solapa Superior (Animada) */
-        .flap-top {
-            top: 0; left: 0;
-            border-width: 130px 160px 0 160px; /* Mobile */
-            border-color: var(--utpl-navy-dark) transparent transparent transparent;
-            z-index: 30;
-            transform-origin: top;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.4s;
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
-        }
-
-        /* Ajustes de tamaño de solapa para Desktop */
+        
         @media (min-width: 768px) {
             .flap-left { border-width: 170px 0 170px 270px; }
             .flap-right { border-width: 170px 270px 170px 0; }
             .flap-bottom { border-width: 0 260px 175px 260px; }
+        }
+
+        /* Tapa Superior */
+        .flap-top {
+            top: 0; left: 0;
+            border-width: 130px 170px 0 170px; /* Móvil */
+            border-color: var(--utpl-navy-dark) transparent transparent transparent;
+            z-index: 30;
+            transform-origin: top;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
+        }
+        @media (min-width: 768px) {
             .flap-top { border-width: 180px 260px 0 260px; }
         }
 
         /* Sello */
         .seal {
             position: absolute;
-            top: -100px; /* Posición relativa al borde de la solapa top (mobile) */
-            left: 50%; transform: translate(-50%, -50%);
+            top: -100px; left: 50%; transform: translate(-50%, 60%);
             width: 70px; height: 70px;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #e6cf8b, #bfa058, #7a5e20);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.4);
             z-index: 31;
             display: flex; justify-content: center; align-items: center;
-            cursor: pointer; pointer-events: all;
-            transition: opacity 0.5s;
             border: 2px solid rgba(255,255,255,0.1);
         }
         @media (min-width: 768px) {
-            .seal { top: -140px; width: 90px; height: 90px; } /* Ajuste desktop */
+            .seal { top: -140px; width: 90px; height: 90px; } /* Desktop pos */
         }
 
+        .seal::before {
+            content: ''; position: absolute; width: 75%; height: 75%;
+            border-radius: 50%; border: 1px dashed rgba(122, 94, 32, 0.5);
+        }
         .seal span {
             font-family: 'Cinzel', serif; font-weight: 700; font-size: 1rem; color: #5c4213; text-shadow: 0 1px 0 rgba(255,255,255,0.3);
         }
 
-        .click-hint {
-            position: absolute; bottom: -60px; width: 100%; text-align: center;
-            color: rgba(255,255,255,0.5); font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-            animation: pulse 2s infinite; pointer-events: none;
-        }
-        @keyframes pulse { 50% { opacity: 0.4; } }
-
-        /* --- CLASES DE ANIMACIÓN (JS) --- */
+        /* Animación de apertura */
         .wrapper.open .flap-top {
             transform: rotateX(180deg);
-            z-index: 1; /* Pasa detrás de la tarjeta */
-        }
-        .wrapper.open .seal {
-            opacity: 0; pointer-events: none;
-        }
-        .wrapper.open .card-preview {
-            transform: translateY(-120%); /* La tarjeta sale hacia arriba */
-            transition-delay: 0.4s; /* Espera a que abra */
-            z-index: 25; /* Pasa por encima del bolsillo bottom */
+            z-index: 1; 
         }
         .wrapper.zoom-out {
-            transform: scale(2) translateY(50px); /* Efecto de acercamiento */
-            opacity: 0; /* Desvanecer */
+            transform: scale(3);
+            opacity: 0;
         }
 
         /* =========================================
-           2. INVITACIÓN FINAL (DISEÑO RESTAURADO)
+           2. ESTILOS DE LA INVITACIÓN FINAL
            ========================================= */
         #final-interface {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; visibility: hidden;
-            transition: opacity 1.5s ease;
+            transition: opacity 2s ease;
             z-index: 100;
-            background-color: var(--bg-body); /* Fondo final claro */
-            background-image: radial-gradient(var(--gold-light) 1px, transparent 1px); /* Patrón puntos */
+            background-color: var(--bg-body);
+            background-image: radial-gradient(var(--gold-light) 1px, transparent 1px);
             background-size: 30px 30px;
-            overflow-y: auto; /* Permitir scroll */
+            overflow-y: auto;
+            padding: 20px 0;
         }
         
         #final-interface.active { opacity: 1; visibility: visible; }
 
-        /* Tarjeta Estilo Original (Restaurada) */
-        .card-wrapper { padding: 20px; width: 100%; display: flex; justify-content: center; }
+        .card-wrapper { padding: 10px; width: 100%; display: flex; justify-content: center; min-height: 100%; align-items: center; }
         
         .card {
             width: 100%; max-width: 500px;
@@ -235,19 +214,18 @@
             box-shadow: 0 30px 60px -10px rgba(0, 51, 102, 0.25);
             overflow: hidden;
             border-radius: 4px;
-            /* Marco dorado sutil interno */
             border: 1px solid rgba(197, 160, 89, 0.3);
+            animation: slideUp 1s ease-out forwards;
+            opacity: 0; transform: translateY(50px);
         }
+        
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
 
-        /* Header con Animación Nieve (Restaurado) */
+        /* Header */
         .header {
             background-color: var(--primary);
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            padding: 40px 30px; text-align: center; position: relative;
         }
-
         .logo-utpl {
             font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 28px;
             color: var(--white); letter-spacing: 2px; text-transform: uppercase;
@@ -269,34 +247,36 @@
 
         h1 {
             font-family: 'Cormorant Garamond', serif; color: var(--primary);
-            font-size: 42px; margin: 5px 0 15px 0; font-weight: 600; line-height: 1;
+            font-size: 38px; margin: 5px 0 15px 0; font-weight: 600; line-height: 1;
         }
+        @media(min-width: 400px) { h1 { font-size: 42px; } }
+        
         h1 span {
-            display: block; font-size: 0.6em; font-family: 'Montserrat', sans-serif;
+            display: block; font-size: 0.5em; font-family: 'Montserrat', sans-serif;
             font-weight: 300; color: var(--text-grey); margin-top: 5px; letter-spacing: 1px; text-transform: uppercase;
         }
 
         .quote-container { margin: 25px auto; position: relative; max-width: 90%; }
         .quote-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: #444; line-height: 1.4; }
 
-        /* Detalles Grid (Perfectamente cuadrado) */
+        /* Detalles Grid */
         .details-row {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
             margin: 30px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;
             padding: 20px 0; align-items: start;
         }
         .detail-group { text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .detail-label { font-size: 10px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 6px; height: 12px; }
+        .detail-label { font-size: 10px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 6px; }
         .detail-value { font-family: 'Montserrat', sans-serif; font-weight: 600; color: var(--primary); font-size: 13px; line-height: 1.4; }
         
         .location-link { text-decoration: none; color: var(--primary); transition: color 0.3s; display: inline-block; }
         .location-link:hover { color: var(--gold); }
-        .icon-map { font-size: 14px; vertical-align: middle; display: inline-block; margin-left: 2px; }
+        .icon-map { font-size: 12px; vertical-align: middle; display: inline-block; margin-left: 2px; }
 
         /* Botones */
         .btn-container { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
         .btn {
-            border: none; padding: 16px 20px; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600;
+            border: none; padding: 16px 20px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600;
             text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s ease;
             position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
@@ -339,40 +319,33 @@
 <body>
 
     <!-- 1. ESCENA DEL SOBRE (Intro) -->
-    <div id="intro-scene" onclick="openEnvelope()">
-        <div id="snowContainer"></div> <!-- Nieve JS -->
+    <div id="intro-scene">
+        <div id="snowContainer"></div>
         
         <div class="wrapper" id="envelopeWrapper">
             <div class="envelope">
-                <div class="envelope-inner"></div>
-                
-                <!-- Tarjeta Preview (visual) -->
-                <div class="card-preview">
-                    <span>UTPL</span>
+                <div class="envelope-inner">
+                    <div class="magic-light"></div>
                 </div>
-
-                <!-- Bolsillos -->
+                
                 <div class="flap flap-left"></div>
                 <div class="flap flap-right"></div>
                 <div class="flap flap-bottom"></div>
-                
-                <!-- Tapa y Sello -->
                 <div class="flap flap-top">
-                    <div class="seal" id="sealBtn">
+                    <div class="seal">
                         <span>UTPL</span>
                     </div>
                 </div>
             </div>
-            <div class="click-hint">Toca el sello para abrir</div>
         </div>
     </div>
 
-    <!-- 2. INVITACIÓN RESTAURADA (Exacta a la que te gustó) -->
+    <!-- 2. INVITACIÓN FINAL -->
     <div id="final-interface">
         <div class="card-wrapper">
             <div class="card">
                 
-                <!-- Header con nieve sutil -->
+                <!-- Header -->
                 <div class="header">
                     <div class="logo-container">
                         <div class="logo-utpl">UTPL</div>
@@ -406,7 +379,6 @@
                         </div>
                         <div class="detail-group">
                             <div class="detail-label">Lugar</div>
-                            <!-- Enlace a Google Maps -->
                             <a href="https://maps.app.goo.gl/JsVaXVVZsPSEiEv17" target="_blank" class="location-link">
                                 <div class="detail-value">Manta</div>
                                 <div class="detail-value" style="font-weight: 500; font-size: 12px; margin-top: 2px;">Hotel Poseidon</div>
@@ -438,8 +410,6 @@
     </div>
 
     <!-- Modales -->
-    
-    <!-- Asistencia -->
     <div id="modal-asistencia" class="modal-backdrop" onclick="toggleModal('modal-asistencia')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="close-modal" onclick="toggleModal('modal-asistencia')">&times;</button>
@@ -458,7 +428,6 @@
         </div>
     </div>
 
-    <!-- Vestimenta -->
     <div id="modal-dress" class="modal-backdrop" onclick="toggleModal('modal-dress')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="close-modal" onclick="toggleModal('modal-dress')">&times;</button>
@@ -486,7 +455,6 @@
         </div>
     </div>
 
-    <!-- Itinerario -->
     <div id="modal-itinerary" class="modal-backdrop" onclick="toggleModal('modal-itinerary')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="close-modal" onclick="toggleModal('modal-itinerary')">&times;</button>
@@ -503,11 +471,12 @@
     </div>
 
     <script>
-        // --- 1. NIEVE ---
-        const snowContainer = document.getElementById('snowContainer'); 
+        // 1. NIEVE INTRO
+        const snowContainer = document.getElementById('snowContainer');
+        const chars = ['❄', '❅', '❆', '•'];
+        
         function createSnowflakes() {
-            const container = document.getElementById('intro-scene');
-            const chars = ['❄', '❅', '❆', '•'];
+            const container = document.getElementById('snowContainer');
             for (let i = 0; i < 40; i++) {
                 const flake = document.createElement('div');
                 flake.classList.add('snowflake');
@@ -522,42 +491,33 @@
         }
         createSnowflakes();
 
-        // --- 2. LÓGICA DE APERTURA ---
-        let opened = false;
-        function openEnvelope() {
-            if (opened) return;
-            opened = true;
-
-            const wrapper = document.getElementById('envelopeWrapper');
-            const introScene = document.getElementById('intro-scene');
-            const finalInterface = document.getElementById('final-interface');
-            const hint = document.querySelector('.click-hint');
-
-            // 1. Abrir sobre
-            wrapper.classList.add('open');
-            if(hint) hint.style.opacity = 0;
-
-            // 2. Transición suave
+        // 2. APERTURA AUTOMÁTICA
+        window.onload = function() {
             setTimeout(() => {
-                // Zoom out y fade
-                wrapper.classList.add('zoom-out'); 
-                
-                setTimeout(() => {
-                    // 3. Mostrar invitacion final
-                    introScene.style.opacity = 0;
-                    finalInterface.classList.add('active');
-                    
-                    // Limpieza
-                    setTimeout(() => {
-                        introScene.style.visibility = 'hidden';
-                        document.body.style.background = '#f3f4f6'; // Fondo final del body (coincide con bg-body de la invitación)
-                        document.body.style.overflowY = 'auto';
-                    }, 1000);
-                }, 600);
-            }, 1200); // Tiempo para ver la tarjeta asomar
-        }
+                const wrapper = document.getElementById('envelopeWrapper');
+                const introScene = document.getElementById('intro-scene');
+                const finalInterface = document.getElementById('final-interface');
 
-        // --- 3. LÓGICA DE MODALES ---
+                // 1. Abrir sobre
+                wrapper.classList.add('open');
+
+                // 2. Transición hacia la invitación
+                setTimeout(() => {
+                    wrapper.classList.add('zoom-out'); 
+                    
+                    setTimeout(() => {
+                        introScene.style.opacity = 0;
+                        introScene.style.visibility = 'hidden';
+                        
+                        finalInterface.classList.add('active');
+                        document.body.style.background = '#f3f4f6';
+                        document.body.style.overflowY = 'auto'; // Habilitar scroll
+                    }, 800);
+                }, 1200); // Tiempo esperando abierto
+            }, 2000); // 2 segundos antes de empezar a abrir
+        };
+
+        // 3. LÓGICA DE MODALES
         function toggleModal(id) {
             const modal = document.getElementById(id);
             if (modal.classList.contains('modal-active')) {
@@ -572,8 +532,17 @@
         }
 
         function enviarConfirmacion() {
-            alert("¡Asistencia Confirmada! Gracias.");
-            toggleModal('modal-asistencia');
+            // Aquí puedes agregar lógica real de envío
+            const btn = document.querySelector('#modal-asistencia .btn-gold');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Enviando...';
+            setTimeout(() => {
+                btn.innerHTML = '¡Confirmado!';
+                setTimeout(() => {
+                    toggleModal('modal-asistencia');
+                    btn.innerHTML = originalText;
+                }, 1000);
+            }, 1000);
         }
     </script>
 </body>

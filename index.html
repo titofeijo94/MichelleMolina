@@ -8,7 +8,7 @@
     <!-- Fuentes Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -19,7 +19,7 @@
             --gold-light: #E5C585;
             --gold-gradient: linear-gradient(135deg, #C5A059 0%, #E5C585 50%, #B08D55 100%);
             --white: #ffffff;
-            --bg-body: #f3f4f6;
+            --bg-body: #f0f2f5;
             --text-dark: #1a1a1a;
             --text-grey: #555555;
         }
@@ -27,6 +27,7 @@
         * {
             box-sizing: border-box;
             outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -34,11 +35,9 @@
             padding: 0;
             background-color: var(--bg-body);
             /* Patrón sutil de fondo */
-            background-image: 
-                radial-gradient(var(--gold-light) 1px, transparent 1px),
-                radial-gradient(var(--gold-light) 1px, transparent 1px);
-            background-position: 0 0, 25px 25px;
-            background-size: 50px 50px;
+            background-image: radial-gradient(#d4af37 0.5px, transparent 0.5px), radial-gradient(#d4af37 0.5px, #f0f2f5 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             display: flex;
@@ -54,27 +53,28 @@
             width: 100%;
             display: flex;
             justify-content: center;
+            perspective: 1000px;
         }
 
         .card {
             width: 100%;
             max-width: 500px;
             background-color: var(--white);
+            /* Textura de papel sutil */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
             position: relative;
-            box-shadow: 0 30px 60px -10px rgba(0, 51, 102, 0.25); /* Sombra azulada elegante */
+            box-shadow: 0 25px 50px -12px rgba(0, 51, 102, 0.25);
             overflow: hidden;
-            border-radius: 4px; /* Bordes menos redondeados para formalidad */
+            border-radius: 2px;
+            transition: transform 0.3s ease;
         }
 
         /* Marco Dorado Decorativo Interno */
         .card::before {
             content: '';
             position: absolute;
-            top: 12px;
-            left: 12px;
-            right: 12px;
-            bottom: 12px;
-            border: 1px solid rgba(197, 160, 89, 0.3); /* Borde dorado muy sutil */
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid rgba(197, 160, 89, 0.25);
             pointer-events: none;
             z-index: 5;
         }
@@ -82,27 +82,25 @@
         /* --- Header con Animación --- */
         .header {
             background-color: var(--primary);
-            padding: 40px 30px;
+            padding: 45px 30px;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        /* Efecto de destellos (nieve dorada) */
+        /* Nieve dorada mejorada */
         .sparkle {
             position: absolute;
-            width: 3px;
-            height: 3px;
-            background-color: var(--gold-light);
+            background-color: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             opacity: 0;
-            animation: snowfall 5s linear infinite;
+            animation: snowfall linear infinite;
         }
 
         @keyframes snowfall {
-            0% { transform: translateY(-10px); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(150px); opacity: 0; }
+            0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(120px) translateX(20px); opacity: 0; }
         }
 
         .logo-container {
@@ -113,75 +111,78 @@
         .logo-utpl {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 28px;
+            font-size: 32px;
             color: var(--white);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .logo-sub {
             display: block;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 16px;
+            font-size: 15px;
             color: var(--gold-light);
-            letter-spacing: 4px;
-            margin-top: 5px;
+            letter-spacing: 5px;
+            margin-top: 8px;
             font-style: italic;
+            text-transform: uppercase;
         }
 
         /* Separador dorado */
         .gold-divider {
-            height: 3px;
+            height: 4px;
             background: var(--gold-gradient);
             width: 100%;
             position: relative;
             z-index: 6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         /* --- Contenido --- */
         .content {
-            padding: 40px 30px;
+            padding: 50px 35px;
             text-align: center;
             position: relative;
-            z-index: 6; /* Sobre el borde decorativo */
+            z-index: 6;
         }
 
         /* Títulos */
         .pre-header {
             text-transform: uppercase;
-            font-size: 10px;
+            font-size: 11px;
             letter-spacing: 3px;
             color: var(--gold);
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: inline-block;
-            border-bottom: 1px solid var(--gold);
-            padding-bottom: 3px;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.4);
+            padding-bottom: 4px;
         }
 
         h1 {
             font-family: 'Cormorant Garamond', serif;
             color: var(--primary);
-            font-size: 42px; /* Más grande y elegante */
-            margin: 5px 0 15px 0;
+            font-size: 46px;
+            margin: 5px 0 10px 0;
             font-weight: 600;
-            line-height: 1;
+            line-height: 0.95;
         }
 
         h1 span {
             display: block;
-            font-size: 0.6em;
+            font-size: 0.5em;
             font-family: 'Montserrat', sans-serif;
-            font-weight: 300;
+            font-weight: 400;
             color: var(--text-grey);
-            margin-top: 5px;
-            letter-spacing: 1px;
+            margin-top: 8px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
         /* Frase */
         .quote-container {
-            margin: 25px auto;
+            margin: 30px auto;
             position: relative;
             max-width: 90%;
         }
@@ -189,28 +190,28 @@
         .quote-text {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
-            font-size: 18px;
-            color: #444;
-            line-height: 1.4;
+            font-size: 19px;
+            color: #4a4a4a;
+            line-height: 1.5;
         }
         
         .ornament-icon {
             color: var(--gold);
-            font-size: 20px;
-            margin-bottom: 10px;
-            opacity: 0.8;
+            font-size: 24px;
+            margin-bottom: 15px;
+            opacity: 0.9;
         }
 
-        /* Detalles Grid MEJORADO */
+        /* Detalles Grid Perfecta */
         .details-row {
-            display: grid; /* Usamos Grid para anchos exactos */
-            grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin: 30px 0;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-            padding: 20px 0;
-            align-items: start; /* Alineamos al top para que los títulos siempre coincidan */
+            margin: 35px 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 25px 0;
+            align-items: start;
         }
 
         .detail-group {
@@ -218,79 +219,102 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100%;
         }
 
         .detail-label {
             font-size: 10px;
             text-transform: uppercase;
             color: #999;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            height: 12px; /* Altura fija para alinear títulos */
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .detail-value {
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
             color: var(--primary);
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.4;
         }
 
+        /* Enlace ubicación refinado */
         .location-link {
             text-decoration: none;
             color: var(--primary);
-            transition: color 0.3s;
+            transition: all 0.3s ease;
             cursor: pointer;
-            display: inline-block;
-        }
-        .location-link:hover {
-            color: var(--gold);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
-        /* Ajuste para que el icono se vea bien junto al texto o debajo si es necesario */
+        .location-link:hover {
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+        
         .icon-map { 
             font-size: 14px; 
-            vertical-align: middle;
-            display: inline-block;
-            margin-left: 2px;
+            margin-top: 4px;
+            opacity: 0.8;
         }
 
         /* --- Botones --- */
         .btn-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 18px;
+            margin-top: 35px;
         }
 
         .btn {
             border: none;
-            padding: 16px 20px;
+            padding: 18px 25px;
             font-family: 'Montserrat', sans-serif;
             font-size: 13px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
+            border-radius: 3px;
         }
 
+        /* Botón Principal con Efecto Shimmer */
         .btn-gold {
             background: var(--gold-gradient);
             color: var(--white);
-            box-shadow: 0 10px 20px -5px rgba(197, 160, 89, 0.4);
+            box-shadow: 0 8px 20px -6px rgba(197, 160, 89, 0.6);
+            z-index: 1;
+        }
+
+        .btn-gold::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+            z-index: -1;
         }
 
         .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 25px -5px rgba(197, 160, 89, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px -6px rgba(197, 160, 89, 0.7);
+        }
+
+        .btn-gold:hover::after {
+            left: 100%;
         }
 
         .btn-links {
@@ -301,36 +325,41 @@
 
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--primary);
+            border: 1px solid rgba(0, 51, 102, 0.3);
             color: var(--primary);
+            padding: 14px;
+            font-size: 11px;
         }
 
         .btn-outline:hover {
+            border-color: var(--primary);
             background-color: var(--primary);
             color: var(--white);
+            transform: translateY(-2px);
         }
 
         /* --- Footer --- */
         .footer {
-            margin-top: 40px;
+            margin-top: 45px;
             font-size: 11px;
-            color: #888;
+            color: #999;
+            letter-spacing: 0.5px;
         }
 
         .signature {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 16px;
+            font-size: 18px;
             color: var(--primary);
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
 
         /* --- MODALES --- */
         .modal-backdrop {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 30, 60, 0.5);
-            backdrop-filter: blur(8px); /* Efecto Glass elegante */
+            background: rgba(0, 20, 40, 0.6);
+            backdrop-filter: blur(6px);
             z-index: 1000;
             display: none;
             justify-content: center;
@@ -347,18 +376,18 @@
         .modal-content {
             background: #fff;
             width: 90%;
-            max-width: 450px;
+            max-width: 420px;
             padding: 40px 30px;
             position: relative;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-            transform: translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
             text-align: center;
-            border-top: 4px solid var(--gold);
+            border-top: 3px solid var(--gold);
         }
 
         .modal-active .modal-content {
-            transform: translateY(0);
+            transform: scale(1) translateY(0);
         }
 
         .close-modal {
@@ -368,59 +397,80 @@
             background: none;
             border: none;
             font-size: 24px;
-            color: #999;
+            color: #ccc;
             cursor: pointer;
             transition: color 0.3s;
+            padding: 5px;
         }
         
         .close-modal:hover { color: var(--primary); }
 
         .modal-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 26px;
+            font-size: 24px;
             color: var(--primary);
-            margin: 0 0 20px;
-            border-bottom: 1px solid #eee;
+            margin: 0 0 25px;
+            border-bottom: 1px solid #f0f0f0;
             padding-bottom: 15px;
+            letter-spacing: 0.5px;
         }
 
-        /* Lista de Asistentes */
+        /* Lista de Asistentes Estilizada */
         .attendees-list {
             text-align: left;
             max-height: 250px;
             overflow-y: auto;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             padding-right: 5px;
+            border: 1px solid #f5f5f5;
+            border-radius: 4px;
         }
         
-        .attendees-list::-webkit-scrollbar { width: 5px; }
-        .attendees-list::-webkit-scrollbar-thumb { background: var(--gold-light); border-radius: 4px; }
+        .attendees-list::-webkit-scrollbar { width: 4px; }
+        .attendees-list::-webkit-scrollbar-track { background: #fff; }
+        .attendees-list::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
 
         .attendee-item {
             display: flex;
             align-items: center;
-            padding: 10px;
+            padding: 12px 15px;
             border-bottom: 1px solid #f9f9f9;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .attendee-item:last-child { border-bottom: none; }
+        .attendee-item:hover { background-color: #fafafa; }
+        
+        /* Checkbox personalizado */
+        .attendee-item input { 
+            margin-right: 12px; 
+            accent-color: var(--primary); 
+            transform: scale(1.2); 
             cursor: pointer;
         }
         
-        .attendee-item:hover { background-color: #fcfcfc; }
-        
-        .attendee-item input { margin-right: 10px; accent-color: var(--primary); transform: scale(1.1); }
-        .attendee-name { font-size: 14px; color: #444; }
+        .attendee-name { 
+            font-size: 14px; 
+            color: #444; 
+            font-weight: 500;
+        }
 
         /* Timeline en Modal */
         .timeline-elegant {
             text-align: left;
-            border-left: 2px solid var(--gold-light);
+            border-left: 2px solid #e0e0e0;
             padding-left: 25px;
             margin-left: 15px;
+            margin-top: 10px;
         }
 
         .t-item {
             position: relative;
             margin-bottom: 30px;
         }
+        
+        .t-item:last-child { margin-bottom: 0; }
 
         .t-item::before {
             content: '';
@@ -432,22 +482,28 @@
             background: var(--white);
             border: 2px solid var(--gold);
             border-radius: 50%;
+            box-shadow: 0 0 0 3px #fff;
         }
 
         .t-time {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            color: var(--gold);
+            color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 4px;
             display: block;
+            background: #f0f4f8;
+            padding: 2px 6px;
+            display: inline-block;
+            border-radius: 3px;
         }
 
         .t-desc {
             font-size: 14px;
             color: #444;
             font-weight: 500;
+            margin-top: 3px;
         }
 
         /* Iconos SVG */
@@ -464,13 +520,13 @@
 <div class="card-wrapper">
     <div class="card">
         
-        <!-- Header con animación de destellos -->
+        <!-- Header -->
         <div class="header">
-            <!-- Destellos -->
-            <div class="sparkle" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
-            <div class="sparkle" style="top: 30%; left: 80%; animation-delay: 1.5s;"></div>
-            <div class="sparkle" style="top: 60%; left: 40%; animation-delay: 2.5s;"></div>
-            <div class="sparkle" style="top: 20%; left: 90%; animation-delay: 3.5s;"></div>
+            <!-- Nieve dorada -->
+            <div class="sparkle" style="width: 4px; height: 4px; left: 20%; animation-duration: 4s; animation-delay: 0s;"></div>
+            <div class="sparkle" style="width: 3px; height: 3px; left: 70%; animation-duration: 5s; animation-delay: 1.5s;"></div>
+            <div class="sparkle" style="width: 2px; height: 2px; left: 40%; animation-duration: 6s; animation-delay: 2.5s;"></div>
+            <div class="sparkle" style="width: 3px; height: 3px; left: 90%; animation-duration: 4.5s; animation-delay: 3s;"></div>
             
             <div class="logo-container">
                 <div class="logo-utpl">UTPL</div>
@@ -492,7 +548,7 @@
                 </p>
             </div>
 
-            <!-- Datos Clave (Ahora perfectamente cuadrados) -->
+            <!-- Datos Clave -->
             <div class="details-row">
                 <div class="detail-group">
                     <div class="detail-label">Fecha</div>
@@ -504,12 +560,12 @@
                 </div>
                 <div class="detail-group">
                     <div class="detail-label">Lugar</div>
-                    <div class="detail-value">
-                        <!-- Enlace a Google Maps con Manta -->
-                        <a href="https://maps.app.goo.gl/JsVaXVVZsPSEiEv17" target="_blank" class="location-link">
-                            Manta • Hotel Poseidon <span class="icon-map">📍</span>
-                        </a>
-                    </div>
+                    <!-- Enlace a Google Maps -->
+                    <a href="https://maps.app.goo.gl/JsVaXVVZsPSEiEv17" target="_blank" class="location-link">
+                        <div class="detail-value">Manta</div>
+                        <div class="detail-value" style="font-weight: 500; font-size: 12px; margin-top: 2px;">Hotel Poseidon</div>
+                        <span class="icon-map">📍 Ver Mapa</span>
+                    </a>
                 </div>
             </div>
 
@@ -546,7 +602,6 @@
         </p>
 
         <div class="attendees-list">
-            <!-- Ejemplo de Lista -->
             <label class="attendee-item">
                 <input type="checkbox"> <span class="attendee-name">Juan Pérez</span>
             </label>
@@ -565,9 +620,12 @@
             <label class="attendee-item">
                 <input type="checkbox"> <span class="attendee-name">Sofía Torres</span>
             </label>
+            <label class="attendee-item">
+                <input type="checkbox"> <span class="attendee-name">David Silva</span>
+            </label>
         </div>
 
-        <button class="btn btn-gold" style="width: 100%;" onclick="enviarConfirmacion()">
+        <button id="btn-enviar" class="btn btn-gold" style="width: 100%;" onclick="enviarConfirmacion()">
             Enviar Confirmación
         </button>
     </div>
@@ -580,23 +638,25 @@
         <h3 class="modal-title">Código de Vestimenta</h3>
         
         <div style="text-align: left; padding: 0 10px;">
+            <!-- Color -->
             <div style="display: flex; gap: 15px; margin-bottom: 25px; align-items: start;">
-                <div style="background: var(--bg-body); padding: 10px; border-radius: 50%;">
-                   <svg class="icon-svg" style="color: var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.4a1.6 1.6 0 0 1 .4 1.6l-1.9 6.22a2.33 2.33 0 0 1-2.2 1.66h-9.36a2.33 2.33 0 0 1-2.2-1.66L3.22 5a1.6 1.6 0 0 1 1.76-2.08l1.63.26A2.3 2.3 0 0 0 8.86 2h6.28a2.3 2.3 0 0 0 2.25 1.18z"></path></svg>
+                <div style="background: #f4f6f8; padding: 12px; border-radius: 50%; color: var(--primary);">
+                   <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.4a1.6 1.6 0 0 1 .4 1.6l-1.9 6.22a2.33 2.33 0 0 1-2.2 1.66h-9.36a2.33 2.33 0 0 1-2.2-1.66L3.22 5a1.6 1.6 0 0 1 1.76-2.08l1.63.26A2.3 2.3 0 0 0 8.86 2h6.28a2.3 2.3 0 0 0 2.25 1.18z"></path></svg>
                 </div>
                 <div>
                     <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 18px;">Gama de Colores</h4>
-                    <p style="margin: 5px 0 0; font-size: 13px; color: #666;">Se sugiere vestir en <strong>blanco o tonos pasteles</strong>.</p>
+                    <p style="margin: 5px 0 0; font-size: 13px; color: #666; line-height: 1.5;">Se sugiere vestir en <strong>color blanco o tonos pasteles</strong> para armonizar con la temática.</p>
                 </div>
             </div>
 
+            <!-- Calzado -->
             <div style="display: flex; gap: 15px; align-items: start;">
-                 <div style="background: var(--bg-body); padding: 10px; border-radius: 50%;">
-                   <svg class="icon-svg" style="color: var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 22v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/><path d="M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+                 <div style="background: #fff9e6; padding: 12px; border-radius: 50%; color: var(--gold);">
+                   <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 22v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/><path d="M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
                 </div>
                 <div>
                     <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 18px;">Calzado Cómodo</h4>
-                    <p style="margin: 5px 0 0; font-size: 13px; color: #666;">Evento sobre arena. Por su comodidad, <strong>evitar tacones</strong>. Se recomienda el uso de sandalias formales.</p>
+                    <p style="margin: 5px 0 0; font-size: 13px; color: #666; line-height: 1.5;">Evento sobre arena. Por su comodidad, <strong>evitar tacones</strong>. Se recomienda el uso de sandalias formales.</p>
                 </div>
             </div>
         </div>
@@ -653,8 +713,27 @@
     }
 
     function enviarConfirmacion() {
-        alert("¡Asistencia Confirmada! Gracias.");
-        toggleModal('modal-asistencia');
+        const btn = document.getElementById('btn-enviar');
+        const originalText = btn.innerHTML;
+        
+        // Simular envío visual
+        btn.innerHTML = "Enviando...";
+        btn.style.backgroundColor = "#28a745"; // Verde éxito momentáneo
+        btn.style.backgroundImage = "none";
+        
+        setTimeout(() => {
+            btn.innerHTML = "¡Enviado! ✓";
+            
+            setTimeout(() => {
+                toggleModal('modal-asistencia');
+                // Restaurar botón después de cerrar
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.backgroundColor = "";
+                    btn.style.backgroundImage = "";
+                }, 500);
+            }, 1000);
+        }, 800);
     }
 </script>
 

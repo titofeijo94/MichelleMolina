@@ -215,14 +215,13 @@
             border-bottom: 1px solid var(--gold); padding-bottom: 3px;
         }
 
-        /* TÍTULO GIGANTE */
+        /* TÍTULO RESTAURADO */
         h1 {
             font-family: 'Cormorant Garamond', serif; color: var(--primary);
-            font-size: 90px; /* Enorme en móvil */
-            margin: 10px 0 20px 0; font-weight: 700; line-height: 0.75;
-            letter-spacing: -2px; /* Letras juntas para estilo editorial */
+            font-size: 46px; 
+            margin: 5px 0 15px 0; font-weight: 700; line-height: 1;
         }
-        @media(min-width: 400px) { h1 { font-size: 110px; } } /* Colosal en pantallas grandes */
+        @media(min-width: 400px) { h1 { font-size: 52px; } } 
         
         .quote-container { margin: 25px auto; position: relative; max-width: 90%; }
         /* TEXTO MÁS OSCURO */
@@ -601,9 +600,11 @@
                 if(id === 'modal-amigo-secreto') {
                     // Si ya se reveló (input oculto), no resetear
                     const container = document.getElementById('secretInputContainer');
-                    if (container.style.display !== 'none') {
+                    const loading = document.getElementById('secretLoadingContainer');
+                    const result = document.getElementById('secretResult');
+                    
+                    if (container.style.display !== 'none' && loading.style.display === 'none' && result.style.display === 'none') {
                         document.getElementById('secretCodeInput').value = '';
-                        document.getElementById('secretResult').style.display = 'none';
                     }
                 }
             }

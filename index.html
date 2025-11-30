@@ -215,10 +215,14 @@
             border-bottom: 1px solid var(--gold); padding-bottom: 3px;
         }
 
+        /* TÍTULO GIGANTE */
         h1 {
             font-family: 'Cormorant Garamond', serif; color: var(--primary);
-            font-size: 38px; margin: 5px 0 15px 0; font-weight: 700; line-height: 1;
+            font-size: 90px; /* Enorme en móvil */
+            margin: 10px 0 20px 0; font-weight: 700; line-height: 0.75;
+            letter-spacing: -2px; /* Letras juntas para estilo editorial */
         }
+        @media(min-width: 400px) { h1 { font-size: 110px; } } /* Colosal en pantallas grandes */
         
         .quote-container { margin: 25px auto; position: relative; max-width: 90%; }
         /* TEXTO MÁS OSCURO */
@@ -302,9 +306,16 @@
         .secret-result { margin-top: 10px; padding: 25px; background: #fff; border: 2px dashed var(--gold); display: none; animation: fadeIn 0.5s; border-radius: 8px; }
         
         .secret-greeting { font-family: 'Montserrat', sans-serif; font-size: 16px; color: var(--text-secondary); margin-bottom: 5px; display: block; }
-        .secret-reveal-name { display: block; font-family: 'Cinzel', serif; font-size: 24px; color: var(--primary); margin-top: 5px; font-weight: 700; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
-        .secret-reveal-city { display: block; font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text-secondary); font-weight: 500; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .secret-reveal-name { display: block; font-family: 'Cinzel', serif; font-size: 24px; color: var(--primary); margin-top: 10px; font-weight: 700; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+        .secret-reveal-city { display: block; font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-secondary); font-weight: 500; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
         
+        /* ESTILOS DE CARGA FALSA */
+        #secretLoadingContainer { display: none; padding: 30px 0; }
+        .loading-text { font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text-body); margin-top: 15px; font-weight: 600; letter-spacing: 1px; animation: pulseText 1.5s infinite; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(197, 160, 89, 0.3); border-left-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .timeline-elegant { text-align: left; border-left: 3px solid var(--gold-light); padding-left: 25px; margin-left: 15px; }
@@ -461,13 +472,23 @@
                 <input type="text" id="secretCodeInput" class="secret-input" placeholder="XXXX" maxlength="4" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 <button class="btn btn-gold" style="width: 100%;" onclick="revelarAmigo()">Revelar</button>
             </div>
+
+            <!-- Contenedor de Carga (Fake Loading) -->
+            <div id="secretLoadingContainer">
+                <div class="spinner"></div>
+                <p id="loadingText" class="loading-text">Generando sorteo aleatorio...</p>
+            </div>
             
             <!-- Resultado -->
             <div id="secretResult" class="secret-result">
                 <span id="secretGreeting" class="secret-greeting"></span>
-                <span style="font-size: 12px; text-transform: uppercase; color: #777; font-weight: 700;">Tú le regalas a:</span>
+                <span style="font-size: 12px; text-transform: uppercase; color: #777; font-weight: 700;">El sistema ha seleccionado a:</span>
                 <span id="secretNameDisplay" class="secret-reveal-name"></span>
                 <span id="secretCityDisplay" class="secret-reveal-city"></span>
+                
+                <div style="margin-top: 20px; font-size: 13px; color: #888; font-style: italic;">
+                    <i class="fas fa-lock"></i> Recuerda mantenerlo en secreto.
+                </div>
             </div>
         </div>
     </div>
@@ -613,31 +634,47 @@
         function revelarAmigo() {
             const input = document.getElementById('secretCodeInput');
             const resultBox = document.getElementById('secretResult');
+            const loadingBox = document.getElementById('secretLoadingContainer');
+            const inputContainer = document.getElementById('secretInputContainer');
+            const loadingText = document.getElementById('loadingText');
+            
             const nameDisplay = document.getElementById('secretNameDisplay');
             const greetingDisplay = document.getElementById('secretGreeting');
             const cityDisplay = document.getElementById('secretCityDisplay');
-            const inputContainer = document.getElementById('secretInputContainer');
             
             const code = input.value.trim();
             const found = secretSantaData.find(p => p.code === code);
 
             if (found) {
-                // ÉXITO
-                resultBox.style.display = 'block';
-                resultBox.style.backgroundColor = '#f0fdf4'; 
-                resultBox.style.borderColor = '#4caf50';
-                
-                // Mensaje personalizado
-                greetingDisplay.innerText = `Hola ${found.name},`;
-                nameDisplay.innerText = found.target;
-                nameDisplay.style.color = '#15803d'; 
-                cityDisplay.innerText = `Centro Universitario de ${found.city}`;
-                
-                // OCULTAR FORMULARIO (Para que no ingresen otro código)
+                // 1. Ocultar formulario
                 inputContainer.style.display = 'none';
                 
+                // 2. Mostrar carga
+                loadingBox.style.display = 'block';
+                
+                // Secuencia de textos de carga (Total 5 segundos)
+                setTimeout(() => { loadingText.innerText = "Conectando con el servidor..."; }, 1500);
+                setTimeout(() => { loadingText.innerText = "Verificando lista de invitados..."; }, 3000); 
+                setTimeout(() => { loadingText.innerText = "Asignando amigo secreto..."; }, 4000);
+                
+                // 3. Finalizar y mostrar resultado después de 5 segundos
+                setTimeout(() => {
+                    loadingBox.style.display = 'none';
+                    
+                    // Mostrar Resultado
+                    resultBox.style.display = 'block';
+                    resultBox.style.backgroundColor = '#fdfdfd'; 
+                    resultBox.style.borderColor = '#C5A059'; // Dorado
+                    
+                    greetingDisplay.innerText = `Hola ${found.name},`;
+                    nameDisplay.innerText = found.target;
+                    nameDisplay.style.color = '#003366'; // Azul UTPL
+                    cityDisplay.innerText = `Centro Universitario de ${found.city}`;
+                    
+                }, 5000);
+                
             } else {
-                // ERROR
+                // ERROR (Sin animación, inmediato)
                 resultBox.style.display = 'block';
                 resultBox.style.backgroundColor = '#fef2f2'; 
                 resultBox.style.borderColor = '#ef4444';

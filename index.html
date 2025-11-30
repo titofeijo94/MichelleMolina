@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UTPL - Gala de Navidad</title>
+    <title>UTPL - Cena de Navidad</title>
     
     <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,16 +22,19 @@
             --gold-shimmer: #f9e59e;
             --bg-gradient-inner: #050a14;
 
-            /* --- VARIABLES DE LA INVITACIÓN (CARTA FINAL) --- */
-            --primary: #003366; /* Azul UTPL Profundo */
-            --primary-dark: #002244;
-            --gold: #C5A059;   /* Dorado Elegante */
+            /* --- VARIABLES DE LA INVITACIÓN --- */
+            --primary: #003366; 
+            --primary-dark: #001a33;
+            --gold: #C5A059;   
             --gold-light: #E5C585;
             --gold-gradient: linear-gradient(135deg, #C5A059 0%, #E5C585 50%, #B08D55 100%);
             --white: #ffffff;
             --bg-body: #f3f4f6;
-            --text-dark: #1a1a1a;
-            --text-grey: #555555;
+            
+            /* TEXTOS OSCUROS */
+            --text-main: #1a1a1a;       
+            --text-body: #333333;       
+            --text-secondary: #555555;  
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -41,11 +44,11 @@
             background: radial-gradient(circle at center, #1a2a40 0%, #050a14 100%);
             margin: 0;
             min-height: 100vh;
-            overflow: hidden; /* Inicialmente oculto para el intro */
+            overflow: hidden; 
         }
 
         /* =========================================
-           1. ESTILOS DEL INTRO (SOBRE ELEGANTE)
+           1. ESTILOS DEL INTRO (SOBRE)
            ========================================= */
         #intro-scene {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -55,15 +58,9 @@
             transition: opacity 1.5s ease, visibility 1.5s;
         }
 
-        /* Nieve Intro */
         .snowflake {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 1rem;
-            top: -50px;
-            animation: fall linear infinite;
-            z-index: 0;
-            pointer-events: none;
+            position: absolute; color: rgba(255, 255, 255, 0.3); font-size: 1rem;
+            top: -50px; animation: fall linear infinite; z-index: 0; pointer-events: none;
         }
         @keyframes fall {
             0% { transform: translateY(0) translateX(0); opacity: 0; }
@@ -71,87 +68,68 @@
             100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
         }
 
-        /* Contenedor del Sobre */
         .wrapper {
-            position: relative;
-            width: 340px; /* Móvil */
-            height: 240px;
-            z-index: 10;
+            position: relative; width: 340px; height: 240px; z-index: 10;
             transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        @media (min-width: 768px) {
-            .wrapper { width: 520px; height: 340px; }
-        }
+        @media (min-width: 768px) { .wrapper { width: 520px; height: 340px; } }
 
         .envelope {
             position: relative; width: 100%; height: 100%;
             background: var(--utpl-navy);
             box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            border-radius: 4px;
-            z-index: 10;
+            border-radius: 4px; z-index: 10;
             background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
         }
 
         .envelope-inner {
             position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
-            background: var(--bg-gradient-inner);
-            z-index: 1; border-radius: 3px;
+            background: var(--bg-gradient-inner); z-index: 1; border-radius: 3px;
             box-shadow: inset 0 10px 20px rgba(0,0,0,0.8);
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* Luz mágica dentro */
         .magic-light {
-            width: 10px; height: 10px;
-            background: var(--gold-shimmer);
-            box-shadow: 0 0 60px 30px var(--gold-leaf);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.8s ease 0.5s;
+            width: 10px; height: 10px; background: var(--gold-shimmer);
+            box-shadow: 0 0 60px 30px var(--gold-leaf); border-radius: 50%;
+            opacity: 0; transition: opacity 0.8s ease 0.5s;
         }
         .wrapper.open .magic-light { opacity: 1; }
 
-        /* Solapas */
         .flap { position: absolute; width: 0; height: 0; border-style: solid; pointer-events: none; }
-
         .flap-left {
             top: 0; left: 0; bottom: 0;
-            border-width: 120px 0 120px 170px; /* Móvil */
+            border-width: 120px 0 120px 170px; 
             border-color: transparent transparent transparent var(--utpl-navy);
             z-index: 20; filter: brightness(1.1);
         }
         .flap-right {
             top: 0; right: 0; bottom: 0;
-            border-width: 120px 170px 120px 0; /* Móvil */
+            border-width: 120px 170px 120px 0; 
             border-color: transparent var(--utpl-navy-dark) transparent transparent;
             z-index: 20;
         }
         .flap-bottom {
             bottom: 0; left: 0;
-            border-width: 0 170px 130px 170px; /* Móvil */
+            border-width: 0 170px 130px 170px; 
             border-color: transparent transparent var(--utpl-navy) transparent;
             z-index: 21; filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.3));
         }
-        
         @media (min-width: 768px) {
             .flap-left { border-width: 170px 0 170px 270px; }
             .flap-right { border-width: 170px 270px 170px 0; }
             .flap-bottom { border-width: 0 260px 175px 260px; }
         }
 
-        /* Tapa Superior */
         .flap-top {
             top: 0; left: 0;
-            border-width: 130px 170px 0 170px; /* Móvil */
+            border-width: 130px 170px 0 170px; 
             border-color: var(--utpl-navy-dark) transparent transparent transparent;
-            z-index: 30;
-            transform-origin: top;
+            z-index: 30; transform-origin: top;
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
         }
-        @media (min-width: 768px) {
-            .flap-top { border-width: 180px 260px 0 260px; }
-        }
+        @media (min-width: 768px) { .flap-top { border-width: 180px 260px 0 260px; } }
 
         /* Sello */
         .seal {
@@ -163,29 +141,24 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.4);
             z-index: 31;
             display: flex; justify-content: center; align-items: center;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.15);
         }
-        @media (min-width: 768px) {
-            .seal { top: -140px; width: 90px; height: 90px; } /* Desktop pos */
-        }
+        @media (min-width: 768px) { .seal { top: -140px; width: 90px; height: 90px; } }
 
         .seal::before {
-            content: ''; position: absolute; width: 75%; height: 75%;
-            border-radius: 50%; border: 1px dashed rgba(122, 94, 32, 0.5);
-        }
-        .seal span {
-            font-family: 'Cinzel', serif; font-weight: 700; font-size: 1rem; color: #5c4213; text-shadow: 0 1px 0 rgba(255,255,255,0.3);
-        }
-
-        /* Animación de apertura */
-        .wrapper.open .flap-top {
-            transform: rotateX(180deg);
+            content: ''; position: absolute; width: 80%; height: 80%;
+            border-radius: 50%; border: 1px dashed rgba(92, 66, 19, 0.4);
             z-index: 1; 
         }
-        .wrapper.zoom-out {
-            transform: scale(3);
-            opacity: 0;
+        .seal span {
+            position: relative; z-index: 10; 
+            font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem; 
+            color: #5c4213; text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+            letter-spacing: 1px;
         }
+
+        .wrapper.open .flap-top { transform: rotateX(180deg); z-index: 1; }
+        .wrapper.zoom-out { transform: scale(3); opacity: 0; }
 
         /* =========================================
            2. ESTILOS DE LA INVITACIÓN FINAL
@@ -199,26 +172,22 @@
             background-color: var(--bg-body);
             background-image: radial-gradient(var(--gold-light) 1px, transparent 1px);
             background-size: 30px 30px;
-            overflow-y: auto;
-            padding: 20px 0;
+            overflow-y: auto; padding: 20px 0;
         }
-        
         #final-interface.active { opacity: 1; visibility: visible; }
 
         .card-wrapper { padding: 10px; width: 100%; display: flex; justify-content: center; min-height: 100%; align-items: center; }
         
         .card {
-            width: 100%; max-width: 500px;
+            width: 100%; max-width: 500px; 
             background-color: var(--white);
             position: relative;
             box-shadow: 0 30px 60px -10px rgba(0, 51, 102, 0.25);
-            overflow: hidden;
-            border-radius: 4px;
+            overflow: hidden; border-radius: 4px;
             border: 1px solid rgba(197, 160, 89, 0.3);
             animation: slideUp 1s ease-out forwards;
             opacity: 0; transform: translateY(50px);
         }
-        
         @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
 
         /* Header */
@@ -239,35 +208,45 @@
         /* Contenido */
         .content { padding: 40px 30px; text-align: center; position: relative; }
         .ornament-icon { color: var(--gold); font-size: 20px; margin-bottom: 10px; opacity: 0.8; }
+        
         .pre-header {
             text-transform: uppercase; font-size: 10px; letter-spacing: 3px; color: var(--gold);
-            font-weight: 600; margin-bottom: 10px; display: inline-block;
+            font-weight: 700; margin-bottom: 10px; display: inline-block;
             border-bottom: 1px solid var(--gold); padding-bottom: 3px;
         }
 
         h1 {
             font-family: 'Cormorant Garamond', serif; color: var(--primary);
-            font-size: 38px; margin: 5px 0 15px 0; font-weight: 600; line-height: 1;
+            font-size: 38px; margin: 5px 0 15px 0; font-weight: 700; line-height: 1;
         }
-        @media(min-width: 400px) { h1 { font-size: 42px; } }
         
-        h1 span {
-            display: block; font-size: 0.5em; font-family: 'Montserrat', sans-serif;
-            font-weight: 300; color: var(--text-grey); margin-top: 5px; letter-spacing: 1px; text-transform: uppercase;
-        }
-
         .quote-container { margin: 25px auto; position: relative; max-width: 90%; }
-        .quote-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: #444; line-height: 1.4; }
+        /* TEXTO MÁS OSCURO */
+        .quote-text { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-style: italic; 
+            font-size: 19px; 
+            color: var(--text-main); 
+            line-height: 1.5; 
+            font-weight: 500;
+        }
 
         /* Detalles Grid */
         .details-row {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            margin: 30px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;
+            margin: 30px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
             padding: 20px 0; align-items: start;
         }
         .detail-group { text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .detail-label { font-size: 10px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 6px; }
-        .detail-value { font-family: 'Montserrat', sans-serif; font-weight: 600; color: var(--primary); font-size: 13px; line-height: 1.4; }
+        .detail-label { 
+            font-size: 11px; text-transform: uppercase; color: var(--text-secondary);
+            letter-spacing: 1px; margin-bottom: 6px; font-weight: 600;
+        }
+        .detail-value { 
+            font-family: 'Montserrat', sans-serif; font-weight: 700; 
+            color: var(--primary); font-size: 14px; 
+            line-height: 1.4; 
+        }
         
         .location-link { text-decoration: none; color: var(--primary); transition: color 0.3s; display: inline-block; }
         .location-link:hover { color: var(--gold); }
@@ -276,58 +255,78 @@
         /* Botones */
         .btn-container { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
         .btn {
-            border: none; padding: 16px 20px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600;
+            border: none; padding: 16px 20px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
             text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s ease;
             position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; gap: 10px;
+            border-radius: 4px;
         }
         .btn-gold { background: var(--gold-gradient); color: var(--white); box-shadow: 0 10px 20px -5px rgba(197, 160, 89, 0.4); }
         .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 15px 25px -5px rgba(197, 160, 89, 0.5); }
         
+        .btn-secret { background: var(--primary); color: var(--white); border: 1px solid var(--primary-dark); }
+        .btn-secret:hover { background: var(--primary-dark); }
+
         .btn-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); font-weight: 600; }
         .btn-outline:hover { background-color: var(--primary); color: var(--white); }
 
-        .footer { margin-top: 40px; font-size: 11px; color: #888; }
-        .signature { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--primary); font-weight: 600; margin-bottom: 2px; }
+        .footer { margin-top: 40px; font-size: 11px; color: var(--text-secondary); }
+        .signature { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--primary); font-weight: 700; margin-bottom: 2px; }
         .cargo-text { font-weight: 600; color: var(--primary); letter-spacing: 1px; font-size: 10px; text-transform: uppercase; }
 
         /* Modales */
-        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 30, 60, 0.5); backdrop-filter: blur(8px); z-index: 3000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease; }
+        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 30, 60, 0.6); backdrop-filter: blur(5px); z-index: 3000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease; }
         .modal-active { display: flex; opacity: 1; }
         .modal-content { background: #fff; width: 90%; max-width: 450px; padding: 40px 30px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; border-top: 4px solid var(--gold); }
         .modal-active .modal-content { transform: translateY(0); }
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; color: #999; cursor: pointer; transition: color 0.3s; }
         .close-modal:hover { color: var(--primary); }
-        .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--primary); margin: 0 0 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         
+        .modal-title { 
+            font-family: 'Cormorant Garamond', serif; font-size: 26px; 
+            color: var(--primary); margin: 0 0 20px; border-bottom: 1px solid #eee; 
+            padding-bottom: 15px; font-weight: 700;
+        }
+        
+        /* Lista Solo Nombres (Negrita) */
         .attendees-list { text-align: left; max-height: 250px; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; }
-        .attendee-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #f9f9f9; cursor: pointer; }
-        .attendee-item:hover { background-color: #fcfcfc; }
-        .attendee-item input { margin-right: 10px; accent-color: var(--primary); transform: scale(1.1); }
-        .attendee-name { font-size: 14px; color: #444; }
+        .attendee-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; }
+        .attendee-item:last-child { border-bottom: none; }
+        .attendee-item::before { content: '•'; color: var(--gold); font-size: 20px; margin-right: 10px; line-height: 1; }
+        .attendee-name { font-size: 14px; color: var(--text-body); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .timeline-elegant { text-align: left; border-left: 2px solid var(--gold-light); padding-left: 25px; margin-left: 15px; }
+        /* Amigo Secreto */
+        .secret-input-container { transition: opacity 0.5s; }
+        .secret-input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 4px; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; text-align: center; font-size: 18px; letter-spacing: 4px; text-transform: uppercase; font-weight: 700; color: var(--primary); }
+        .secret-input:focus { border-color: var(--gold); outline: none; }
+        .secret-result { margin-top: 10px; padding: 25px; background: #fff; border: 2px dashed var(--gold); display: none; animation: fadeIn 0.5s; border-radius: 8px; }
+        
+        .secret-greeting { font-family: 'Montserrat', sans-serif; font-size: 16px; color: var(--text-secondary); margin-bottom: 5px; display: block; }
+        .secret-reveal-name { display: block; font-family: 'Cinzel', serif; font-size: 24px; color: var(--primary); margin-top: 5px; font-weight: 700; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+        .secret-reveal-city { display: block; font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text-secondary); font-weight: 500; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .timeline-elegant { text-align: left; border-left: 3px solid var(--gold-light); padding-left: 25px; margin-left: 15px; }
         .t-item { position: relative; margin-bottom: 30px; }
         .t-item:last-child { margin-bottom: 0; }
-        .t-item::before { content: ''; position: absolute; left: -32px; top: 4px; width: 12px; height: 12px; background: var(--white); border: 2px solid var(--gold); border-radius: 50%; }
-        .t-time { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
-        .t-desc { font-size: 14px; color: #444; font-weight: 500; }
+        .t-item::before { content: ''; position: absolute; left: -34px; top: 4px; width: 15px; height: 15px; background: var(--white); border: 3px solid var(--gold); border-radius: 50%; }
+        .t-time { font-size: 11px; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+        .t-desc { font-size: 14px; color: var(--text-body); font-weight: 600; }
         .icon-svg { width: 18px; height: 18px; stroke-width: 1.5; }
 
     </style>
 </head>
 <body>
 
-    <!-- 1. ESCENA DEL SOBRE (Intro) -->
+    <!-- 1. INTRO (SOBRE) -->
     <div id="intro-scene">
         <div id="snowContainer"></div>
-        
         <div class="wrapper" id="envelopeWrapper">
             <div class="envelope">
                 <div class="envelope-inner">
                     <div class="magic-light"></div>
                 </div>
-                
                 <div class="flap flap-left"></div>
                 <div class="flap flap-right"></div>
                 <div class="flap flap-bottom"></div>
@@ -340,7 +339,7 @@
         </div>
     </div>
 
-    <!-- 2. INVITACIÓN FINAL -->
+    <!-- 2. INVITACIÓN -->
     <div id="final-interface">
         <div class="card-wrapper">
             <div class="card">
@@ -359,7 +358,7 @@
                     <div class="ornament-icon">✦</div>
                     <div class="pre-header">Invitación Corporativa</div>
                     
-                    <h1>Cena de Navidad <span>Fin de Año 2025</span></h1>
+                    <h1>Cena de Navidad</h1>
 
                     <div class="quote-container">
                         <p class="quote-text">
@@ -375,7 +374,7 @@
                         </div>
                         <div class="detail-group">
                             <div class="detail-label">Hora</div>
-                            <div class="detail-value">17:00</div>
+                            <div class="detail-value">17:30</div>
                         </div>
                         <div class="detail-group">
                             <div class="detail-label">Lugar</div>
@@ -389,9 +388,15 @@
 
                     <!-- Botones -->
                     <div class="btn-container">
-                        <button class="btn btn-gold" onclick="toggleModal('modal-asistencia')">
-                            Confirmar Asistencia
-                            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <!-- Nómina -->
+                        <button class="btn btn-gold" onclick="toggleModal('modal-nomina')">
+                            Ver Nómina de Invitados
+                            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </button>
+
+                        <!-- Botón AMIGO SECRETO -->
+                        <button class="btn btn-secret" onclick="toggleModal('modal-amigo-secreto')">
+                            Ver Amigo Secreto 🎁
                         </button>
                         
                         <div class="btn-links">
@@ -410,45 +415,85 @@
     </div>
 
     <!-- Modales -->
-    <div id="modal-asistencia" class="modal-backdrop" onclick="toggleModal('modal-asistencia')">
+    
+    <!-- Modal Nómina (Solo Lectura) -->
+    <div id="modal-nomina" class="modal-backdrop" onclick="toggleModal('modal-nomina')">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-modal" onclick="toggleModal('modal-asistencia')">&times;</button>
-            <h3 class="modal-title">Confirmar Asistencia</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 20px; text-align: left;">
-                Seleccione las personas que asistirán:
+            <button class="close-modal" onclick="toggleModal('modal-nomina')">&times;</button>
+            <h3 class="modal-title">Nómina de Invitados</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
+                Lista oficial de colaboradores de Zona 4:
             </p>
             <div class="attendees-list">
-                <label class="attendee-item"><input type="checkbox"><span class="attendee-name">Juan Pérez</span></label>
-                <label class="attendee-item"><input type="checkbox"><span class="attendee-name">María López</span></label>
-                <label class="attendee-item"><input type="checkbox"><span class="attendee-name">Carlos Andrade</span></label>
-                <label class="attendee-item"><input type="checkbox"><span class="attendee-name">Ana García</span></label>
-                <label class="attendee-item"><input type="checkbox"><span class="attendee-name">Luis Mendoza</span></label>
+                <div class="attendee-item"><span class="attendee-name">Orejuela Intriago Nancy Gisela</span></div>
+                <div class="attendee-item"><span class="attendee-name">Arriaga Muñoz Lenny Noraida</span></div>
+                <div class="attendee-item"><span class="attendee-name">Moreira Escalante Efrén Arturo</span></div>
+                <div class="attendee-item"><span class="attendee-name">Feijoo Moreira Tito Eliecer</span></div>
+                <div class="attendee-item"><span class="attendee-name">Edyn Meza Cárdenas</span></div>
+                <div class="attendee-item"><span class="attendee-name">Castillo Bermudez Tania Elizabeth</span></div>
+                <div class="attendee-item"><span class="attendee-name">Rojas Delgado Karina Cecibel</span></div>
+                <div class="attendee-item"><span class="attendee-name">Andrade Mora Oscar Alexander</span></div>
+                <div class="attendee-item"><span class="attendee-name">Sambrano Andrade Tannya Maribel</span></div>
+                <div class="attendee-item"><span class="attendee-name">Jaramillo Pantoja Edwin Galo</span></div>
+                <div class="attendee-item"><span class="attendee-name">Berrú Tinizaray Jessica Marcela</span></div>
+                <div class="attendee-item"><span class="attendee-name">Medranda Vera Geovanny Alejandro</span></div>
+                <div class="attendee-item"><span class="attendee-name">Gomez Gualpa Fabricio</span></div>
+                <div class="attendee-item"><span class="attendee-name">Cabezas Ortiz Flavio Cesar</span></div>
+                <div class="attendee-item"><span class="attendee-name">Alcivar Alvarez Ximena Maribel</span></div>
+                <div class="attendee-item"><span class="attendee-name">Ortoneda Velasquez Maria Dolores</span></div>
+                <div class="attendee-item"><span class="attendee-name">Zambrano Minaya Liliana Monserrate</span></div>
+                <div class="attendee-item"><span class="attendee-name">VeraValdez Santos Nestor</span></div>
             </div>
-            <button class="btn btn-gold" style="width: 100%;" onclick="enviarConfirmacion()">Enviar Confirmación</button>
         </div>
     </div>
 
+    <!-- Modal Amigo Secreto -->
+    <div id="modal-amigo-secreto" class="modal-backdrop" onclick="toggleModal('modal-amigo-secreto')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="toggleModal('modal-amigo-secreto')">&times;</button>
+            <h3 class="modal-title">Amigo Secreto</h3>
+            
+            <!-- Contenedor del Formulario -->
+            <div id="secretInputContainer">
+                <p style="font-size: 15px; color: var(--text-body); margin-bottom: 20px;">
+                    Ingresa tu código personal para revelar tu amigo secreto:
+                </p>
+                <input type="text" id="secretCodeInput" class="secret-input" placeholder="XXXX" maxlength="4" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <button class="btn btn-gold" style="width: 100%;" onclick="revelarAmigo()">Revelar</button>
+            </div>
+            
+            <!-- Resultado -->
+            <div id="secretResult" class="secret-result">
+                <span id="secretGreeting" class="secret-greeting"></span>
+                <span style="font-size: 12px; text-transform: uppercase; color: #777; font-weight: 700;">Tú le regalas a:</span>
+                <span id="secretNameDisplay" class="secret-reveal-name"></span>
+                <span id="secretCityDisplay" class="secret-reveal-city"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Otros Modales -->
     <div id="modal-dress" class="modal-backdrop" onclick="toggleModal('modal-dress')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="close-modal" onclick="toggleModal('modal-dress')">&times;</button>
             <h3 class="modal-title">Código de Vestimenta</h3>
             <div style="text-align: left; padding: 0 10px;">
                 <div style="display: flex; gap: 15px; margin-bottom: 25px; align-items: start;">
-                    <div style="background: #f4f6f8; padding: 12px; border-radius: 50%; color: var(--primary);">
+                    <div style="background: #f4f6f8; padding: 12px; border-radius: 50%; color: var(--primary); min-width: 48px;">
                        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.4a1.6 1.6 0 0 1 .4 1.6l-1.9 6.22a2.33 2.33 0 0 1-2.2 1.66h-9.36a2.33 2.33 0 0 1-2.2-1.66L3.22 5a1.6 1.6 0 0 1 1.76-2.08l1.63.26A2.3 2.3 0 0 0 8.86 2h6.28a2.3 2.3 0 0 0 2.25 1.18z"></path></svg>
                     </div>
                     <div>
-                        <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 18px;">Gama de Colores</h4>
-                        <p style="margin: 5px 0 0; font-size: 13px; color: #666; line-height: 1.5;">Se sugiere vestir en <strong>blanco o tonos pasteles</strong> para armonizar con la temática.</p>
+                        <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700;">Gama de Colores</h4>
+                        <p style="margin: 5px 0 0; font-size: 14px; color: var(--text-secondary); line-height: 1.5;">Se sugiere vestir en <strong>blanco o tonos pasteles</strong> para armonizar con la temática.</p>
                     </div>
                 </div>
                 <div style="display: flex; gap: 15px; align-items: start;">
-                     <div style="background: #fff9e6; padding: 12px; border-radius: 50%; color: var(--gold);">
+                     <div style="background: #fff9e6; padding: 12px; border-radius: 50%; color: var(--gold); min-width: 48px;">
                        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 22v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/><path d="M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
                     </div>
                     <div>
-                        <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 18px;">Calzado Cómodo</h4>
-                        <p style="margin: 5px 0 0; font-size: 13px; color: #666; line-height: 1.5;">Evento sobre arena. Por su comodidad, <strong>evitar tacones</strong>. Se recomienda el uso de sandalias formales.</p>
+                        <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700;">Calzado Cómodo</h4>
+                        <p style="margin: 5px 0 0; font-size: 14px; color: var(--text-secondary); line-height: 1.5;">Evento sobre arena. Por su comodidad, <strong>evitar tacones</strong>. Se recomienda el uso de sandalias formales.</p>
                     </div>
                 </div>
             </div>
@@ -461,7 +506,7 @@
             <h3 class="modal-title">Itinerario Oficial</h3>
             <div class="timeline-elegant">
                 <div class="t-item"><span class="t-time">15:00</span><div class="t-desc">Check-in Hotel Poseidon</div></div>
-                <div class="t-item"><span class="t-time">17:00</span><div class="t-desc">Inicio del Evento</div></div>
+                <div class="t-item"><span class="t-time">17:30</span><div class="t-desc">Inicio del Evento</div></div>
                 <div class="t-item"><span class="t-time">19:00</span><div class="t-desc">Cena Navideña</div></div>
                 <div class="t-item"><span class="t-time">NOCHE</span><div class="t-desc">Hospedaje</div></div>
                 <div class="t-item"><span class="t-time">08:00</span><div class="t-desc">Desayuno Buffet</div></div>
@@ -471,7 +516,7 @@
     </div>
 
     <script>
-        // 1. NIEVE INTRO
+        // 1. NIEVE
         const snowContainer = document.getElementById('snowContainer');
         const chars = ['❄', '❅', '❆', '•'];
         
@@ -498,23 +543,18 @@
                 const introScene = document.getElementById('intro-scene');
                 const finalInterface = document.getElementById('final-interface');
 
-                // 1. Abrir sobre
                 wrapper.classList.add('open');
-
-                // 2. Transición hacia la invitación
                 setTimeout(() => {
                     wrapper.classList.add('zoom-out'); 
-                    
                     setTimeout(() => {
                         introScene.style.opacity = 0;
                         introScene.style.visibility = 'hidden';
-                        
                         finalInterface.classList.add('active');
                         document.body.style.background = '#f3f4f6';
-                        document.body.style.overflowY = 'auto'; // Habilitar scroll
+                        document.body.style.overflowY = 'auto'; 
                     }, 800);
-                }, 1200); // Tiempo esperando abierto
-            }, 2000); // 2 segundos antes de empezar a abrir
+                }, 1200); 
+            }, 2000); 
         };
 
         // 3. LÓGICA DE MODALES
@@ -525,24 +565,79 @@
                 setTimeout(() => { modal.style.display = 'none'; }, 400); 
             } else {
                 modal.style.display = 'flex';
-                // Force reflow
-                modal.offsetHeight;
+                modal.offsetHeight; 
                 modal.classList.add('modal-active');
+                
+                // Reset inputs si es modal secreto (SOLO SI NO SE HA REVELADO AÚN)
+                if(id === 'modal-amigo-secreto') {
+                    // Si ya se reveló (input oculto), no resetear
+                    const container = document.getElementById('secretInputContainer');
+                    if (container.style.display !== 'none') {
+                        document.getElementById('secretCodeInput').value = '';
+                        document.getElementById('secretResult').style.display = 'none';
+                    }
+                }
             }
         }
 
-        function enviarConfirmacion() {
-            // Aquí puedes agregar lógica real de envío
-            const btn = document.querySelector('#modal-asistencia .btn-gold');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Enviando...';
-            setTimeout(() => {
-                btn.innerHTML = '¡Confirmado!';
-                setTimeout(() => {
-                    toggleModal('modal-asistencia');
-                    btn.innerHTML = originalText;
-                }, 1000);
-            }, 1000);
+        // 4. LÓGICA AMIGO SECRETO (Actualizada con Ciudades)
+        const secretSantaData = [
+            { code: "7391", name: "Orejuela Intriago Nancy Gisela", target: "Castillo Bermudez Tania Elizabeth", city: "PORTOVIEJO" },
+            { code: "2845", name: "Arriaga Muñoz Lenny Noraida", target: "Berrú Tinizaray Jessica Marcela", city: "LA CONCORDIA" },
+            { code: "6150", name: "Moreira Escalante Efrén Arturo", target: "Sambrano Andrade Tannya Maribel", city: "SANTO DOMINGO" },
+            { code: "9423", name: "Feijoo Moreira Tito Eliecer", target: "Alcivar Alvarez Ximena Maribel", city: "CHONE" },
+            { code: "5078", name: "Edyn Meza Cárdenas", target: "Ortoneda Velasquez Maria Dolores", city: "BAHÍA DE CARÁQUEZ" },
+            { code: "1362", name: "Castillo Bermudez Tania Elizabeth", target: "Moreira Escalante Efrén Arturo", city: "MANTA" },
+            { code: "8247", name: "Rojas Delgado Karina Cecibel", target: "Gomez Gualpa Fabricio", city: "QUININDÉ" },
+            { code: "3951", name: "Andrade Mora Oscar Alexander", target: "Arriaga Muñoz Lenny Noraida", city: "ESMERALDAS" },
+            { code: "4682", name: "Sambrano Andrade Tannya Maribel", target: "Jaramillo Pantoja Edwin Galo", city: "SANTO DOMINGO" },
+            { code: "7519", name: "Jaramillo Pantoja Edwin Galo", target: "Zambrano Minaya Liliana Monserrate", city: "CALCETA" },
+            { code: "2034", name: "Berrú Tinizaray Jessica Marcela", target: "Rojas Delgado Karina Cecibel", city: "SANTO DOMINGO" },
+            { code: "6495", name: "Medranda Vera Geovanny Alejandro", target: "Cabezas Ortiz Flavio Cesar", city: "SAN LORENZO" },
+            { code: "1728", name: "Gomez Gualpa Fabricio", target: "VeraValdez Santos Nestor", city: "SAN MIGUEL DE LOS BANCOS" },
+            { code: "5836", name: "Cabezas Ortiz Flavio Cesar", target: "Orejuela Intriago Nancy Gisela", city: "ESMERALDAS" },
+            { code: "9104", name: "Alcivar Alvarez Ximena Maribel", target: "Andrade Mora Oscar Alexander", city: "SANTO DOMINGO" },
+            { code: "3267", name: "Ortoneda Velasquez Maria Dolores", target: "Medranda Vera Geovanny Alejandro", city: "PEDERNALES" },
+            { code: "8540", name: "Zambrano Minaya Liliana Monserrate", target: "Edyn Meza Cárdenas", city: "PORTOVIEJO" },
+            { code: "4913", name: "VeraValdez Santos Nestor", target: "Feijoo Moreira Tito Eliecer", city: "MANTA" }
+        ];
+
+        function revelarAmigo() {
+            const input = document.getElementById('secretCodeInput');
+            const resultBox = document.getElementById('secretResult');
+            const nameDisplay = document.getElementById('secretNameDisplay');
+            const greetingDisplay = document.getElementById('secretGreeting');
+            const cityDisplay = document.getElementById('secretCityDisplay');
+            const inputContainer = document.getElementById('secretInputContainer');
+            
+            const code = input.value.trim();
+            const found = secretSantaData.find(p => p.code === code);
+
+            if (found) {
+                // ÉXITO
+                resultBox.style.display = 'block';
+                resultBox.style.backgroundColor = '#f0fdf4'; 
+                resultBox.style.borderColor = '#4caf50';
+                
+                // Mensaje personalizado
+                greetingDisplay.innerText = `Hola ${found.name},`;
+                nameDisplay.innerText = found.target;
+                nameDisplay.style.color = '#15803d'; 
+                cityDisplay.innerText = `Centro Universitario de ${found.city}`;
+                
+                // OCULTAR FORMULARIO (Para que no ingresen otro código)
+                inputContainer.style.display = 'none';
+                
+            } else {
+                // ERROR
+                resultBox.style.display = 'block';
+                resultBox.style.backgroundColor = '#fef2f2'; 
+                resultBox.style.borderColor = '#ef4444';
+                greetingDisplay.innerText = "";
+                nameDisplay.innerText = "Código incorrecto";
+                nameDisplay.style.color = '#b91c1c';
+                cityDisplay.innerText = "";
+            }
         }
     </script>
 </body>

@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEPYBET PRESTIGE | Mobile-Ready Finance</title>
+    <title>Sepybet | Control Financiero</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -21,13 +21,13 @@
                         mono: ['JetBrains Mono', 'monospace']
                     },
                     colors: {
-                        prestige: {
-                            bg: '#0a0c10',
-                            card: '#11141d',
+                        brand: {
+                            base: '#08090a',
+                            card: '#121418',
                             accent: '#3b82f6',
                             emerald: '#10b981',
-                            border: 'rgba(255, 255, 255, 0.08)',
-                            error: '#f43f5e'
+                            rose: '#f43f5e',
+                            border: '#1f2937'
                         }
                     }
                 }
@@ -37,71 +37,55 @@
 
     <style>
         body { 
-            background-color: #0a0c10;
-            color: #f8fafc;
-            -webkit-tap-highlight-color: transparent;
-            overscroll-behavior-y: contain;
+            background-color: #08090a;
+            color: #f1f5f9;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
         }
 
-        .premium-card {
-            background: rgba(17, 20, 29, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--prestige-border);
-            border-radius: 20px;
+        .glass-panel {
+            background: rgba(18, 20, 24, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .item-card {
+            background: #121418;
+            border: 1px solid #1f2937;
+            border-radius: 16px;
+            transition: all 0.25s ease;
+        }
+
+        .item-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
         .nav-active {
-            color: #3b82f6 !important;
-            position: relative;
+            color: white !important;
+            background: rgba(59, 130, 246, 0.15);
         }
 
-        .nav-active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: #3b82f6;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #3b82f6;
-        }
-
-        @media (min-width: 1024px) {
-            .nav-active::after {
-                left: 0;
-                bottom: auto;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 3px;
-                height: 20px;
-                border-radius: 0 4px 4px 0;
-            }
-        }
+        .nav-active svg { color: #3b82f6; }
 
         .money { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
 
-        input, select {
-            background: #0d1117 !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-radius: 12px;
-            color: white !important;
-            font-size: 16px !important; /* Evita zoom automático en iOS */
-        }
-
-        /* Responsive Audit Sheet */
-        .audit-container {
-            background: white;
+        /* Estilo Reporte Profesional */
+        .audit-document {
+            background: #ffffff;
             color: #0f172a;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 1000px;
+            max-width: 1050px;
             margin: 0 auto;
+            border-radius: 4px;
         }
 
-        .table-responsive {
-            display: block;
+        .audit-hero {
+            background: #0f172a;
+            padding: 50px;
+            color: white;
+        }
+
+        .table-wrap {
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -111,176 +95,198 @@
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="flex flex-col h-screen overflow-hidden">
+<body class="flex flex-col lg:flex-row h-screen">
 
-    <!-- LOGIN -->
-    <div id="login-gate" class="fixed inset-0 z-[2000] bg-prestige-bg flex items-center justify-center p-6">
+    <!-- PANTALLA DE ACCESO (LOGIN) -->
+    <div id="login-gate" class="fixed inset-0 z-[5000] bg-brand-base flex items-center justify-center p-6">
         <div class="w-full max-w-sm">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-900/20">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
-                <h1 class="text-2xl font-black text-white uppercase italic tracking-tighter">TITAN PRESTIGE</h1>
-                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Mobile Access Gateway</p>
+                <h1 class="text-4xl font-extrabold text-white tracking-tighter">Sepybet</h1>
+                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.4em] mt-2">Sistema de Control</p>
             </div>
             
-            <div class="bg-prestige-card p-8 rounded-3xl border border-white/5 shadow-2xl space-y-4">
-                <input type="text" id="auth-u" class="w-full text-center py-4 font-bold uppercase tracking-widest" placeholder="admin">
-                <input type="password" id="auth-p" class="w-full text-center py-4 font-bold tracking-widest" placeholder="••••">
-                <button onclick="app.authenticate()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-xl transition-all shadow-lg shadow-blue-900/20 uppercase text-xs tracking-widest">Entrar</button>
-                <p id="auth-error" class="text-prestige-error text-[10px] font-bold text-center hidden uppercase">Credenciales Inválidas</p>
+            <div class="bg-brand-card p-10 rounded-[32px] border border-brand-border shadow-2xl space-y-5">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Usuario</label>
+                    <input type="text" id="auth-u" class="w-full bg-brand-base border-brand-border py-4 px-5 rounded-xl font-bold text-white focus:border-blue-600 outline-none transition-all" placeholder="admin">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Clave</label>
+                    <input type="password" id="auth-p" class="w-full bg-brand-base border-brand-border py-4 px-5 rounded-xl font-bold text-white focus:border-blue-600 outline-none transition-all" placeholder="admin">
+                </div>
+                <button onclick="app.authenticate()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-blue-900/40 uppercase text-xs tracking-[0.2em] mt-4">Ingresar al Sistema</button>
+                <p id="auth-err" class="text-brand-rose text-[10px] font-bold text-center hidden uppercase mt-4">Acceso Denegado</p>
             </div>
         </div>
     </div>
 
-    <!-- APP SHELL -->
-    <div id="app-shell" class="hidden flex-1 flex flex-col lg:flex-row overflow-hidden opacity-0 transition-opacity duration-700">
+    <!-- SIDEBAR (Escritorio) -->
+    <aside class="hidden lg:flex w-72 h-full bg-black border-r border-brand-border flex-col p-8 no-print z-[100]">
+        <div class="flex items-center gap-3 mb-16">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg italic">S</div>
+            <h2 class="text-2xl font-black text-white italic tracking-tighter">Sepybet</h2>
+        </div>
         
-        <!-- SIDEBAR (Desktop) / TOP NAV (Mobile) -->
-        <aside class="lg:w-72 lg:h-full bg-slate-950 border-r border-white/5 flex flex-col no-print z-[100]">
-            <div class="p-6 hidden lg:flex items-center gap-3 border-b border-white/5">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg italic">T</div>
-                <h2 class="text-lg font-bold tracking-tighter text-white uppercase italic">Prestige</h2>
-            </div>
-            
-            <nav class="hidden lg:flex flex-col flex-1 p-4 space-y-1">
-                <button onclick="app.nav('dash')" id="m-dash" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg> Dashboard</button>
-                <button onclick="app.nav('sync')" id="m-sync" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg> Importar</button>
-                <button onclick="app.nav('net')" id="m-net" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg> Agentes</button>
-                <button onclick="app.nav('audit')" id="m-audit" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg> Auditoría</button>
-            </nav>
+        <nav class="flex-1 space-y-2">
+            <button onclick="app.nav('dash')" id="m-dash" class="w-full flex items-center gap-4 p-4 text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg> Dashboard</button>
+            <button onclick="app.nav('sync')" id="m-sync" class="w-full flex items-center gap-4 p-4 text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg> Cargar Excel</button>
+            <button onclick="app.nav('net')" id="m-net" class="w-full flex items-center gap-4 p-4 text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg> Red de Agentes</button>
+            <button onclick="app.nav('audit')" id="m-audit" class="w-full flex items-center gap-4 p-4 text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg> Auditoría</button>
+        </nav>
 
-            <!-- Bottom Nav (Mobile Only) -->
-            <nav class="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-slate-950 border-t border-white/5 flex items-center justify-around px-4 z-[1000] no-print">
-                <button onclick="app.nav('dash')" id="mb-dash" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Panel</span></button>
-                <button onclick="app.nav('sync')" id="mb-sync" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Carga</span></button>
-                <button onclick="app.nav('net')" id="mb-net" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Red</span></button>
-                <button onclick="app.nav('audit')" id="mb-audit" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Audit</span></button>
-            </nav>
+        <div class="mt-auto pt-6 border-t border-brand-border">
+            <button onclick="location.reload()" class="w-full text-left text-[10px] font-black text-brand-rose uppercase tracking-widest hover:underline">Log Out</button>
+        </div>
+    </aside>
 
-            <div class="mt-auto p-4 hidden lg:block border-t border-white/5">
-                <button onclick="location.reload()" class="w-full text-left text-[10px] font-black text-prestige-error uppercase tracking-widest hover:underline">Log Out System</button>
-            </div>
-        </aside>
+    <!-- BOTTOM NAV (Móvil) -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-brand-border flex items-center justify-around px-4 z-[100] no-print">
+        <button onclick="app.nav('dash')" id="mb-dash" class="text-slate-500 p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg></button>
+        <button onclick="app.nav('sync')" id="mb-sync" class="text-slate-500 p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg></button>
+        <button onclick="app.nav('net')" id="mb-net" class="text-slate-500 p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg></button>
+        <button onclick="app.nav('audit')" id="mb-audit" class="text-slate-500 p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg></button>
+    </nav>
 
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 flex flex-col overflow-hidden pb-20 lg:pb-0">
-            
-            <!-- HEADER -->
-            <header class="h-16 lg:h-24 bg-slate-900 lg:bg-transparent border-b border-white/5 lg:border-none flex items-center justify-between px-6 lg:px-10 no-print">
-                <h2 id="v-title" class="text-lg lg:text-3xl font-black italic tracking-tighter uppercase">Dashboard</h2>
-                <div id="h-tools" class="flex items-center gap-3">
-                    <!-- Dinámico -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        
+        <header class="h-16 lg:h-20 px-6 lg:px-10 flex items-center justify-between border-b border-brand-border bg-brand-base no-print">
+            <h2 id="view-title" class="text-sm lg:text-xl font-bold uppercase italic tracking-widest text-white">Panel Principal</h2>
+            <div id="h-tools"></div>
+        </header>
+
+        <div id="viewport" class="flex-1 overflow-y-auto p-4 lg:p-10 no-scrollbar pb-24">
+
+            <!-- VISTA: DASHBOARD -->
+            <div id="v-dash" class="view space-y-6 animate-in fade-in duration-500">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="item-card p-6 bg-gradient-to-br from-brand-card to-brand-base">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-3">Depósitos</p>
+                        <h3 id="st-in" class="text-xl lg:text-3xl font-bold money text-white">$0.00</h3>
+                    </div>
+                    <div class="item-card p-6 border-l-4 border-l-brand-rose">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-3">Retiros</p>
+                        <h3 id="st-out" class="text-xl lg:text-3xl font-bold money text-slate-400">-$0.00</h3>
+                    </div>
+                    <div class="item-card p-6 border-l-4 border-l-brand-accent bg-blue-600/5">
+                        <p class="text-[9px] font-black text-brand-accent uppercase tracking-widest mb-3 italic">GGR Neto</p>
+                        <h3 id="st-ggr" class="text-xl lg:text-3xl font-bold money text-white">$0.00</h3>
+                    </div>
+                    <div class="item-card p-6 border-l-4 border-l-brand-emerald">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-3">Comisiones</p>
+                        <h3 id="st-fee" class="text-xl lg:text-3xl font-bold money text-brand-emerald">$0.00</h3>
+                    </div>
                 </div>
-            </header>
 
-            <!-- VIEWPORT -->
-            <div id="viewport" class="flex-1 overflow-y-auto p-4 lg:p-10 no-scrollbar">
-
-                <!-- DASHBOARD -->
-                <div id="v-dash" class="view space-y-6 animate-in fade-in duration-500">
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
-                        <div class="premium-card p-4 lg:p-8">
-                            <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase mb-2">Depósitos</p>
-                            <h3 id="st-in" class="text-lg lg:text-2xl font-bold money text-white">$0.00</h3>
-                        </div>
-                        <div class="premium-card p-4 lg:p-8">
-                            <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase mb-2">Retiros</p>
-                            <h3 id="st-out" class="text-lg lg:text-2xl font-bold money text-slate-400">-$0.00</h3>
-                        </div>
-                        <div class="premium-card p-4 lg:p-8 border-l-4 border-l-blue-600 bg-blue-600/5">
-                            <p class="text-[8px] lg:text-[10px] font-black text-blue-500 uppercase mb-2">GGR Neto</p>
-                            <h3 id="st-ggr" class="text-lg lg:text-2xl font-bold money text-white">$0.00</h3>
-                        </div>
-                        <div class="premium-card p-4 lg:p-8 border-l-4 border-l-emerald-500">
-                            <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase mb-2">Liquidar</p>
-                            <h3 id="st-fee" class="text-lg lg:text-2xl font-bold money text-emerald-500">$0.00</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-8 item-card p-6 lg:p-10 h-[350px] lg:h-[450px]">
+                        <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-8">Performance por Nodo</h4>
+                        <div class="h-full pb-10">
+                            <canvas id="chart-main"></canvas>
                         </div>
                     </div>
+                    <div class="lg:col-span-4 item-card p-6 lg:p-10 flex flex-col">
+                        <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6 italic">Actividad de Red</h4>
+                        <div id="log-list" class="flex-1 space-y-3 overflow-y-auto text-[10px] font-mono no-scrollbar opacity-40"></div>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <div class="lg:col-span-8 premium-card p-6 lg:p-10">
-                            <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">Métrica de Nodos</h4>
-                            <div class="h-64 lg:h-96">
-                                <canvas id="chart-dash"></canvas>
+            <!-- VISTA: CARGAR -->
+            <div id="v-sync" class="view hidden h-full flex items-center justify-center animate-in zoom-in duration-300">
+                <div class="max-w-md w-full item-card p-10 lg:p-20 text-center border-2 border-dashed border-slate-800">
+                    <div class="w-20 h-20 bg-blue-600/10 text-blue-600 rounded-[32px] flex items-center justify-center mx-auto mb-8">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="1.5"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-white uppercase italic">Terminal Sepybet</h3>
+                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mt-4 mb-10 leading-relaxed">Seleccione el reporte .xlsx para inicializar el balance global.</p>
+                    <label class="block">
+                        <input type="file" id="f-input" class="hidden" onchange="app.handleFile(this.files[0])">
+                        <span id="f-label" class="bg-white text-black font-black py-4 px-10 rounded-2xl cursor-pointer text-[10px] uppercase tracking-widest shadow-2xl transition-all active:scale-95">Sincronizar Datos</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- VISTA: RED -->
+            <div id="v-net" class="view hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="item-card p-8 space-y-8 border-t-2 border-brand-accent">
+                            <h3 class="text-[11px] font-black uppercase tracking-[0.2em] italic text-blue-500">Registrar Agente</h3>
+                            <div class="space-y-5">
+                                <input type="text" id="n-name" class="w-full uppercase font-bold py-4 text-xs" placeholder="ID DEL AGENTE">
+                                <div class="flex justify-between items-center text-[10px] font-bold uppercase text-slate-500 px-1">
+                                    <span>Fee</span>
+                                    <span id="f-val" class="text-blue-500 text-lg">20%</span>
+                                </div>
+                                <input type="range" id="n-fee" min="1" max="50" value="20" oninput="document.getElementById('f-val').innerText = this.value + '%'" class="w-full accent-blue-600 h-1 bg-slate-800 rounded-full appearance-none">
+                                <button onclick="app.addNode()" class="w-full bg-white text-black font-black py-4 rounded-xl uppercase text-[10px] tracking-widest transition-all active:scale-95">Anclar Agente</button>
                             </div>
                         </div>
-                        <div class="lg:col-span-4 premium-card p-6 lg:p-10 flex flex-col max-h-64 lg:max-h-full">
-                            <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">Eventos</h4>
-                            <div id="log-list" class="flex-1 space-y-2 overflow-y-auto text-[10px] font-mono opacity-50 no-scrollbar"></div>
+                        <div id="n-list" class="space-y-2 max-h-64 lg:max-h-full overflow-y-auto no-scrollbar"></div>
+                    </div>
+                    <div class="lg:col-span-8 item-card flex flex-col h-[600px] lg:h-[800px] overflow-hidden">
+                        <div class="p-6 lg:p-8 bg-white/5 border-b border-brand-border flex flex-col lg:flex-row justify-between items-center gap-4">
+                            <h3 class="text-[11px] font-black uppercase tracking-widest italic">Vinculación de Usuarios</h3>
+                            <div class="relative w-full lg:w-80">
+                                <input type="text" id="n-search" oninput="app.renderNodes()" placeholder="Filtrar por Usuario..." class="w-full pl-10 text-[10px] font-bold uppercase tracking-widest py-3">
+                                <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/></svg>
+                            </div>
                         </div>
+                        <div id="n-grid" class="flex-1 overflow-y-auto p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 content-start no-scrollbar"></div>
                     </div>
                 </div>
+            </div>
 
-                <!-- SYNC -->
-                <div id="v-sync" class="view hidden h-full flex items-center justify-center animate-in zoom-in duration-300">
-                    <div class="max-w-md w-full premium-card p-10 text-center border-2 border-dashed border-slate-800">
-                        <div class="w-20 h-20 bg-blue-600/10 text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-width="1.5"/></svg>
-                        </div>
-                        <h3 class="text-xl font-black text-white italic uppercase">Inyección de Datos</h3>
-                        <p class="text-slate-500 text-xs mt-2 mb-8 uppercase tracking-widest">Master Excel Sync</p>
-                        <label class="block">
-                            <input type="file" id="f-input" class="hidden" onchange="app.handleFile(this.files[0])">
-                            <span id="f-label" class="bg-white text-black font-black py-4 px-8 rounded-xl cursor-pointer text-xs uppercase tracking-widest shadow-xl inline-block transition-all active:scale-95">Sincronizar</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- NETWORK -->
-                <div id="v-net" class="view hidden space-y-6">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <div class="lg:col-span-4 space-y-4">
-                            <div class="premium-card p-6 space-y-6 border-t-2 border-blue-600">
-                                <h3 class="text-[10px] font-black uppercase tracking-widest italic">Anclar Agente</h3>
-                                <div class="space-y-4">
-                                    <input type="text" id="n-name" class="w-full uppercase font-bold" placeholder="ID AGENTE">
-                                    <div class="flex justify-between items-center text-[10px] font-bold uppercase text-slate-500">
-                                        <span>Fee</span>
-                                        <span id="f-val" class="text-blue-500">20%</span>
-                                    </div>
-                                    <input type="range" id="n-fee" min="1" max="50" value="20" oninput="document.getElementById('f-val').innerText = this.value + '%'" class="w-full accent-blue-600 h-1 bg-slate-800 rounded-full appearance-none">
-                                    <button onclick="app.addNode()" class="w-full bg-white text-black font-black py-3 rounded-xl uppercase text-[10px] tracking-widest transition-all active:scale-95">Generar Nodo</button>
+            <!-- VISTA: AUDITORÍA -->
+            <div id="v-audit" class="view hidden">
+                <div id="audit-doc" class="audit-document shadow-2xl relative overflow-hidden">
+                    <div class="audit-hero relative overflow-hidden">
+                        <div class="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
+                            <div>
+                                <h1 class="text-5xl lg:text-8xl font-black italic tracking-tighter uppercase leading-none mb-6">Sepybet</h1>
+                                <div class="flex items-center gap-4">
+                                    <span class="px-5 py-2 bg-blue-600 text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-xl">Auditoría de Red</span>
+                                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.6em] italic">Settlement Global v3.5</p>
                                 </div>
                             </div>
-                            <div id="n-list" class="space-y-2 max-h-48 lg:max-h-full overflow-y-auto no-scrollbar"></div>
-                        </div>
-                        <div class="lg:col-span-8 premium-card flex flex-col h-[500px] lg:h-[750px] overflow-hidden">
-                            <div class="p-4 lg:p-8 bg-white/5 border-b border-white/5 flex justify-between items-center">
-                                <h3 class="text-[10px] font-black uppercase tracking-widest">Mapeo de Red</h3>
-                                <input type="text" id="n-search" oninput="app.renderNodes()" placeholder="Buscar..." class="w-40 lg:w-64 text-xs">
+                            <div class="text-left lg:text-right bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-md">
+                                <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Hash de Registro</p>
+                                <p id="audit-id" class="text-sm font-mono font-bold text-white uppercase"></p>
+                                <p id="audit-date" class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest"></p>
                             </div>
-                            <div id="n-grid" class="flex-1 overflow-y-auto p-4 lg:p-8 grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4 content-start no-scrollbar"></div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 lg:p-20 space-y-24 bg-white">
+                        <div id="audit-kpi" class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10"></div>
+                        
+                        <div id="audit-body" class="space-y-40"></div>
+
+                        <div class="mt-40 pt-20 border-t-2 border-slate-100 grid grid-cols-1 lg:grid-cols-2 gap-20">
+                            <div class="italic text-slate-400 text-xs leading-relaxed">
+                                "Este reporte constituye el balance definitivo de liquidación. Se han verificado todas las transacciones procesadas y ajustes manuales vinculados a cada nodo de agente registrado."
+                            </div>
+                            <div class="flex justify-between items-center gap-10">
+                                <div class="text-center w-full">
+                                    <div class="w-32 h-[1px] bg-slate-900 mx-auto mb-3"></div>
+                                    <p class="text-[9px] font-black text-slate-900 uppercase tracking-widest leading-none">Control Maestro</p>
+                                    <p class="text-[8px] text-slate-400 uppercase mt-1 italic">Verified System</p>
+                                </div>
+                                <div class="w-24 h-24 border-4 border-slate-100 rounded-2xl flex items-center justify-center opacity-10 rotate-12">
+                                    <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- AUDIT -->
-                <div id="v-audit" class="view hidden">
-                    <div id="audit-doc" class="audit-container p-6 lg:p-16 shadow-2xl relative overflow-hidden">
-                        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b-2 border-slate-100 pb-8 mb-10 gap-4">
-                            <div>
-                                <h1 class="text-3xl lg:text-5xl font-black italic tracking-tighter text-slate-900 leading-none">PRESTIGE STATEMENT</h1>
-                                <p class="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mt-2">Protocolo Institucional v3.5</p>
-                            </div>
-                            <div class="text-left lg:text-right space-y-2">
-                                <p id="audit-id" class="text-xs font-mono font-bold text-slate-400 uppercase"></p>
-                                <p id="audit-date" class="text-[9px] font-black text-blue-600 uppercase"></p>
-                            </div>
-                        </div>
-
-                        <div id="audit-kpi" class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-10 lg:mb-20"></div>
-                        <div id="audit-body" class="space-y-16 lg:space-y-32"></div>
-
-                        <div class="mt-20 lg:mt-40 pt-10 border-t border-slate-100 text-center opacity-30 italic">
-                            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[1em]">Privado • Confidencial • Red Sepybet</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </main>
-    </div>
+
+        </div>
+    </main>
 
     <script>
         const app = {
@@ -294,7 +300,7 @@
             },
 
             init() {
-                const s = localStorage.getItem('prestige_m_v3');
+                const s = localStorage.getItem('sepy_final_v3');
                 if (s) {
                     const p = JSON.parse(s);
                     this.state.nodes = p.nodes || [];
@@ -313,7 +319,7 @@
                     setTimeout(() => sh.style.opacity = '1', 50);
                     this.nav('sync');
                 } else {
-                    const err = document.getElementById('auth-error');
+                    const err = document.getElementById('auth-err');
                     err.classList.remove('hidden');
                     setTimeout(() => err.classList.add('hidden'), 2000);
                 }
@@ -325,20 +331,21 @@
                 document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
                 document.getElementById('v-' + id).classList.remove('hidden');
                 
-                // Active States
                 document.querySelectorAll('button[id^="m-"], button[id^="mb-"]').forEach(b => b.classList.remove('nav-active'));
-                document.getElementById('m-' + id).classList.add('nav-active');
-                document.getElementById('mb-' + id).classList.add('nav-active');
+                const btn = document.getElementById('m-' + id);
+                const mBtn = document.getElementById('mb-' + id);
+                if(btn) btn.classList.add('nav-active');
+                if(mBtn) mBtn.classList.add('nav-active');
 
-                const ts = { dash: 'Panel Maestro', sync: 'Sync Terminal', net: 'Estructura de Red', audit: 'Auditoría Final' };
-                document.getElementById('v-title').innerText = ts[id];
+                const ts = { dash: 'Dashboard Ejecutivo', sync: 'Terminal de Carga', net: 'Red de Agentes', audit: 'Auditoría Final' };
+                document.getElementById('view-title').innerText = ts[id];
 
                 const ht = document.getElementById('h-tools');
                 ht.innerHTML = '';
                 if (id === 'audit') {
                     ht.innerHTML = `
-                        <select id="a-filt" onchange="app.renderAudit()" class="hidden lg:block text-[10px] font-black uppercase w-48"></select>
-                        <button onclick="app.exportPDF()" class="bg-blue-600 text-white font-black px-4 py-2 rounded-lg text-[9px] uppercase shadow-lg shadow-blue-900/30">PDF</button>
+                        <select id="a-filt" onchange="app.renderAudit()" class="hidden lg:block text-[10px] font-black uppercase w-64"></select>
+                        <button onclick="app.exportPDF()" class="bg-blue-600 text-white font-black px-6 py-2 rounded-xl text-[10px] uppercase shadow-xl hover:bg-white hover:text-black transition-all">Generar PDF</button>
                     `;
                     this.renderAudit();
                 }
@@ -351,15 +358,15 @@
                 const l = document.getElementById('log-list');
                 if (!l) return;
                 const tm = new Date().toLocaleTimeString('es-EC', { hour12: false });
-                const cl = t === 'success' ? 'text-emerald-500' : 'text-slate-400';
+                const cl = t === 'success' ? 'text-blue-500' : 'text-slate-500';
                 const d = document.createElement('div');
-                d.className = "flex gap-3 pb-1 border-b border-white/5";
+                d.className = "flex gap-3 pb-1 border-b border-white/[0.03]";
                 d.innerHTML = `<span class="opacity-30 italic">${tm}</span><span class="${cl} font-bold uppercase tracking-tighter">${m}</span>`;
                 l.prepend(d);
             },
 
             save() {
-                localStorage.setItem('prestige_m_v3', JSON.stringify({
+                localStorage.setItem('sepy_final_v3', JSON.stringify({
                     nodes: this.state.nodes,
                     adj: this.state.adj
                 }));
@@ -373,9 +380,9 @@
                     const w = XLSX.read(d, { type: 'array' });
                     const j = XLSX.utils.sheet_to_json(w.Sheets[w.SheetNames[0]]);
                     this.state.data = j;
-                    document.getElementById('f-label').innerText = `Matrix Ready (${j.length})`;
-                    this.log(`Inyectados ${j.length} registros operativos.`, "success");
-                    // AUTO REDIRECT
+                    document.getElementById('f-label').innerText = `Matriz Sincronizada (${j.length})`;
+                    this.log(`Inyectados ${j.length} movimientos operativos.`, "success");
+                    // REDIRECCIÓN AUTOMÁTICA
                     setTimeout(() => this.nav('dash'), 500);
                 };
                 r.readAsArrayBuffer(f);
@@ -384,11 +391,11 @@
             getBalances() {
                 const b = {};
                 this.state.data.forEach(r => {
-                    const u = r['Nombre de jugador/agente'] || r.Usuario || r.Player || 'X-ID';
+                    const u = r['Nombre de jugador/agente'] || r.Usuario || r.Player || 'S/N';
                     const a = Math.abs(parseFloat(r.Monto || r.Amount || 0));
                     const ty = String(r['Tipo de operación'] || r.Type || '').toLowerCase();
                     const st = String(r['Estado'] || r.Status || '').toLowerCase();
-                    if (u === 'X-ID' || st !== 'processed') return;
+                    if (u === 'S/N' || st !== 'processed') return;
                     if (!b[u]) b[u] = { in: 0, out: 0 };
                     if (ty.includes('deposit') || ty.includes('ingreso')) b[u].in += a;
                     else if (ty.includes('withdrawal') || ty.includes('retiro')) b[u].out += a;
@@ -420,20 +427,28 @@
                 const tGGR = m.reduce((a, x) => a + x.gr, 0);
                 const tFee = m.reduce((a, x) => a + x.fa, 0);
 
-                document.getElementById('st-in').innerText = `$${tIn.toLocaleString()}`;
-                document.getElementById('st-out').innerText = `-$${Object.values(b).reduce((a, x) => a + x.out, 0).toLocaleString()}`;
-                document.getElementById('st-ggr').innerText = `$${tGGR.toLocaleString()}`;
-                document.getElementById('st-fee').innerText = `$${tFee.toLocaleString()}`;
+                document.getElementById('st-in').innerText = `$${tIn.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+                document.getElementById('st-out').innerText = `-$${Object.values(b).reduce((a, x) => a + x.out, 0).toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+                document.getElementById('st-ggr').innerText = `$${tGGR.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+                document.getElementById('st-fee').innerText = `$${tFee.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
 
                 if (this.state.chart) this.state.chart.destroy();
-                const ctx = document.getElementById('chart-dash').getContext('2d');
+                const ctx = document.getElementById('chart-main').getContext('2d');
                 this.state.chart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: m.map(x => x.name),
-                        datasets: [{ label: 'GGR', data: m.map(x => x.gr), backgroundColor: '#3b82f6', borderRadius: 8 }]
+                        datasets: [{ label: 'GGR Bruto', data: m.map(x => x.gr), backgroundColor: '#3b82f6', borderRadius: 6 }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 } } },
+                            x: { grid: { display: false }, ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } } }
+                        }
+                    }
                 });
             },
 
@@ -445,7 +460,7 @@
                 document.getElementById('n-name').value = '';
                 this.save();
                 this.renderNodes();
-                this.log(`Agente ${n} Generado.`, "success");
+                this.log(`Establecido canal de liquidación para ${n}.`, "success");
             },
 
             remNode(i) { this.state.nodes.splice(i, 1); this.save(); this.renderNodes(); },
@@ -465,30 +480,31 @@
 
             renderNodes() {
                 const b = this.getBalances();
-                const q = document.getElementById('n-search').value.toUpperCase();
-                const pl = Object.keys(b).filter(id => id.includes(q));
+                const q = document.getElementById('n-search').value.toLowerCase();
+                // BÚSQUEDA CORREGIDA: Case-insensitive y exacta
+                const pl = Object.keys(b).filter(id => id.toLowerCase().includes(q));
 
                 document.getElementById('n-list').innerHTML = this.state.nodes.map((n, i) => `
-                    <div class="premium-card p-4 flex justify-between items-center border-l-4 border-l-blue-600">
-                        <p class="text-[10px] font-black text-white italic">${n.name}</p>
-                        <button onclick="app.remNode(${i})" class="text-slate-700 hover:text-prestige-error"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" stroke-width="2"/></svg></button>
+                    <div class="item-card p-5 flex justify-between items-center border-l-4 border-l-blue-600 bg-blue-600/5">
+                        <p class="text-[11px] font-black text-white italic tracking-widest">${n.name}</p>
+                        <button onclick="app.remNode(${i})" class="text-slate-700 hover:text-brand-rose"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" stroke-width="2.5"/></svg></button>
                     </div>
                 `).join('');
 
                 document.getElementById('n-grid').innerHTML = pl.map(pid => {
                     const o = this.state.nodes.find(a => a.players.includes(pid));
                     return `
-                        <div class="premium-card p-5 flex flex-col gap-3 ${o ? 'bg-blue-600/5' : ''}">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-[10px] italic">${pid.charAt(0)}</div>
+                        <div class="item-card p-6 flex flex-col gap-4 ${o ? 'bg-blue-600/5 border-blue-600/30' : ''}">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center font-black text-xl italic text-slate-500">${pid.charAt(0)}</div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-[11px] font-bold text-white truncate uppercase">${pid}</p>
-                                    <p class="text-[8px] text-slate-500 uppercase">${o ? 'Nodo: ' + o.name : 'Libre'}</p>
+                                    <p class="text-[13px] font-black text-white truncate uppercase italic tracking-tighter leading-none mb-1">${pid}</p>
+                                    <p class="text-[9px] font-bold uppercase tracking-widest ${o ? 'text-blue-500' : 'text-slate-600'}">${o ? 'Agente: ' + o.name : 'ID Independiente'}</p>
                                 </div>
                             </div>
-                            <div class="flex flex-wrap gap-1">
-                                ${o ? `<button onclick="app.unlink('${pid}')" class="px-2 py-1 bg-prestige-error/10 text-prestige-error rounded text-[8px] font-bold uppercase">Sever</button>` : ''}
-                                ${this.state.nodes.map((n, i) => o?.name !== n.name ? `<button onclick="app.link(${i}, '${pid}')" class="px-2 py-1 bg-slate-800 text-slate-400 rounded text-[8px] font-bold uppercase hover:bg-blue-600 hover:text-white">${n.name}</button>` : '').join('')}
+                            <div class="flex flex-wrap gap-1.5">
+                                ${o ? `<button onclick="app.unlink('${pid}')" class="px-3 py-2 bg-brand-rose/10 text-brand-rose rounded-lg text-[8px] font-bold uppercase tracking-widest hover:bg-brand-rose hover:text-white transition-all">Desvincular</button>` : ''}
+                                ${this.state.nodes.map((n, i) => o?.name !== n.name ? `<button onclick="app.link(${i}, '${pid}')" class="px-3 py-2 bg-slate-800 text-slate-400 rounded-lg text-[8px] font-bold uppercase hover:bg-blue-600 hover:text-white transition-all">${n.name}</button>` : '').join('')}
                             </div>
                         </div>
                     `;
@@ -512,64 +528,64 @@
                 const gGr = m.reduce((a, b) => a + b.gr, 0);
                 const gFa = m.reduce((a, b) => a + b.fa, 0);
 
-                document.getElementById('audit-id').innerText = 'PRSTG-M' + Math.random().toString(36).substr(2, 6).toUpperCase();
-                document.getElementById('audit-date').innerText = new Date().toLocaleDateString('es-EC', { dateStyle: 'long' });
+                document.getElementById('audit-id').innerText = 'SPB-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                document.getElementById('audit-date').innerText = new Date().toLocaleString('es-EC', { dateStyle: 'full', timeStyle: 'short' });
 
                 document.getElementById('audit-kpi').innerHTML = `
-                    <div class="p-6 lg:p-10 border border-slate-100 rounded-3xl">
-                        <p class="text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Liquidez</p>
-                        <p class="text-xl lg:text-3xl font-black money-font text-slate-900">$${gTi.toLocaleString()}</p>
+                    <div class="p-10 border-2 border-slate-100 rounded-[32px] text-center">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Liquidez Ingresada</p>
+                        <p class="text-3xl font-black money-font text-slate-900">$${gTi.toLocaleString()}</p>
                     </div>
-                    <div class="p-6 lg:p-10 bg-slate-900 rounded-3xl text-white">
-                        <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Utilidad Neta</p>
-                        <p class="text-xl lg:text-3xl font-black money-font">$${(gGr - gFa).toLocaleString()}</p>
+                    <div class="p-10 bg-slate-900 rounded-[32px] text-center text-white shadow-2xl">
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Ganancia Neta Casa</p>
+                        <p class="text-4xl font-black money-font">$${(gGr - gFa).toLocaleString()}</p>
                     </div>
-                    <div class="p-6 lg:p-10 border border-slate-100 rounded-3xl">
-                        <p class="text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Pago Agentes</p>
-                        <p class="text-xl lg:text-3xl font-black money-font text-blue-600">$${gFa.toLocaleString()}</p>
+                    <div class="p-10 border-2 border-slate-100 rounded-[32px] text-center">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Pago a Agentes</p>
+                        <p class="text-3xl font-black money-font text-blue-600">$${gFa.toLocaleString()}</p>
                     </div>
                 `;
 
                 document.getElementById('audit-body').innerHTML = flt.map(n => `
-                    <div class="space-y-6 lg:space-y-10">
-                        <div class="flex justify-between items-end border-b border-slate-200 pb-6">
+                    <div class="space-y-12 animate-in slide-in-from-bottom duration-700">
+                        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b-4 border-slate-900 pb-10 gap-6">
                             <div>
-                                <h3 class="text-2xl lg:text-5xl font-black italic tracking-tighter text-slate-900 uppercase">${n.name}</h3>
-                                <p class="text-[8px] lg:text-[10px] font-black bg-slate-100 px-3 py-1 rounded inline-block mt-2">Health: ${n.h}%</p>
+                                <h3 class="text-5xl lg:text-7xl font-black italic tracking-tighter text-slate-900 uppercase leading-none">${n.name}</h3>
+                                <p class="text-[10px] font-black bg-slate-100 px-4 py-1.5 rounded-full inline-block mt-4 uppercase tracking-widest">Ratio Salud: ${n.h}%</p>
                             </div>
-                            <div class="text-right">
-                                <p class="text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase mb-2">Comisión (${n.fee}%)</p>
-                                <p class="text-2xl lg:text-6xl font-black money-font text-slate-900">$${n.fa.toLocaleString()}</p>
+                            <div class="text-left lg:text-right">
+                                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 italic">Monto de Liquidación (${n.fee}%)</p>
+                                <p class="text-5xl lg:text-7xl font-black money-font text-slate-900 tracking-tighter">$${n.fa.toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
                             </div>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-wrap">
                             <table class="w-full text-left">
-                                <thead class="bg-slate-50 text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                <thead class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                     <tr>
-                                        <th class="p-4">ID</th>
-                                        <th class="p-4 text-center">In</th>
-                                        <th class="p-4 text-center">Out</th>
-                                        <th class="p-4 text-center">Adj</th>
-                                        <th class="p-4 text-right">Net</th>
+                                        <th class="p-5">Terminal ID</th>
+                                        <th class="p-5 text-center">Entrada (+)</th>
+                                        <th class="p-5 text-center">Salida (-)</th>
+                                        <th class="p-5 text-center">Ajuste Audit.</th>
+                                        <th class="p-5 text-right font-black">Total Neto</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100 text-[10px] lg:text-sm">
+                                <tbody class="divide-y-2 divide-slate-100 text-sm">
                                     ${n.ent.map(e => `
                                         <tr>
-                                            <td class="p-4 font-black uppercase">${e.id}</td>
-                                            <td class="p-4 text-center money-font text-slate-400">$${e.in.toLocaleString()}</td>
-                                            <td class="p-4 text-center money-font text-slate-300">-$${e.out.toLocaleString()}</td>
-                                            <td class="p-4 text-center no-print">
-                                                <input type="number" oninput="app.updAdj('${e.id}', this.value)" value="${this.state.adj[e.id] || ''}" class="w-16 lg:w-24 text-center font-bold text-blue-600 bg-slate-50 border-none outline-none text-[10px]">
+                                            <td class="p-5 font-black text-slate-900 uppercase tracking-tight text-base italic leading-none">${e.id}</td>
+                                            <td class="p-5 text-center money-font text-slate-500 font-bold">$${e.in.toLocaleString()}</td>
+                                            <td class="p-5 text-center money-font text-brand-rose/40 font-bold">-$${e.out.toLocaleString()}</td>
+                                            <td class="p-5 text-center no-print">
+                                                <input type="number" oninput="app.updAdj('${e.id}', this.value)" value="${this.state.adj[e.id] || ''}" class="w-24 lg:w-32 text-center font-black text-blue-600 bg-slate-50 border-none outline-none rounded-xl py-2">
                                             </td>
-                                            <td class="p-4 text-right font-black money-font text-slate-900">$${e.nt.toLocaleString()}</td>
+                                            <td class="p-5 text-right font-black money-font text-slate-900 text-xl tracking-tighter leading-none">$${e.nt.toLocaleString('es-EC', {minimumFractionDigits: 2})}</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
                                 <tfoot class="bg-slate-50 font-black">
                                     <tr>
-                                        <td colspan="4" class="p-4 text-right text-[8px] lg:text-[10px] uppercase opacity-40">Subtotal Nodo:</td>
-                                        <td class="p-4 text-right text-base lg:text-2xl money-font">$${n.gr.toLocaleString()}</td>
+                                        <td colspan="4" class="p-8 text-right text-[12px] uppercase tracking-[0.8em] opacity-40 italic">Balance de Nodo Acumulado:</td>
+                                        <td class="p-8 text-right text-5xl money-font italic tracking-tighter leading-none">$${n.gr.toLocaleString('es-EC', {minimumFractionDigits: 2})}</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -581,13 +597,13 @@
             async exportPDF() {
                 const doc = document.getElementById('audit-doc');
                 document.querySelectorAll('.no-print').forEach(el => el.style.opacity = '0');
-                const canvas = await html2canvas(doc, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
-                const img = canvas.toDataURL('image/png');
+                const canvas = await html2canvas(doc, { scale: 2.5, backgroundColor: '#ffffff', useCORS: true });
+                const imgData = canvas.toDataURL('image/png');
                 const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
                 const w = pdf.internal.pageSize.getWidth();
                 const h = (canvas.height * w) / canvas.width;
-                pdf.addImage(img, 'PNG', 0, 0, w, h);
-                pdf.save(`AUDIT_${Date.now()}.pdf`);
+                pdf.addImage(imgData, 'PNG', 0, 0, w, h);
+                pdf.save(`Sepybet_Audit_${Date.now()}.pdf`);
                 document.querySelectorAll('.no-print').forEach(el => el.style.opacity = '1');
             }
         };
@@ -596,4 +612,5 @@
     </script>
 </body>
 </html>
+
 

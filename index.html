@@ -2,15 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEPYBET PRESTIGE | Institutional Intelligence</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEPYBET PRESTIGE | Mobile-Ready Finance</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -21,14 +21,13 @@
                         mono: ['JetBrains Mono', 'monospace']
                     },
                     colors: {
-                        vault: {
+                        prestige: {
                             bg: '#0a0c10',
                             card: '#11141d',
                             accent: '#3b82f6',
-                            success: '#10b981',
-                            error: '#f43f5e',
+                            emerald: '#10b981',
                             border: 'rgba(255, 255, 255, 0.08)',
-                            text: '#f8fafc'
+                            error: '#f43f5e'
                         }
                     }
                 }
@@ -37,330 +36,244 @@
     </script>
 
     <style>
-        :root {
-            --sidebar-width: 280px;
-        }
-
         body { 
             background-color: #0a0c10;
             color: #f8fafc;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
         }
 
-        /* Alineación Perfecta */
-        .grid-master {
-            display: grid;
-            grid-template-columns: var(--sidebar-width) 1fr;
-            height: 100vh;
+        .premium-card {
+            background: rgba(17, 20, 29, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--prestige-border);
+            border-radius: 20px;
         }
 
-        .sidebar {
-            background-color: #0d1117;
-            border-right: 1px solid var(--vault-border);
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
+        .nav-active {
+            color: #3b82f6 !important;
+            position: relative;
         }
 
-        .main-content {
-            overflow-y: auto;
-            background: radial-gradient(circle at top right, #111827, #0a0c10);
-        }
-
-        /* Componentes Premium */
-        .executive-card {
-            background: rgba(17, 20, 29, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--vault-border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .executive-card:hover {
-            border-color: rgba(59, 130, 246, 0.5);
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.875rem 1rem;
-            border-radius: 10px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #94a3b8;
-            transition: all 0.2s ease;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.03);
-            color: white;
-        }
-
-        .nav-item.active {
+        .nav-active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
             background: #3b82f6;
-            color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+            border-radius: 50%;
+            box-shadow: 0 0 8px #3b82f6;
         }
 
-        .money-font {
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: -0.05em;
+        @media (min-width: 1024px) {
+            .nav-active::after {
+                left: 0;
+                bottom: auto;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 3px;
+                height: 20px;
+                border-radius: 0 4px 4px 0;
+            }
         }
 
-        /* Inputs y Selects Profesionales */
+        .money { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+
         input, select {
             background: #0d1117 !important;
-            border: 1px solid var(--vault-border) !important;
-            border-radius: 8px;
-            padding: 0.625rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 12px;
             color: white !important;
-            font-size: 0.875rem;
+            font-size: 16px !important; /* Evita zoom automático en iOS */
         }
 
-        input:focus {
-            border-color: #3b82f6 !important;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        /* Reporte de Auditoría Pro */
-        .audit-sheet {
+        /* Responsive Audit Sheet */
+        .audit-container {
             background: white;
-            color: #1e293b;
-            padding: 4rem;
-            border-radius: 8px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            color: #0f172a;
+            border-radius: 12px;
+            width: 100%;
             max-width: 1000px;
             margin: 0 auto;
         }
 
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        .loading-shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body>
+<body class="flex flex-col h-screen overflow-hidden">
 
-    <!-- PORTAL DE ACCESO SEGURO -->
-    <div id="login-screen" class="fixed inset-0 z-[1000] bg-vault-bg flex items-center justify-center p-6">
+    <!-- LOGIN -->
+    <div id="login-gate" class="fixed inset-0 z-[2000] bg-prestige-bg flex items-center justify-center p-6">
         <div class="w-full max-w-sm">
-            <div class="text-center mb-10">
-                <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
-                <h1 class="text-2xl font-bold tracking-tight text-white uppercase">Prestige Gateway</h1>
-                <p class="text-slate-500 text-sm mt-2">Ingrese sus credenciales operativas</p>
+                <h1 class="text-2xl font-black text-white uppercase italic tracking-tighter">TITAN PRESTIGE</h1>
+                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Mobile Access Gateway</p>
             </div>
             
-            <div class="space-y-4 bg-vault-card p-8 rounded-2xl border border-vault-border shadow-2xl">
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Identificador</label>
-                    <input type="text" id="auth-user" class="w-full" placeholder="admin">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contraseña</label>
-                    <input type="password" id="auth-pass" class="w-full" placeholder="admin">
-                </div>
-                <button onclick="app.login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-blue-900/20">Iniciar Sesión</button>
-                <p id="login-error" class="text-vault-error text-[10px] font-bold text-center hidden uppercase tracking-wider">Acceso Denegado</p>
+            <div class="bg-prestige-card p-8 rounded-3xl border border-white/5 shadow-2xl space-y-4">
+                <input type="text" id="auth-u" class="w-full text-center py-4 font-bold uppercase tracking-widest" placeholder="admin">
+                <input type="password" id="auth-p" class="w-full text-center py-4 font-bold tracking-widest" placeholder="••••">
+                <button onclick="app.authenticate()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-xl transition-all shadow-lg shadow-blue-900/20 uppercase text-xs tracking-widest">Entrar</button>
+                <p id="auth-error" class="text-prestige-error text-[10px] font-bold text-center hidden uppercase">Credenciales Inválidas</p>
             </div>
         </div>
     </div>
 
-    <!-- APP WRAPPER -->
-    <div id="app-shell" class="hidden grid-master opacity-0 transition-opacity duration-700">
+    <!-- APP SHELL -->
+    <div id="app-shell" class="hidden flex-1 flex flex-col lg:flex-row overflow-hidden opacity-0 transition-opacity duration-700">
         
-        <!-- SIDEBAR IZQUIERDO -->
-        <aside class="sidebar no-print">
-            <div class="flex items-center gap-3 mb-12">
-                <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center font-bold text-white shadow-lg">S</div>
-                <h2 class="text-lg font-bold tracking-tighter text-white">SEPYBET <span class="text-blue-500">PRESTIGE</span></h2>
+        <!-- SIDEBAR (Desktop) / TOP NAV (Mobile) -->
+        <aside class="lg:w-72 lg:h-full bg-slate-950 border-r border-white/5 flex flex-col no-print z-[100]">
+            <div class="p-6 hidden lg:flex items-center gap-3 border-b border-white/5">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg italic">T</div>
+                <h2 class="text-lg font-bold tracking-tighter text-white uppercase italic">Prestige</h2>
             </div>
             
-            <nav class="flex-1 space-y-1">
-                <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-4 px-4">Menu Principal</p>
-                <button onclick="app.nav('dashboard')" id="nav-dashboard" class="nav-item">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg>
-                    <span>Dashboard</span>
-                </button>
-                <button onclick="app.nav('import')" id="nav-import" class="nav-item">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg>
-                    <span>Carga de Datos</span>
-                </button>
-                <button onclick="app.nav('agents')" id="nav-agents" class="nav-item">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg>
-                    <span>Gestión de Red</span>
-                </button>
-                <button onclick="app.nav('audit')" id="nav-audit" class="nav-item">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg>
-                    <span>Auditoría Final</span>
-                </button>
+            <nav class="hidden lg:flex flex-col flex-1 p-4 space-y-1">
+                <button onclick="app.nav('dash')" id="m-dash" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg> Dashboard</button>
+                <button onclick="app.nav('sync')" id="m-sync" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg> Importar</button>
+                <button onclick="app.nav('net')" id="m-net" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg> Agentes</button>
+                <button onclick="app.nav('audit')" id="m-audit" class="flex items-center gap-3 p-4 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg> Auditoría</button>
             </nav>
 
-            <div class="mt-auto p-4 bg-white/5 rounded-xl border border-vault-border">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs">A</div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[11px] font-bold text-white uppercase truncate tracking-tight">Admin Principal</p>
-                        <button onclick="location.reload()" class="text-[10px] text-vault-error font-bold hover:underline">Log Out</button>
-                    </div>
-                </div>
+            <!-- Bottom Nav (Mobile Only) -->
+            <nav class="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-slate-950 border-t border-white/5 flex items-center justify-around px-4 z-[1000] no-print">
+                <button onclick="app.nav('dash')" id="mb-dash" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Panel</span></button>
+                <button onclick="app.nav('sync')" id="mb-sync" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Carga</span></button>
+                <button onclick="app.nav('net')" id="mb-net" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Red</span></button>
+                <button onclick="app.nav('audit')" id="mb-audit" class="flex flex-col items-center gap-1 text-slate-500 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg><span class="text-[9px] font-bold uppercase tracking-widest">Audit</span></button>
+            </nav>
+
+            <div class="mt-auto p-4 hidden lg:block border-t border-white/5">
+                <button onclick="location.reload()" class="w-full text-left text-[10px] font-black text-prestige-error uppercase tracking-widest hover:underline">Log Out System</button>
             </div>
         </aside>
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <main class="main-content flex flex-col h-screen">
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 flex flex-col overflow-hidden pb-20 lg:pb-0">
             
-            <!-- HEADER SUPERIOR -->
-            <header class="h-20 flex items-center justify-between px-10 border-b border-vault-border no-print">
-                <div class="flex items-center gap-4">
-                    <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Dashboard</h2>
-                    <span class="px-3 py-1 bg-blue-600/10 text-blue-500 text-[10px] font-bold rounded-full border border-blue-500/20 uppercase tracking-widest">En Línea</span>
-                </div>
-                
-                <div id="header-tools" class="flex items-center gap-4">
+            <!-- HEADER -->
+            <header class="h-16 lg:h-24 bg-slate-900 lg:bg-transparent border-b border-white/5 lg:border-none flex items-center justify-between px-6 lg:px-10 no-print">
+                <h2 id="v-title" class="text-lg lg:text-3xl font-black italic tracking-tighter uppercase">Dashboard</h2>
+                <div id="h-tools" class="flex items-center gap-3">
                     <!-- Dinámico -->
                 </div>
             </header>
 
-            <div id="viewport" class="flex-1 overflow-y-auto p-10 no-scrollbar">
+            <!-- VIEWPORT -->
+            <div id="viewport" class="flex-1 overflow-y-auto p-4 lg:p-10 no-scrollbar">
 
-                <!-- VISTA: DASHBOARD -->
-                <div id="view-dashboard" class="view space-y-8 animate-in fade-in duration-500">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div class="executive-card">
-                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Volumen Depósitos</p>
-                            <h3 id="stat-in" class="text-2xl font-bold money-font text-white">$0.00</h3>
+                <!-- DASHBOARD -->
+                <div id="v-dash" class="view space-y-6 animate-in fade-in duration-500">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+                        <div class="premium-card p-4 lg:p-8">
+                            <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase mb-2">Depósitos</p>
+                            <h3 id="st-in" class="text-lg lg:text-2xl font-bold money text-white">$0.00</h3>
                         </div>
-                        <div class="executive-card border-l-4 border-l-vault-error">
-                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Volumen Retiros</p>
-                            <h3 id="stat-out" class="text-2xl font-bold money-font text-slate-400">-$0.00</h3>
+                        <div class="premium-card p-4 lg:p-8">
+                            <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase mb-2">Retiros</p>
+                            <h3 id="st-out" class="text-lg lg:text-2xl font-bold money text-slate-400">-$0.00</h3>
                         </div>
-                        <div class="executive-card bg-blue-600/10 border-blue-600/20 border-l-4 border-l-blue-600">
-                            <p class="text-[10px] font-bold text-blue-500 uppercase tracking-[0.2em] mb-3">GGR Neto Global</p>
-                            <h3 id="stat-ggr" class="text-2xl font-bold money-font text-white">$0.00</h3>
+                        <div class="premium-card p-4 lg:p-8 border-l-4 border-l-blue-600 bg-blue-600/5">
+                            <p class="text-[8px] lg:text-[10px] font-black text-blue-500 uppercase mb-2">GGR Neto</p>
+                            <h3 id="st-ggr" class="text-lg lg:text-2xl font-bold money text-white">$0.00</h3>
                         </div>
-                        <div class="executive-card border-l-4 border-l-vault-success">
-                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Liquidación Agentes</p>
-                            <h3 id="stat-fees" class="text-2xl font-bold money-font text-vault-success">$0.00</h3>
+                        <div class="premium-card p-4 lg:p-8 border-l-4 border-l-emerald-500">
+                            <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase mb-2">Liquidar</p>
+                            <h3 id="st-fee" class="text-lg lg:text-2xl font-bold money text-emerald-500">$0.00</h3>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-12 gap-8">
-                        <div class="col-span-12 lg:col-span-8 executive-card h-[450px] flex flex-col">
-                            <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-8 italic">Distribución de Activos por Nodo</h4>
-                            <div class="flex-1 min-h-0">
-                                <canvas id="main-chart"></canvas>
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-8 premium-card p-6 lg:p-10">
+                            <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">Métrica de Nodos</h4>
+                            <div class="h-64 lg:h-96">
+                                <canvas id="chart-dash"></canvas>
                             </div>
                         </div>
-                        <div class="col-span-12 lg:col-span-4 executive-card flex flex-col">
-                            <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-6 italic text-center">Protocolo de Operaciones</h4>
-                            <div id="log-list" class="flex-1 space-y-3 overflow-y-auto pr-2 no-scrollbar opacity-60"></div>
+                        <div class="lg:col-span-4 premium-card p-6 lg:p-10 flex flex-col max-h-64 lg:max-h-full">
+                            <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">Eventos</h4>
+                            <div id="log-list" class="flex-1 space-y-2 overflow-y-auto text-[10px] font-mono opacity-50 no-scrollbar"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- VISTA: IMPORTAR -->
-                <div id="view-import" class="view hidden h-full flex items-center justify-center animate-in zoom-in duration-500">
-                    <div class="max-w-xl w-full executive-card p-16 text-center border-2 border-dashed border-slate-700">
-                        <div class="w-24 h-24 bg-blue-600/10 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="1.5"/></svg>
+                <!-- SYNC -->
+                <div id="v-sync" class="view hidden h-full flex items-center justify-center animate-in zoom-in duration-300">
+                    <div class="max-w-md w-full premium-card p-10 text-center border-2 border-dashed border-slate-800">
+                        <div class="w-20 h-20 bg-blue-600/10 text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-width="1.5"/></svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-white mb-3">Importar Inteligencia de Datos</h3>
-                        <p class="text-slate-500 text-sm mb-10 max-w-xs mx-auto">Sincronice su archivo .xlsx para habilitar la terminal de auditoría y liquidación.</p>
-                        
-                        <label class="group relative cursor-pointer inline-block">
-                            <input type="file" id="file-input" class="hidden" onchange="app.handleFile(this.files[0])">
-                            <span id="file-label" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-xl transition-all shadow-xl shadow-blue-900/20 inline-block">Seleccionar Master Excel</span>
+                        <h3 class="text-xl font-black text-white italic uppercase">Inyección de Datos</h3>
+                        <p class="text-slate-500 text-xs mt-2 mb-8 uppercase tracking-widest">Master Excel Sync</p>
+                        <label class="block">
+                            <input type="file" id="f-input" class="hidden" onchange="app.handleFile(this.files[0])">
+                            <span id="f-label" class="bg-white text-black font-black py-4 px-8 rounded-xl cursor-pointer text-xs uppercase tracking-widest shadow-xl inline-block transition-all active:scale-95">Sincronizar</span>
                         </label>
                     </div>
                 </div>
 
-                <!-- VISTA: AGENTES -->
-                <div id="view-agents" class="view hidden space-y-8 animate-in slide-in-from-right duration-500">
-                    <div class="grid grid-cols-12 gap-10">
-                        <div class="col-span-12 lg:col-span-4 space-y-6">
-                            <div class="executive-card space-y-8">
-                                <h3 class="text-sm font-bold text-white uppercase tracking-widest italic border-l-4 border-blue-600 pl-4">Anclar Nodo Maestro</h3>
-                                <div class="space-y-6">
-                                    <div class="space-y-2">
-                                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Nombre Operativo</label>
-                                        <input type="text" id="node-name" class="w-full uppercase font-bold" placeholder="EJ: DELTA_STATION">
+                <!-- NETWORK -->
+                <div id="v-net" class="view hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-4 space-y-4">
+                            <div class="premium-card p-6 space-y-6 border-t-2 border-blue-600">
+                                <h3 class="text-[10px] font-black uppercase tracking-widest italic">Anclar Agente</h3>
+                                <div class="space-y-4">
+                                    <input type="text" id="n-name" class="w-full uppercase font-bold" placeholder="ID AGENTE">
+                                    <div class="flex justify-between items-center text-[10px] font-bold uppercase text-slate-500">
+                                        <span>Fee</span>
+                                        <span id="f-val" class="text-blue-500">20%</span>
                                     </div>
-                                    <div class="space-y-6">
-                                        <div class="flex justify-between items-center">
-                                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fee de Liquidación</label>
-                                            <span id="fee-disp" class="text-2xl font-bold text-blue-500 money-font">20%</span>
-                                        </div>
-                                        <input type="range" id="node-fee" min="1" max="50" value="20" oninput="document.getElementById('fee-disp').innerText = this.value + '%'" class="w-full accent-blue-600 h-1 bg-slate-800 rounded-full appearance-none">
-                                    </div>
-                                    <button onclick="app.addAgent()" class="w-full bg-white hover:bg-blue-600 hover:text-white text-black font-black py-4 rounded-xl transition-all uppercase tracking-widest text-[11px]">Establecer Conexión</button>
+                                    <input type="range" id="n-fee" min="1" max="50" value="20" oninput="document.getElementById('f-val').innerText = this.value + '%'" class="w-full accent-blue-600 h-1 bg-slate-800 rounded-full appearance-none">
+                                    <button onclick="app.addNode()" class="w-full bg-white text-black font-black py-3 rounded-xl uppercase text-[10px] tracking-widest transition-all active:scale-95">Generar Nodo</button>
                                 </div>
                             </div>
-                            <div id="agent-list" class="space-y-3 max-h-[400px] overflow-y-auto no-scrollbar"></div>
+                            <div id="n-list" class="space-y-2 max-h-48 lg:max-h-full overflow-y-auto no-scrollbar"></div>
                         </div>
-
-                        <div class="col-span-12 lg:col-span-8 executive-card flex flex-col h-[750px] overflow-hidden">
-                            <div class="p-6 bg-white/5 border-b border-vault-border flex justify-between items-center">
-                                <h3 class="text-sm font-bold text-white uppercase tracking-widest">Mapeo de Terminales de Usuario</h3>
-                                <input type="text" id="user-search" oninput="app.renderAgents()" placeholder="Trace ID..." class="w-72 bg-transparent text-xs font-bold uppercase tracking-widest">
+                        <div class="lg:col-span-8 premium-card flex flex-col h-[500px] lg:h-[750px] overflow-hidden">
+                            <div class="p-4 lg:p-8 bg-white/5 border-b border-white/5 flex justify-between items-center">
+                                <h3 class="text-[10px] font-black uppercase tracking-widest">Mapeo de Red</h3>
+                                <input type="text" id="n-search" oninput="app.renderNodes()" placeholder="Buscar..." class="w-40 lg:w-64 text-xs">
                             </div>
-                            <div id="user-grid" class="flex-1 overflow-y-auto p-8 grid grid-cols-1 md:grid-cols-2 gap-4 content-start no-scrollbar"></div>
+                            <div id="n-grid" class="flex-1 overflow-y-auto p-4 lg:p-8 grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4 content-start no-scrollbar"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- VISTA: AUDITORÍA -->
-                <div id="view-audit" class="view hidden">
-                    <div id="audit-sheet" class="audit-sheet animate-in slide-in-from-bottom duration-1000">
-                        <!-- Header Reporte -->
-                        <div class="flex justify-between items-start border-b-2 border-slate-900/10 pb-10 mb-12">
+                <!-- AUDIT -->
+                <div id="v-audit" class="view hidden">
+                    <div id="audit-doc" class="audit-container p-6 lg:p-16 shadow-2xl relative overflow-hidden">
+                        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b-2 border-slate-100 pb-8 mb-10 gap-4">
                             <div>
-                                <h1 class="text-4xl font-black tracking-tighter text-slate-900 uppercase">Statement of Earnings</h1>
-                                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.4em] mt-2">Sepybet Institutional Prestige Protocol v3.0</p>
+                                <h1 class="text-3xl lg:text-5xl font-black italic tracking-tighter text-slate-900 leading-none">PRESTIGE STATEMENT</h1>
+                                <p class="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mt-2">Protocolo Institucional v3.5</p>
                             </div>
-                            <div class="text-right space-y-4">
-                                <div>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reference ID</p>
-                                    <p id="audit-id" class="text-xs font-mono font-bold text-slate-900 uppercase"></p>
-                                </div>
-                                <p id="audit-date" class="text-[10px] text-slate-400 font-bold uppercase"></p>
+                            <div class="text-left lg:text-right space-y-2">
+                                <p id="audit-id" class="text-xs font-mono font-bold text-slate-400 uppercase"></p>
+                                <p id="audit-date" class="text-[9px] font-black text-blue-600 uppercase"></p>
                             </div>
                         </div>
 
-                        <!-- Dashboard Auditoría -->
-                        <div id="audit-summary-grid" class="grid grid-cols-3 gap-8 mb-20"></div>
+                        <div id="audit-kpi" class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-10 lg:mb-20"></div>
+                        <div id="audit-body" class="space-y-16 lg:space-y-32"></div>
 
-                        <!-- Contenido Principal -->
-                        <div id="audit-body" class="space-y-24"></div>
-
-                        <!-- Footer -->
-                        <div class="mt-40 pt-16 border-t-2 border-slate-100">
-                            <div class="grid grid-cols-3 gap-20">
-                                <div class="text-center italic">
-                                    <div class="h-[1px] bg-slate-200 mb-2"></div>
-                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Sello Digital Corporativo</p>
-                                </div>
-                                <div class="flex flex-col items-center justify-center opacity-10">
-                                    <div class="w-16 h-16 bg-black rounded-full"></div>
-                                </div>
-                                <div class="text-center italic">
-                                    <div class="h-[1px] bg-slate-200 mb-2"></div>
-                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Validación de Auditoría</p>
-                                </div>
-                            </div>
-                            <p class="mt-20 text-center text-[10px] text-slate-300 font-bold uppercase tracking-[1em]">Privado • Confidencial</p>
+                        <div class="mt-20 lg:mt-40 pt-10 border-t border-slate-100 text-center opacity-30 italic">
+                            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[1em]">Privado • Confidencial • Red Sepybet</p>
                         </div>
                     </div>
                 </div>
@@ -372,323 +285,291 @@
     <script>
         const app = {
             state: {
-                agents: [],
-                rawData: [],
-                adjustments: {},
-                currView: 'login',
-                charts: {},
-                isLogged: false
+                nodes: [],
+                data: [],
+                adj: {},
+                curr: 'sync',
+                isLog: false,
+                chart: null
             },
 
             init() {
-                const data = localStorage.getItem('sepy_prestige_v3');
-                if (data) {
-                    const parsed = JSON.parse(data);
-                    this.state.agents = parsed.agents || [];
-                    this.state.adjustments = parsed.adjustments || {};
+                const s = localStorage.getItem('prestige_m_v3');
+                if (s) {
+                    const p = JSON.parse(s);
+                    this.state.nodes = p.nodes || [];
+                    this.state.adj = p.adj || {};
                 }
             },
 
-            login() {
-                const u = document.getElementById('auth-user').value.toLowerCase();
-                const p = document.getElementById('auth-pass').value;
+            authenticate() {
+                const u = document.getElementById('auth-u').value.toLowerCase();
+                const p = document.getElementById('auth-p').value;
                 if (u === 'admin' && p === 'admin') {
-                    this.state.isLogged = true;
-                    document.getElementById('login-screen').style.display = 'none';
-                    const shell = document.getElementById('app-shell');
-                    shell.classList.remove('hidden');
-                    setTimeout(() => shell.style.opacity = '1', 50);
-                    this.nav('import');
-                    this.log("Handshake de seguridad validado.", "success");
+                    this.state.isLog = true;
+                    document.getElementById('login-gate').style.display = 'none';
+                    const sh = document.getElementById('app-shell');
+                    sh.classList.remove('hidden');
+                    setTimeout(() => sh.style.opacity = '1', 50);
+                    this.nav('sync');
                 } else {
-                    const err = document.getElementById('login-error');
+                    const err = document.getElementById('auth-error');
                     err.classList.remove('hidden');
                     setTimeout(() => err.classList.add('hidden'), 2000);
                 }
             },
 
             nav(id) {
-                if (!this.state.isLogged) return;
-                this.state.currView = id;
+                if (!this.state.isLog) return;
+                this.state.curr = id;
                 document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-                document.getElementById('view-' + id).classList.remove('hidden');
-                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-                document.getElementById('nav-' + id).classList.add('active');
+                document.getElementById('v-' + id).classList.remove('hidden');
+                
+                // Active States
+                document.querySelectorAll('button[id^="m-"], button[id^="mb-"]').forEach(b => b.classList.remove('nav-active'));
+                document.getElementById('m-' + id).classList.add('nav-active');
+                document.getElementById('mb-' + id).classList.add('nav-active');
 
-                const titles = { dashboard: 'Resumen Maestro', import: 'Terminal de Inteligencia', agents: 'Arquitectura de Red', audit: 'Informe de Liquidación' };
-                document.getElementById('view-title').innerText = titles[id];
+                const ts = { dash: 'Panel Maestro', sync: 'Sync Terminal', net: 'Estructura de Red', audit: 'Auditoría Final' };
+                document.getElementById('v-title').innerText = ts[id];
 
-                const tools = document.getElementById('header-tools');
-                tools.innerHTML = '';
+                const ht = document.getElementById('h-tools');
+                ht.innerHTML = '';
                 if (id === 'audit') {
-                    tools.innerHTML = `
-                        <select id="h-filter" onchange="app.renderAudit()" class="text-[10px] font-black uppercase w-64"></select>
-                        <button onclick="app.exportPDF()" class="bg-white text-black font-black px-6 py-2 rounded-lg text-[10px] uppercase shadow-xl hover:bg-blue-600 hover:text-white transition-all">Generar Statement PDF</button>
+                    ht.innerHTML = `
+                        <select id="a-filt" onchange="app.renderAudit()" class="hidden lg:block text-[10px] font-black uppercase w-48"></select>
+                        <button onclick="app.exportPDF()" class="bg-blue-600 text-white font-black px-4 py-2 rounded-lg text-[9px] uppercase shadow-lg shadow-blue-900/30">PDF</button>
                     `;
+                    this.renderAudit();
                 }
 
-                if (id === 'dashboard') this.renderDashboard();
-                if (id === 'agents') this.renderAgents();
-                if (id === 'audit') this.renderAudit();
+                if (id === 'dash') this.renderDash();
+                if (id === 'net') this.renderNodes();
             },
 
-            log(msg, type = 'info') {
-                const list = document.getElementById('log-list');
-                if (!list) return;
-                const time = new Date().toLocaleTimeString('es-EC', { hour12: false });
-                const color = type === 'success' ? 'text-vault-success' : (type === 'error' ? 'text-vault-error' : 'text-slate-500');
-                const div = document.createElement('div');
-                div.className = "flex gap-4 border-b border-white/5 pb-2 text-[10px] font-mono";
-                div.innerHTML = `<span class="opacity-30 italic">${time}</span><span class="${color} font-bold uppercase tracking-tighter">${msg}</span>`;
-                list.prepend(div);
+            log(m, t = 'info') {
+                const l = document.getElementById('log-list');
+                if (!l) return;
+                const tm = new Date().toLocaleTimeString('es-EC', { hour12: false });
+                const cl = t === 'success' ? 'text-emerald-500' : 'text-slate-400';
+                const d = document.createElement('div');
+                d.className = "flex gap-3 pb-1 border-b border-white/5";
+                d.innerHTML = `<span class="opacity-30 italic">${tm}</span><span class="${cl} font-bold uppercase tracking-tighter">${m}</span>`;
+                l.prepend(d);
             },
 
             save() {
-                localStorage.setItem('sepy_prestige_v3', JSON.stringify({
-                    agents: this.state.agents,
-                    adjustments: this.state.adjustments
+                localStorage.setItem('prestige_m_v3', JSON.stringify({
+                    nodes: this.state.nodes,
+                    adj: this.state.adj
                 }));
             },
 
-            handleFile(file) {
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const data = new Uint8Array(e.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-                    this.state.rawData = json;
-                    document.getElementById('file-label').innerText = `Matrix Ready (${json.length} IDs)`;
-                    this.log(`Procesados ${json.length} registros operativos.`, "success");
-                    // AUTO-NAVIGATE
-                    setTimeout(() => this.nav('dashboard'), 600);
+            handleFile(f) {
+                if (!f) return;
+                const r = new FileReader();
+                r.onload = (e) => {
+                    const d = new Uint8Array(e.target.result);
+                    const w = XLSX.read(d, { type: 'array' });
+                    const j = XLSX.utils.sheet_to_json(w.Sheets[w.SheetNames[0]]);
+                    this.state.data = j;
+                    document.getElementById('f-label').innerText = `Matrix Ready (${j.length})`;
+                    this.log(`Inyectados ${j.length} registros operativos.`, "success");
+                    // AUTO REDIRECT
+                    setTimeout(() => this.nav('dash'), 500);
                 };
-                reader.readAsArrayBuffer(file);
+                r.readAsArrayBuffer(f);
             },
 
             getBalances() {
                 const b = {};
-                this.state.rawData.forEach(row => {
-                    const u = row['Nombre de jugador/agente'] || row.Usuario || row.Player || 'X-ID';
-                    const a = Math.abs(parseFloat(row.Monto || row.Amount || 0));
-                    const ty = String(row['Tipo de operación'] || row.Type || '').toLowerCase();
-                    const st = String(row['Estado'] || row.Status || '').toLowerCase();
-
+                this.state.data.forEach(r => {
+                    const u = r['Nombre de jugador/agente'] || r.Usuario || r.Player || 'X-ID';
+                    const a = Math.abs(parseFloat(r.Monto || r.Amount || 0));
+                    const ty = String(r['Tipo de operación'] || r.Type || '').toLowerCase();
+                    const st = String(r['Estado'] || r.Status || '').toLowerCase();
                     if (u === 'X-ID' || st !== 'processed') return;
                     if (!b[u]) b[u] = { in: 0, out: 0 };
-
                     if (ty.includes('deposit') || ty.includes('ingreso')) b[u].in += a;
                     else if (ty.includes('withdrawal') || ty.includes('retiro')) b[u].out += a;
                 });
                 return b;
             },
 
-            calculateMatrix() {
-                const bal = this.getBalances();
-                return this.state.agents.map(ag => {
+            calc() {
+                const b = this.getBalances();
+                return this.state.nodes.map(n => {
                     let ti = 0, to = 0, ta = 0;
-                    const entities = ag.players.map(p => {
-                        const s = bal[p] || { in: 0, out: 0 };
-                        const adj = parseFloat(this.state.adjustments[p] || 0);
-                        const net = (s.in - s.out) - adj;
-                        ti += s.in; to += s.out; ta += adj;
-                        return { id: p, in: s.in, out: s.out, adj, net };
+                    const ent = n.players.map(p => {
+                        const s = b[p] || { in: 0, out: 0 };
+                        const ad = parseFloat(this.state.adj[p] || 0);
+                        const nt = (s.in - s.out) - ad;
+                        ti += s.in; to += s.out; ta += ad;
+                        return { id: p, ...s, ad, nt };
                     });
-                    const ggr = (ti - to) - ta;
-                    const feeAmt = ggr > 0 ? (ggr * (ag.fee / 100)) : 0;
-                    return { ...ag, entities, ti, to, ta, ggr, feeAmt, health: ti > 0 ? ((ggr / ti) * 100).toFixed(1) : 0 };
+                    const gr = (ti - to) - ta;
+                    const fa = gr > 0 ? (gr * (n.fee / 100)) : 0;
+                    return { ...n, ent, ti, to, ta, gr, fa, h: ti > 0 ? ((gr / ti) * 100).toFixed(1) : 0 };
                 });
             },
 
-            renderDashboard() {
-                const raw = this.getBalances();
-                const matrix = this.calculateMatrix();
-                
-                const tIn = Object.values(raw).reduce((a, b) => a + b.in, 0);
-                const tOut = Object.values(raw).reduce((a, b) => a + b.out, 0);
-                const tGGR = matrix.reduce((a, b) => a + b.ggr, 0);
-                const tFee = matrix.reduce((a, b) => a + b.feeAmt, 0);
+            renderDash() {
+                const b = this.getBalances();
+                const m = this.calc();
+                const tIn = Object.values(b).reduce((a, x) => a + x.in, 0);
+                const tGGR = m.reduce((a, x) => a + x.gr, 0);
+                const tFee = m.reduce((a, x) => a + x.fa, 0);
 
-                document.getElementById('stat-in').innerText = `$${tIn.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
-                document.getElementById('stat-out').innerText = `-$${tOut.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
-                document.getElementById('stat-ggr').innerText = `$${tGGR.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
-                document.getElementById('stat-fees').innerText = `$${tFee.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+                document.getElementById('st-in').innerText = `$${tIn.toLocaleString()}`;
+                document.getElementById('st-out').innerText = `-$${Object.values(b).reduce((a, x) => a + x.out, 0).toLocaleString()}`;
+                document.getElementById('st-ggr').innerText = `$${tGGR.toLocaleString()}`;
+                document.getElementById('st-fee').innerText = `$${tFee.toLocaleString()}`;
 
-                if (this.state.charts.main) this.state.charts.main.destroy();
-                const ctx = document.getElementById('main-chart').getContext('2d');
-                this.state.charts.main = new Chart(ctx, {
+                if (this.state.chart) this.state.chart.destroy();
+                const ctx = document.getElementById('chart-dash').getContext('2d');
+                this.state.chart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: matrix.map(x => x.name),
-                        datasets: [{
-                            label: 'GGR Nivelado',
-                            data: matrix.map(x => x.ggr),
-                            backgroundColor: '#3b82f6',
-                            borderRadius: 12,
-                        }]
+                        labels: m.map(x => x.name),
+                        datasets: [{ label: 'GGR', data: m.map(x => x.gr), backgroundColor: '#3b82f6', borderRadius: 8 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#475569', font: { family: 'JetBrains Mono', size: 10 } } },
-                            x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: 'bold', size: 9 } } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
             },
 
-            addAgent() {
-                const name = document.getElementById('node-name').value.trim().toUpperCase();
-                const fee = parseInt(document.getElementById('node-fee').value);
-                if (!name || this.state.agents.some(x => x.name === name)) return;
-                this.state.agents.push({ name, fee, players: [] });
-                document.getElementById('node-name').value = '';
+            addNode() {
+                const n = document.getElementById('n-name').value.trim().toUpperCase();
+                const f = parseInt(document.getElementById('n-fee').value);
+                if (!n || this.state.nodes.some(x => x.name === n)) return;
+                this.state.nodes.push({ name: n, fee: f, players: [] });
+                document.getElementById('n-name').value = '';
                 this.save();
-                this.renderAgents();
-                this.log(`Establecido canal de liquidación para ${name}.`, "success");
+                this.renderNodes();
+                this.log(`Agente ${n} Generado.`, "success");
             },
 
-            removeAgent(idx) {
-                this.state.agents.splice(idx, 1);
+            remNode(i) { this.state.nodes.splice(i, 1); this.save(); this.renderNodes(); },
+
+            link(nIdx, p) {
+                this.state.nodes.forEach(x => x.players = x.players.filter(z => z !== p));
+                this.state.nodes[nIdx].players.push(p);
                 this.save();
-                this.renderAgents();
+                this.renderNodes();
             },
 
-            linkPlayer(idx, pid) {
-                this.state.agents.forEach(a => a.players = a.players.filter(x => x !== pid));
-                this.state.agents[idx].players.push(pid);
+            unlink(p) {
+                this.state.nodes.forEach(x => x.players = x.players.filter(z => z !== p));
                 this.save();
-                this.renderAgents();
+                this.renderNodes();
             },
 
-            unlinkPlayer(pid) {
-                this.state.agents.forEach(a => a.players = a.players.filter(x => x !== pid));
-                this.save();
-                this.renderAgents();
-            },
+            renderNodes() {
+                const b = this.getBalances();
+                const q = document.getElementById('n-search').value.toUpperCase();
+                const pl = Object.keys(b).filter(id => id.includes(q));
 
-            renderAgents() {
-                const raw = this.getBalances();
-                const q = document.getElementById('user-search').value.toUpperCase();
-                const players = Object.keys(raw).filter(id => id.includes(q));
-
-                document.getElementById('agent-list').innerHTML = this.state.agents.map((a, i) => `
-                    <div class="executive-card flex justify-between items-center border-l-4 border-l-blue-600 p-6">
-                        <div>
-                            <p class="text-xs font-black text-white uppercase tracking-widest">${a.name}</p>
-                            <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">${a.fee}% Fee • ${a.players.length} Terminales</p>
-                        </div>
-                        <button onclick="app.removeAgent(${i})" class="text-slate-600 hover:text-vault-error transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" stroke-width="2.5"/></svg>
-                        </button>
+                document.getElementById('n-list').innerHTML = this.state.nodes.map((n, i) => `
+                    <div class="premium-card p-4 flex justify-between items-center border-l-4 border-l-blue-600">
+                        <p class="text-[10px] font-black text-white italic">${n.name}</p>
+                        <button onclick="app.remNode(${i})" class="text-slate-700 hover:text-prestige-error"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" stroke-width="2"/></svg></button>
                     </div>
                 `).join('');
 
-                document.getElementById('user-grid').innerHTML = players.map(pid => {
-                    const assigned = this.state.agents.find(a => a.players.includes(pid));
+                document.getElementById('n-grid').innerHTML = pl.map(pid => {
+                    const o = this.state.nodes.find(a => a.players.includes(pid));
                     return `
-                        <div class="executive-card flex flex-col gap-4 ${assigned ? 'bg-blue-600/5 border-blue-600/30' : ''}">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center font-black text-slate-500 text-sm italic">${pid.charAt(0)}</div>
+                        <div class="premium-card p-5 flex flex-col gap-3 ${o ? 'bg-blue-600/5' : ''}">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-[10px] italic">${pid.charAt(0)}</div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-xs font-black text-white truncate uppercase tracking-tighter leading-none mb-1">${pid}</p>
-                                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">${assigned ? 'Nodo: ' + assigned.name : 'Terminal Autónoma'}</p>
+                                    <p class="text-[11px] font-bold text-white truncate uppercase">${pid}</p>
+                                    <p class="text-[8px] text-slate-500 uppercase">${o ? 'Nodo: ' + o.name : 'Libre'}</p>
                                 </div>
                             </div>
                             <div class="flex flex-wrap gap-1">
-                                ${assigned ? `<button onclick="app.unlinkPlayer('${pid}')" class="px-3 py-1.5 bg-vault-error/10 text-vault-error rounded-lg text-[9px] font-bold uppercase tracking-widest hover:bg-vault-error hover:text-white transition-all">Sever</button>` : ''}
-                                ${this.state.agents.map((a, i) => assigned?.name !== a.name ? `<button onclick="app.linkPlayer(${i}, '${pid}')" class="px-3 py-1.5 bg-slate-800 text-slate-400 rounded-lg text-[9px] font-bold uppercase hover:bg-blue-600 hover:text-white transition-all">${a.name}</button>` : '').join('')}
+                                ${o ? `<button onclick="app.unlink('${pid}')" class="px-2 py-1 bg-prestige-error/10 text-prestige-error rounded text-[8px] font-bold uppercase">Sever</button>` : ''}
+                                ${this.state.nodes.map((n, i) => o?.name !== n.name ? `<button onclick="app.link(${i}, '${pid}')" class="px-2 py-1 bg-slate-800 text-slate-400 rounded text-[8px] font-bold uppercase hover:bg-blue-600 hover:text-white">${n.name}</button>` : '').join('')}
                             </div>
                         </div>
                     `;
                 }).join('');
             },
 
-            updateAdj(pid, val) {
-                this.state.adjustments[pid] = val;
-                this.save();
-                this.renderAudit();
-            },
+            updAdj(p, v) { this.state.adj[p] = v; this.save(); this.renderAudit(); },
 
             renderAudit() {
-                const matrix = this.calculateMatrix();
-                const filter = document.getElementById('h-filter')?.value || 'ALL';
-                const filterSelect = document.getElementById('h-filter');
-                if (filterSelect) {
-                    const last = filterSelect.value;
-                    filterSelect.innerHTML = `<option value="ALL">CONSOLIDADO GLOBAL DE RED</option>` + this.state.agents.map(a => `<option value="${a.name}">${a.name}</option>`).join('');
-                    filterSelect.value = last || 'ALL';
+                const m = this.calc();
+                const f = document.getElementById('a-filt')?.value || 'ALL';
+                const s = document.getElementById('a-filt');
+                if (s) {
+                    const lv = s.value;
+                    s.innerHTML = `<option value="ALL">CONSOLIDADO GLOBAL</option>` + this.state.nodes.map(x => `<option value="${x.name}">${x.name}</option>`).join('');
+                    s.value = lv || 'ALL';
                 }
 
-                const filtered = filter === 'ALL' ? matrix : matrix.filter(a => a.name === filter);
-                const gTi = matrix.reduce((a, b) => a + b.ti, 0);
-                const gGr = matrix.reduce((a, b) => a + b.ggr, 0);
-                const gFa = matrix.reduce((a, b) => a + b.feeAmt, 0);
+                const flt = f === 'ALL' ? m : m.filter(x => x.name === f);
+                const gTi = m.reduce((a, b) => a + b.ti, 0);
+                const gGr = m.reduce((a, b) => a + b.gr, 0);
+                const gFa = m.reduce((a, b) => a + b.fa, 0);
 
-                document.getElementById('audit-id').innerText = 'PRSTG-X' + Math.random().toString(36).substr(2, 8).toUpperCase();
-                document.getElementById('audit-date').innerText = new Date().toLocaleString('es-EC', { dateStyle: 'full', timeStyle: 'short' });
+                document.getElementById('audit-id').innerText = 'PRSTG-M' + Math.random().toString(36).substr(2, 6).toUpperCase();
+                document.getElementById('audit-date').innerText = new Date().toLocaleDateString('es-EC', { dateStyle: 'long' });
 
-                document.getElementById('audit-summary-grid').innerHTML = `
-                    <div class="p-10 border-2 border-slate-100 rounded-3xl">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4">Total Liquidez Entrada</p>
-                        <p class="text-3xl font-black money-font text-slate-900">$${gTi.toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                document.getElementById('audit-kpi').innerHTML = `
+                    <div class="p-6 lg:p-10 border border-slate-100 rounded-3xl">
+                        <p class="text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Liquidez</p>
+                        <p class="text-xl lg:text-3xl font-black money-font text-slate-900">$${gTi.toLocaleString()}</p>
                     </div>
-                    <div class="p-10 bg-slate-900 rounded-3xl text-white shadow-2xl">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mb-4 italic">Utilidad Neta Prestige</p>
-                        <p class="text-4xl font-black money-font text-white">$${(gGr - gFa).toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                    <div class="p-6 lg:p-10 bg-slate-900 rounded-3xl text-white">
+                        <p class="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Utilidad Neta</p>
+                        <p class="text-xl lg:text-3xl font-black money-font">$${(gGr - gFa).toLocaleString()}</p>
                     </div>
-                    <div class="p-10 border-2 border-slate-100 rounded-3xl">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4 italic">Provisionado Agentes</p>
-                        <p class="text-3xl font-black money-font text-blue-600">$${gFa.toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                    <div class="p-6 lg:p-10 border border-slate-100 rounded-3xl">
+                        <p class="text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Pago Agentes</p>
+                        <p class="text-xl lg:text-3xl font-black money-font text-blue-600">$${gFa.toLocaleString()}</p>
                     </div>
                 `;
 
-                document.getElementById('audit-body').innerHTML = filtered.map(a => `
-                    <div class="space-y-12">
-                        <div class="flex justify-between items-end border-b-4 border-slate-900 pb-8">
+                document.getElementById('audit-body').innerHTML = flt.map(n => `
+                    <div class="space-y-6 lg:space-y-10">
+                        <div class="flex justify-between items-end border-b border-slate-200 pb-6">
                             <div>
-                                <h3 class="text-6xl font-black text-slate-900 italic tracking-tighter uppercase leading-none">${a.name}</h3>
-                                <div class="flex items-center gap-6 mt-6">
-                                    <span class="px-4 py-1 bg-slate-900 text-white text-[10px] font-black rounded uppercase tracking-widest">Efficiency: ${a.health}%</span>
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] italic">Station Verified • Node Active</span>
-                                </div>
+                                <h3 class="text-2xl lg:text-5xl font-black italic tracking-tighter text-slate-900 uppercase">${n.name}</h3>
+                                <p class="text-[8px] lg:text-[10px] font-black bg-slate-100 px-3 py-1 rounded inline-block mt-2">Health: ${n.h}%</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 italic font-light">Settlement Amount (${a.fee}%)</p>
-                                <p class="text-7xl font-black money-font text-slate-900 tracking-tighter">$${a.feeAmt.toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                                <p class="text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase mb-2">Comisión (${n.fee}%)</p>
+                                <p class="text-2xl lg:text-6xl font-black money-font text-slate-900">$${n.fa.toLocaleString()}</p>
                             </div>
                         </div>
-
-                        <div class="overflow-hidden border-2 border-slate-900 rounded-3xl shadow-sm">
+                        <div class="table-responsive">
                             <table class="w-full text-left">
-                                <thead class="bg-slate-900 text-[11px] font-bold text-white uppercase tracking-widest">
+                                <thead class="bg-slate-50 text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                     <tr>
-                                        <th class="py-6 px-8">Terminal ID</th>
-                                        <th class="py-6 px-4 text-center">Inflow (+)</th>
-                                        <th class="py-6 px-4 text-center">Outflow (-)</th>
-                                        <th class="py-6 px-4 text-center">Audit Adj.</th>
-                                        <th class="py-6 px-8 text-right font-black">Net Value</th>
+                                        <th class="p-4">ID</th>
+                                        <th class="p-4 text-center">In</th>
+                                        <th class="p-4 text-center">Out</th>
+                                        <th class="p-4 text-center">Adj</th>
+                                        <th class="p-4 text-right">Net</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y-2 divide-slate-100 text-sm">
-                                    ${a.entities.map(e => `
-                                        <tr class="hover:bg-slate-50 transition-colors">
-                                            <td class="py-6 px-8 font-black text-slate-900 uppercase tracking-tighter leading-none text-base italic">${e.id}</td>
-                                            <td class="py-6 px-4 text-center money-font text-slate-500">$${e.in.toLocaleString()}</td>
-                                            <td class="py-6 px-4 text-center money-font text-slate-400">-$${e.out.toLocaleString()}</td>
-                                            <td class="py-6 px-4 text-center no-print">
-                                                <input type="number" oninput="app.updateAdj('${e.id}', this.value)" value="${this.state.adjustments[e.id] || ''}" class="w-28 text-center font-black text-blue-600 bg-slate-100 border-none outline-none rounded">
+                                <tbody class="divide-y divide-slate-100 text-[10px] lg:text-sm">
+                                    ${n.ent.map(e => `
+                                        <tr>
+                                            <td class="p-4 font-black uppercase">${e.id}</td>
+                                            <td class="p-4 text-center money-font text-slate-400">$${e.in.toLocaleString()}</td>
+                                            <td class="p-4 text-center money-font text-slate-300">-$${e.out.toLocaleString()}</td>
+                                            <td class="p-4 text-center no-print">
+                                                <input type="number" oninput="app.updAdj('${e.id}', this.value)" value="${this.state.adj[e.id] || ''}" class="w-16 lg:w-24 text-center font-bold text-blue-600 bg-slate-50 border-none outline-none text-[10px]">
                                             </td>
-                                            <td class="py-6 px-8 text-right font-black money-font text-slate-900 text-2xl tracking-tighter">$${e.net.toLocaleString('es-EC', {minimumFractionDigits: 2})}</td>
+                                            <td class="p-4 text-right font-black money-font text-slate-900">$${e.nt.toLocaleString()}</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
-                                <tfoot class="bg-slate-100 text-slate-900 font-bold">
+                                <tfoot class="bg-slate-50 font-black">
                                     <tr>
-                                        <td colspan="4" class="py-8 px-8 text-right text-[12px] uppercase tracking-[0.5em] opacity-40 italic">Aggregate Node Yield:</td>
-                                        <td class="py-8 px-8 text-right text-6xl money-font tracking-tighter leading-none italic">$${a.ggr.toLocaleString('es-EC', {minimumFractionDigits: 2})}</td>
+                                        <td colspan="4" class="p-4 text-right text-[8px] lg:text-[10px] uppercase opacity-40">Subtotal Nodo:</td>
+                                        <td class="p-4 text-right text-base lg:text-2xl money-font">$${n.gr.toLocaleString()}</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -698,17 +579,16 @@
             },
 
             async exportPDF() {
-                const sheet = document.getElementById('audit-sheet');
+                const doc = document.getElementById('audit-doc');
                 document.querySelectorAll('.no-print').forEach(el => el.style.opacity = '0');
-                const canvas = await html2canvas(sheet, { scale: 3, backgroundColor: '#ffffff', useCORS: true });
-                const imgData = canvas.toDataURL('image/png');
+                const canvas = await html2canvas(doc, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+                const img = canvas.toDataURL('image/png');
                 const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
                 const w = pdf.internal.pageSize.getWidth();
                 const h = (canvas.height * w) / canvas.width;
-                pdf.addImage(imgData, 'PNG', 0, 0, w, h);
-                pdf.save(`SEPYBET_PRESTIGE_STATEMENT_${Date.now()}.pdf`);
+                pdf.addImage(img, 'PNG', 0, 0, w, h);
+                pdf.save(`AUDIT_${Date.now()}.pdf`);
                 document.querySelectorAll('.no-print').forEach(el => el.style.opacity = '1');
-                this.log("Reporte exportado con sello institucional.", "success");
             }
         };
 
@@ -716,3 +596,4 @@
     </script>
 </body>
 </html>
+

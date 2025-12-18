@@ -2,761 +2,717 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UTPL - Cena de Navidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEPYBET PRESTIGE | Institutional Intelligence</title>
     
-    <!-- Fuentes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Iconos -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-        :root {
-            /* --- VARIABLES DEL INTRO (SOBRE AZUL ORIGINAL) --- */
-            --utpl-navy: #002855;
-            --utpl-navy-dark: #001a38;
-            --gold-leaf: #d4af37;
-            --gold-shimmer: #f9e59e;
-            --bg-gradient-inner: #050a14;
-
-            /* --- VARIABLES DE LA INVITACIÓN --- */
-            --primary: #003366; 
-            --primary-dark: #001a33;
-            --gold: #C5A059;   
-            --gold-light: #E5C585;
-            --gold-gradient: linear-gradient(135deg, #C5A059 0%, #E5C585 50%, #B08D55 100%);
-            --white: #ffffff;
-            --bg-body: #f3f4f6;
-            
-            /* TEXTOS OSCUROS */
-            --text-main: #1a1a1a;       
-            --text-body: #333333;       
-            --text-secondary: #555555;  
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: radial-gradient(circle at center, #1a2a40 0%, #050a14 100%);
-            margin: 0;
-            min-height: 100vh;
-            overflow: hidden; 
-        }
-
-        /* =========================================
-           1. ESTILOS DEL INTRO (SOBRE AZUL)
-           ========================================= */
-        #intro-scene {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 2000;
-            perspective: 1200px;
-            transition: opacity 1.5s ease, visibility 1.5s;
-            /* Fondo oscuro para la intro */
-            background: radial-gradient(circle at center, #1a2a40 0%, #050a14 100%);
-        }
-
-        .snowflake {
-            position: absolute; color: rgba(255, 255, 255, 0.4); font-size: 1rem;
-            top: -50px; animation: fall linear infinite; z-index: 0; pointer-events: none;
-        }
-        @keyframes fall {
-            0% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
-        }
-
-        .wrapper {
-            position: relative; width: 340px; height: 240px; z-index: 10;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @media (min-width: 768px) { .wrapper { width: 550px; height: 360px; } }
-
-        .envelope {
-            position: relative; width: 100%; height: 100%;
-            background: var(--utpl-navy);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            border-radius: 4px; z-index: 10;
-            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
-        }
-
-        .envelope-inner {
-            position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
-            background: var(--bg-gradient-inner); z-index: 1; border-radius: 3px;
-            box-shadow: inset 0 10px 20px rgba(0,0,0,0.8);
-            display: flex; justify-content: center; align-items: center;
-        }
-
-        .magic-light {
-            width: 10px; height: 10px; background: var(--gold-shimmer);
-            box-shadow: 0 0 60px 30px var(--gold-leaf); border-radius: 50%;
-            opacity: 0; transition: opacity 0.8s ease 0.5s;
-        }
-        .wrapper.open .magic-light { opacity: 1; }
-
-        /* SOLAPAS (Diseño Azul Original) */
-        .flap { position: absolute; width: 0; height: 0; border-style: solid; pointer-events: none; }
-        
-        .flap-left {
-            top: 0; left: 0; bottom: 0;
-            border-width: 120px 0 120px 170px; /* Móvil */
-            border-color: transparent transparent transparent var(--utpl-navy);
-            z-index: 20; filter: brightness(1.1);
-        }
-        .flap-right {
-            top: 0; right: 0; bottom: 0;
-            border-width: 120px 170px 120px 0; 
-            border-color: transparent var(--utpl-navy-dark) transparent transparent;
-            z-index: 20;
-        }
-        .flap-bottom {
-            bottom: 0; left: 0;
-            border-width: 0 170px 130px 170px; 
-            border-color: transparent transparent var(--utpl-navy) transparent;
-            z-index: 21; filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.3));
-        }
-        .flap-top {
-            top: 0; left: 0;
-            border-width: 130px 170px 0 170px; 
-            border-color: var(--utpl-navy-dark) transparent transparent transparent;
-            z-index: 30; transform-origin: top;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
-        }
-
-        /* Ajustes Desktop */
-        @media (min-width: 768px) {
-            .flap-left { border-width: 180px 0 180px 275px; }
-            .flap-right { border-width: 180px 275px 180px 0; }
-            .flap-bottom { border-width: 0 275px 220px 275px; }
-            .flap-top { border-width: 200px 275px 0 275px; }
-        }
-
-        /* Sello */
-        .seal {
-            position: absolute;
-            top: -100px; left: 50%; transform: translate(-50%, 60%);
-            width: 70px; height: 70px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #e6cf8b, #bfa058, #7a5e20);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.4);
-            z-index: 31;
-            display: flex; justify-content: center; align-items: center;
-            border: 2px solid rgba(255,255,255,0.15);
-        }
-        @media (min-width: 768px) { .seal { top: -140px; width: 90px; height: 90px; } }
-
-        .seal::before {
-            content: ''; position: absolute; width: 80%; height: 80%;
-            border-radius: 50%; border: 1px dashed rgba(92, 66, 19, 0.4);
-            z-index: 1; 
-        }
-        .seal span {
-            position: relative; z-index: 10; 
-            font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem; 
-            color: #5c4213; text-shadow: 0 1px 0 rgba(255,255,255,0.4);
-            letter-spacing: 1px;
-        }
-
-        .wrapper.open .flap-top { transform: rotateX(180deg); z-index: 1; }
-        .wrapper.zoom-out { transform: scale(3); opacity: 0; }
-
-        /* =========================================
-           2. INVITACIÓN FINAL (CORRECCIÓN MÓVIL)
-           ========================================= */
-        #final-interface {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* Ajuste crítico para móviles: Scroll nativo */
-            display: block; 
-            opacity: 0; visibility: hidden;
-            transition: opacity 2s ease;
-            z-index: 100;
-            background-color: var(--bg-body);
-            background-image: radial-gradient(var(--gold-light) 1px, transparent 1px);
-            background-size: 30px 30px;
-            overflow-y: auto; /* Scroll vertical */
-            -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
-        }
-        #final-interface.active { opacity: 1; visibility: visible; }
-
-        .card-wrapper { 
-            width: 100%; 
-            min-height: 100vh; /* Asegura altura mínima completa */
-            display: flex; 
-            flex-direction: column; /* Columna para centrado seguro */
-            /* En móvil, usamos padding para 'centrar' visualmente sin cortar arriba */
-            padding: 20px 15px; 
-            /* Eliminamos justify-content: center para evitar corte superior en pantallas pequeñas */
-        }
-        
-        /* En pantallas grandes, podemos centrar verticalmente de verdad */
-        @media (min-width: 768px) {
-            .card-wrapper {
-                justify-content: center; /* Centrado vertical solo en PC */
-                padding: 40px 0;
-            }
-        }
-        
-        .card {
-            width: 100%; max-width: 500px; 
-            background-color: var(--white);
-            position: relative;
-            box-shadow: 0 30px 60px -10px rgba(0, 51, 102, 0.25);
-            overflow: hidden; border-radius: 4px;
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            /* CENTRADO SEGURO: margin auto centra si hay espacio, alinea top si no */
-            margin: auto; 
-            animation: slideUp 1s ease-out forwards;
-            opacity: 0; transform: translateY(50px);
-        }
-        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* Header CON NIEVE */
-        .header {
-            background-color: var(--primary);
-            padding: 40px 30px; text-align: center; position: relative;
-            overflow: hidden; /* Importante para contener la nieve */
-        }
-        
-        /* Contenedor específico para la nieve del header */
-        #headerSnowContainer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1;
-        }
-        .header-flake {
-            position: absolute; background: white; border-radius: 50%; opacity: 0.6;
-            animation: headerFall linear infinite;
-        }
-        @keyframes headerFall {
-            0% { transform: translateY(-10px) translateX(0); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translateY(150px) translateX(10px); opacity: 0; }
-        }
-
-        .logo-container { position: relative; z-index: 10; }
-        .logo-utpl {
-            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 28px;
-            color: var(--white); letter-spacing: 2px; text-transform: uppercase;
-        }
-        .logo-sub {
-            display: block; font-family: 'Cormorant Garamond', serif; font-size: 16px;
-            color: var(--gold-light); letter-spacing: 4px; margin-top: 5px; font-style: italic;
-        }
-        .gold-divider { height: 3px; background: var(--gold-gradient); width: 100%; }
-
-        /* Contenido */
-        .content { padding: 40px 30px; text-align: center; position: relative; }
-        .ornament-icon { color: var(--gold); font-size: 20px; margin-bottom: 10px; opacity: 0.8; }
-        
-        .pre-header {
-            text-transform: uppercase; font-size: 10px; letter-spacing: 3px; color: var(--gold);
-            font-weight: 700; margin-bottom: 10px; display: inline-block;
-            border-bottom: 1px solid var(--gold); padding-bottom: 3px;
-        }
-
-        /* TÍTULO ELEGANTE (Tamaño original) */
-        h1 {
-            font-family: 'Cormorant Garamond', serif; color: var(--primary);
-            font-size: 46px; margin: 5px 0 15px 0; font-weight: 700; line-height: 1;
-        }
-        @media(min-width: 400px) { h1 { font-size: 52px; } } 
-        
-        .quote-container { margin: 25px auto; position: relative; max-width: 90%; }
-        /* TEXTO MÁS OSCURO */
-        .quote-text { 
-            font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; 
-            color: var(--text-main); line-height: 1.5; font-weight: 500;
-        }
-
-        /* Detalles Grid */
-        .details-row {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            margin: 30px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
-            padding: 20px 0; align-items: start;
-        }
-        .detail-group { text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .detail-label { 
-            font-size: 11px; text-transform: uppercase; color: var(--text-secondary);
-            letter-spacing: 1px; margin-bottom: 6px; font-weight: 600;
-        }
-        .detail-value { 
-            font-family: 'Montserrat', sans-serif; font-weight: 700; 
-            color: var(--primary); font-size: 14px; 
-            line-height: 1.4; 
-        }
-        
-        .location-link { text-decoration: none; color: var(--primary); transition: color 0.3s; display: inline-block; }
-        .location-link:hover { color: var(--gold); }
-        .icon-map { font-size: 12px; vertical-align: middle; display: inline-block; margin-left: 2px; }
-
-        /* Botones */
-        .btn-container { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
-        .btn {
-            border: none; padding: 16px 20px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s ease;
-            position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; gap: 10px;
-            border-radius: 4px;
-        }
-        .btn-gold { background: var(--gold-gradient); color: var(--white); box-shadow: 0 10px 20px -5px rgba(197, 160, 89, 0.4); }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 15px 25px -5px rgba(197, 160, 89, 0.5); }
-        
-        .btn-secret { background: var(--primary); color: var(--white); border: 1px solid var(--primary-dark); }
-        .btn-secret:hover { background: var(--primary-dark); }
-
-        .btn-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); font-weight: 600; }
-        .btn-outline:hover { background-color: var(--primary); color: var(--white); }
-
-        .footer { margin-top: 40px; font-size: 11px; color: var(--text-secondary); }
-        .signature { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--primary); font-weight: 700; margin-bottom: 2px; }
-        .cargo-text { font-weight: 600; color: var(--primary); letter-spacing: 1px; font-size: 10px; text-transform: uppercase; }
-
-        /* Modales */
-        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 30, 60, 0.6); backdrop-filter: blur(5px); z-index: 3000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease; }
-        .modal-active { display: flex; opacity: 1; }
-        .modal-content { background: #fff; width: 90%; max-width: 450px; padding: 40px 30px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; border-top: 4px solid var(--gold); }
-        .modal-active .modal-content { transform: translateY(0); }
-        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; color: #999; cursor: pointer; transition: color 0.3s; }
-        .close-modal:hover { color: var(--primary); }
-        
-        .modal-title { 
-            font-family: 'Cormorant Garamond', serif; font-size: 26px; 
-            color: var(--primary); margin: 0 0 20px; border-bottom: 1px solid #eee; 
-            padding-bottom: 15px; font-weight: 700;
-        }
-        
-        .attendees-list { text-align: left; max-height: 250px; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; }
-        .attendee-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; }
-        .attendee-item:last-child { border-bottom: none; }
-        .attendee-item::before { content: '•'; color: var(--gold); font-size: 20px; margin-right: 10px; line-height: 1; }
-        .attendee-name { font-size: 14px; color: var(--text-body); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* Amigo Secreto */
-        .secret-input-container { transition: opacity 0.5s; }
-        .secret-input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 4px; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; text-align: center; font-size: 18px; letter-spacing: 4px; text-transform: uppercase; font-weight: 700; color: var(--primary); }
-        .secret-input:focus { border-color: var(--gold); outline: none; }
-        .secret-result { margin-top: 10px; padding: 25px; background: #fff; border: 2px dashed var(--gold); display: none; animation: fadeIn 0.5s; border-radius: 8px; }
-        
-        .secret-greeting { font-family: 'Montserrat', sans-serif; font-size: 16px; color: var(--text-secondary); margin-bottom: 5px; display: block; }
-        .secret-reveal-name { display: block; font-family: 'Cinzel', serif; font-size: 24px; color: var(--primary); margin-top: 10px; font-weight: 700; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
-        .secret-reveal-city { display: block; font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-secondary); font-weight: 500; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* ESTILOS DE CARGA FALSA */
-        #secretLoadingContainer { display: none; padding: 30px 0; }
-        .loading-text { font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text-body); margin-top: 15px; font-weight: 600; letter-spacing: 1px; animation: pulseText 1.5s infinite; }
-        .spinner { width: 40px; height: 40px; border: 4px solid rgba(197, 160, 89, 0.3); border-left-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Etiquetas de precio y secreto */
-        .price-tag {
-            display: inline-block;
-            background-color: #f0f9ff;
-            color: #0369a1;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            margin-top: 10px;
-            border: 1px solid #bae6fd;
-        }
-        
-        .secret-warning {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #888;
-            font-style: italic;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-        }
-
-        .timeline-elegant { text-align: left; border-left: 3px solid var(--gold-light); padding-left: 25px; margin-left: 15px; }
-        .t-item { position: relative; margin-bottom: 30px; }
-        .t-item:last-child { margin-bottom: 0; }
-        .t-item::before { content: ''; position: absolute; left: -34px; top: 4px; width: 15px; height: 15px; background: var(--white); border: 3px solid var(--gold); border-radius: 50%; }
-        .t-time { font-size: 11px; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
-        .t-desc { font-size: 14px; color: var(--text-body); font-weight: 600; }
-        .icon-svg { width: 18px; height: 18px; stroke-width: 1.5; }
-
-    </style>
-</head>
-<body>
-
-    <!-- 1. INTRO (SOBRE AZUL ORIGINAL) -->
-    <div id="intro-scene">
-        <div id="snowContainer"></div>
-        <div class="wrapper" id="envelopeWrapper">
-            <div class="envelope">
-                <div class="envelope-inner">
-                    <div class="magic-light"></div>
-                </div>
-                <div class="flap flap-left"></div>
-                <div class="flap flap-right"></div>
-                <div class="flap flap-bottom"></div>
-                <div class="flap flap-top">
-                    <div class="seal">
-                        <span>UTPL</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. INVITACIÓN -->
-    <div id="final-interface">
-        <div class="card-wrapper">
-            <div class="card">
-                
-                <!-- Header CON NIEVE REAL -->
-                <div class="header">
-                    <div id="headerSnowContainer"></div> <!-- Nieve aquí -->
-                    <div class="logo-container">
-                        <div class="logo-utpl">UTPL</div>
-                        <span class="logo-sub">Zona 4</span>
-                    </div>
-                </div>
-                
-                <div class="gold-divider"></div>
-
-                <div class="content">
-                    <div class="ornament-icon">✦</div>
-                    <div class="pre-header">Invitación Corporativa</div>
-                    
-                    <h1>Cena de Navidad</h1>
-
-                    <div class="quote-container">
-                        <p class="quote-text">
-                            "Que la unión y el espíritu navideño renueven nuestro compromiso y fortalezcan nuestros lazos. Un momento para celebrar juntos nuestros logros."
-                        </p>
-                    </div>
-
-                    <!-- Datos Clave -->
-                    <div class="details-row">
-                        <div class="detail-group">
-                            <div class="detail-label">Fecha</div>
-                            <div class="detail-value">Dic 12</div>
-                        </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Hora</div>
-                            <div class="detail-value">17:30</div>
-                        </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Lugar</div>
-                            <a href="https://maps.app.goo.gl/JsVaXVVZsPSEiEv17" target="_blank" class="location-link">
-                                <div class="detail-value">Manta</div>
-                                <div class="detail-value" style="font-weight: 500; font-size: 12px; margin-top: 2px;">Hotel Poseidon</div>
-                                <span class="icon-map">📍 Ver Mapa</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="btn-container">
-                        <!-- Nómina -->
-                        <button class="btn btn-gold" onclick="toggleModal('modal-nomina')">
-                            Ver Nómina de Invitados
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        </button>
-
-                        <!-- Botón AMIGO SECRETO -->
-                        <button class="btn btn-secret" onclick="toggleModal('modal-amigo-secreto')">
-                            Ver Amigo Secreto 🎁
-                        </button>
-                        
-                        <div class="btn-links">
-                            <button class="btn btn-outline" onclick="toggleModal('modal-dress')">Vestimenta</button>
-                            <button class="btn btn-outline" onclick="toggleModal('modal-itinerary')">Itinerario</button>
-                        </div>
-                    </div>
-
-                    <div class="footer">
-                        <div class="signature">Karina Rojas</div>
-                        <div class="cargo-text">GERENCIA COMERCIAL ZONA 4</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modales -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Modal Nómina (Solo Lectura) -->
-    <div id="modal-nomina" class="modal-backdrop" onclick="toggleModal('modal-nomina')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-modal" onclick="toggleModal('modal-nomina')">&times;</button>
-            <h3 class="modal-title">Nómina de Invitados</h3>
-            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
-                Lista oficial de colaboradores de Zona 4:
-            </p>
-            <div class="attendees-list">
-                <div class="attendee-item"><span class="attendee-name">Orejuela Intriago Nancy Gisela</span></div>
-                <div class="attendee-item"><span class="attendee-name">Arriaga Muñoz Lenny Noraida</span></div>
-                <div class="attendee-item"><span class="attendee-name">Moreira Escalante Efrén Arturo</span></div>
-                <div class="attendee-item"><span class="attendee-name">Feijoo Moreira Tito Eliecer</span></div>
-                <div class="attendee-item"><span class="attendee-name">Edyn Meza Cárdenas</span></div>
-                <div class="attendee-item"><span class="attendee-name">Castillo Bermudez Tania Elizabeth</span></div>
-                <div class="attendee-item"><span class="attendee-name">Rojas Delgado Karina Cecibel</span></div>
-                <div class="attendee-item"><span class="attendee-name">Andrade Mora Oscar Alexander</span></div>
-                <div class="attendee-item"><span class="attendee-name">Sambrano Andrade Tannya Maribel</span></div>
-                <div class="attendee-item"><span class="attendee-name">Jaramillo Pantoja Edwin Galo</span></div>
-                <div class="attendee-item"><span class="attendee-name">Berrú Tinizaray Jessica Marcela</span></div>
-                <div class="attendee-item"><span class="attendee-name">Medranda Vera Geovanny Alejandro</span></div>
-                <div class="attendee-item"><span class="attendee-name">Gomez Gualpa Fabricio</span></div>
-                <div class="attendee-item"><span class="attendee-name">Cabezas Ortiz Flavio Cesar</span></div>
-                <div class="attendee-item"><span class="attendee-name">Alcivar Alvarez Ximena Maribel</span></div>
-                <div class="attendee-item"><span class="attendee-name">Ortoneda Velasquez Maria Dolores</span></div>
-                <div class="attendee-item"><span class="attendee-name">Zambrano Minaya Liliana Monserrate</span></div>
-                <div class="attendee-item"><span class="attendee-name">VeraValdez Santos Nestor</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Amigo Secreto -->
-    <div id="modal-amigo-secreto" class="modal-backdrop" onclick="toggleModal('modal-amigo-secreto')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-modal" onclick="toggleModal('modal-amigo-secreto')">&times;</button>
-            <h3 class="modal-title">Amigo Secreto</h3>
-            
-            <!-- Contenedor del Formulario -->
-            <div id="secretInputContainer">
-                <p style="font-size: 14px; color: var(--text-body); margin-bottom: 15px;">
-                    Ingresa tu código personal para revelar tu amigo secreto:
-                </p>
-                <input type="text" id="secretCodeInput" class="secret-input" placeholder="XXXX" maxlength="4" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                <button class="btn btn-gold" style="width: 100%;" onclick="revelarAmigo()">Revelar</button>
-            </div>
-
-            <!-- Carga -->
-            <div id="secretLoadingContainer">
-                <div class="spinner"></div>
-                <p id="loadingText" class="loading-text">Generando sorteo aleatorio...</p>
-            </div>
-            
-            <!-- Resultado -->
-            <div id="secretResult" class="secret-result">
-                <span id="secretGreeting" style="display:block; font-size:14px; color:#555; margin-bottom:5px;"></span>
-                <span style="font-size: 12px; text-transform: uppercase; color: #777; font-weight: 700;">El sistema ha seleccionado a:</span>
-                <span id="secretNameDisplay" style="display:block; font-family:'Cinzel', serif; font-size:20px; color:var(--primary); font-weight:700; margin:8px 0;"></span>
-                <span id="secretCityDisplay" style="display:block; font-size:12px; color:#555; text-transform:uppercase; letter-spacing:1px; font-weight:600;"></span>
-                
-                <div style="margin-top: 15px;">
-                    <span class="price-tag">
-                        <i class="fas fa-tag"></i> Valor del regalo: $20
-                    </span>
-                </div>
-                
-                <div class="secret-warning">
-                    <i class="fas fa-lock"></i> Recuerda mantenerlo en secreto.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Otros Modales -->
-    <div id="modal-dress" class="modal-backdrop" onclick="toggleModal('modal-dress')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-modal" onclick="toggleModal('modal-dress')">&times;</button>
-            <h3 class="modal-title">Código de Vestimenta</h3>
-            <div style="text-align: left; padding: 0 5px;">
-                <div style="display: flex; gap: 15px; margin-bottom: 25px; align-items: start;">
-                    <div style="background: #f4f6f8; padding: 10px; border-radius: 50%; color: var(--primary); min-width: 45px;">
-                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.38 3.4a1.6 1.6 0 0 1 .4 1.6l-1.9 6.22a2.33 2.33 0 0 1-2.2 1.66h-9.36a2.33 2.33 0 0 1-2.2-1.66L3.22 5a1.6 1.6 0 0 1 1.76-2.08l1.63.26A2.3 2.3 0 0 0 8.86 2h6.28a2.3 2.3 0 0 0 2.25 1.18z"></path></svg>
-                    </div>
-                    <div>
-                        <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700;">Gama de Colores</h4>
-                        <p style="margin: 5px 0 0; font-size: 14px; color: var(--text-secondary); line-height: 1.5;">Se sugiere vestir en <strong>blanco o tonos pasteles</strong> para armonizar con la temática.</p>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 15px; align-items: start;">
-                     <div style="background: #fff9e6; padding: 10px; border-radius: 50%; color: var(--gold); min-width: 45px;">
-                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 22v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8"></path></svg>
-                    </div>
-                    <div>
-                        <h4 style="margin: 0; color: var(--primary); font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700;">Calzado Cómodo</h4>
-                        <p style="margin: 5px 0 0; font-size: 14px; color: var(--text-secondary); line-height: 1.5;">Evento sobre arena. Por su comodidad, <strong>evitar tacones</strong>. Se recomienda el uso de sandalias formales.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-itinerary" class="modal-backdrop" onclick="toggleModal('modal-itinerary')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-modal" onclick="toggleModal('modal-itinerary')">&times;</button>
-            <h3 class="modal-title">Itinerario Oficial</h3>
-            <div class="timeline-elegant">
-                <div class="t-item"><span class="t-time">15:00</span><div class="t-desc">Check-in Hotel Poseidon</div></div>
-                <div class="t-item"><span class="t-time">17:30</span><div class="t-desc">Inicio del Evento</div></div>
-                <div class="t-item"><span class="t-time">19:00</span><div class="t-desc">Cena Navideña</div></div>
-                <div class="t-item"><span class="t-time">NOCHE</span><div class="t-desc">Hospedaje</div></div>
-                <div class="t-item"><span class="t-time">08:00</span><div class="t-desc">Desayuno</div></div>
-                <div class="t-item"><span class="t-time">12:00</span><div class="t-desc">Check-out</div></div>
-            </div>
-            
-            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; text-align: left;">
-                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; font-style: italic;">
-                    <span style="color: var(--gold); font-weight: 700; text-transform: uppercase;">Nota:</span> 
-                    Podrán disfrutar libremente de todas las instalaciones del hotel durante su estancia.
-                </p>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // 1. NIEVE INTRO
-        const snowContainer = document.getElementById('snowContainer');
-        const chars = ['❄', '❅', '❆', '•'];
-        
-        function createSnowflakes() {
-            // Nieve en la intro
-            const container = document.getElementById('snowContainer');
-            for (let i = 0; i < 40; i++) {
-                const flake = document.createElement('div');
-                flake.classList.add('snowflake');
-                flake.textContent = chars[Math.floor(Math.random() * chars.length)];
-                flake.style.left = Math.random() * 100 + 'vw';
-                flake.style.fontSize = (Math.random() * 10 + 10) + 'px';
-                flake.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                flake.style.animationDelay = (Math.random() * 5) + 's';
-                flake.style.opacity = Math.random() * 0.5 + 0.2;
-                container.appendChild(flake);
-            }
-        }
-        
-        function createHeaderSnow() {
-            // Nieve en el header azul
-            const container = document.getElementById('headerSnowContainer');
-            if(!container) return;
-            for (let i = 0; i < 25; i++) {
-                const flake = document.createElement('div');
-                flake.classList.add('header-flake');
-                flake.style.width = (Math.random() * 3 + 2) + 'px';
-                flake.style.height = flake.style.width;
-                flake.style.left = Math.random() * 100 + '%';
-                flake.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                flake.style.animationDelay = (Math.random() * 2) + 's';
-                container.appendChild(flake);
-            }
-        }
-
-        createSnowflakes();
-        createHeaderSnow();
-
-        // 2. APERTURA AUTOMÁTICA
-        window.onload = function() {
-            setTimeout(() => {
-                const wrapper = document.getElementById('envelopeWrapper');
-                const introScene = document.getElementById('intro-scene');
-                const finalInterface = document.getElementById('final-interface');
-
-                wrapper.classList.add('open');
-                setTimeout(() => {
-                    wrapper.classList.add('zoom-out'); 
-                    setTimeout(() => {
-                        introScene.style.opacity = 0;
-                        introScene.style.visibility = 'hidden';
-                        finalInterface.classList.add('active');
-                        // Cambiar fondo al body al final para que coincida con el patrón
-                        document.body.style.backgroundColor = '#f3f4f6'; 
-                        document.body.style.background = '#f3f4f6';
-                        document.body.style.overflowY = 'auto'; 
-                    }, 800);
-                }, 1200); 
-            }, 2000); 
-        };
-
-        // 3. MODALES
-        function toggleModal(id) {
-            const modal = document.getElementById(id);
-            if (modal.classList.contains('modal-active')) {
-                modal.classList.remove('modal-active');
-                setTimeout(() => { modal.style.display = 'none'; }, 400); 
-            } else {
-                modal.style.display = 'flex';
-                modal.offsetHeight; 
-                modal.classList.add('modal-active');
-                if(id === 'modal-amigo-secreto') {
-                    const container = document.getElementById('secretInputContainer');
-                    const loading = document.getElementById('secretLoadingContainer');
-                    const result = document.getElementById('secretResult');
-                    if (container.style.display !== 'none' && loading.style.display === 'none' && result.style.display === 'none') {
-                        document.getElementById('secretCodeInput').value = '';
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        vault: {
+                            bg: '#0a0c10',
+                            card: '#11141d',
+                            accent: '#3b82f6',
+                            success: '#10b981',
+                            error: '#f43f5e',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            text: '#f8fafc'
+                        }
                     }
                 }
             }
         }
+    </script>
 
-        // 4. LÓGICA AMIGO SECRETO
-        const secretSantaData = [
-            { code: "7391", name: "Orejuela Intriago Nancy Gisela", target: "Castillo Bermudez Tania Elizabeth", city: "PORTOVIEJO" },
-            { code: "2845", name: "Arriaga Muñoz Lenny Noraida", target: "Berrú Tinizaray Jessica Marcela", city: "LA CONCORDIA" },
-            { code: "6150", name: "Moreira Escalante Efrén Arturo", target: "Sambrano Andrade Tannya Maribel", city: "SANTO DOMINGO" },
-            { code: "9423", name: "Feijoo Moreira Tito Eliecer", target: "Alcivar Alvarez Ximena Maribel", city: "CHONE" },
-            { code: "5078", name: "Edyn Meza Cárdenas", target: "Ortoneda Velasquez Maria Dolores", city: "BAHÍA DE CARÁQUEZ" },
-            { code: "1362", name: "Castillo Bermudez Tania Elizabeth", target: "Moreira Escalante Efrén Arturo", city: "MANTA" },
-            { code: "8247", name: "Rojas Delgado Karina Cecibel", target: "Gomez Gualpa Fabricio", city: "QUININDÉ" },
-            { code: "3951", name: "Andrade Mora Oscar Alexander", target: "Arriaga Muñoz Lenny Noraida", city: "ESMERALDAS" },
-            { code: "4682", name: "Sambrano Andrade Tannya Maribel", target: "Jaramillo Pantoja Edwin Galo", city: "SANTO DOMINGO" },
-            { code: "7519", name: "Jaramillo Pantoja Edwin Galo", target: "Zambrano Minaya Liliana Monserrate", city: "CALCETA" },
-            { code: "2034", name: "Berrú Tinizaray Jessica Marcela", target: "Rojas Delgado Karina Cecibel", city: "SANTO DOMINGO" },
-            { code: "6495", name: "Medranda Vera Geovanny Alejandro", target: "Cabezas Ortiz Flavio Cesar", city: "SAN LORENZO" },
-            { code: "1728", name: "Gomez Gualpa Fabricio", target: "VeraValdez Santos Nestor", city: "SAN MIGUEL DE LOS BANCOS" },
-            { code: "5836", name: "Cabezas Ortiz Flavio Cesar", target: "Orejuela Intriago Nancy Gisela", city: "ESMERALDAS" },
-            { code: "9104", name: "Alcivar Alvarez Ximena Maribel", target: "Andrade Mora Oscar Alexander", city: "SANTO DOMINGO" },
-            { code: "3267", name: "Ortoneda Velasquez Maria Dolores", target: "Medranda Vera Geovanny Alejandro", city: "PEDERNALES" },
-            { code: "8540", name: "Zambrano Minaya Liliana Monserrate", target: "Edyn Meza Cárdenas", city: "PORTOVIEJO" },
-            { code: "4913", name: "VeraValdez Santos Nestor", target: "Feijoo Moreira Tito Eliecer", city: "MANTA" }
-        ];
-
-        function revelarAmigo() {
-            const input = document.getElementById('secretCodeInput');
-            const resultBox = document.getElementById('secretResult');
-            const loadingBox = document.getElementById('secretLoadingContainer');
-            const inputContainer = document.getElementById('secretInputContainer');
-            const loadingText = document.getElementById('loadingText');
-            
-            const nameDisplay = document.getElementById('secretNameDisplay');
-            const greetingDisplay = document.getElementById('secretGreeting');
-            const cityDisplay = document.getElementById('secretCityDisplay');
-            
-            const code = input.value.trim();
-            const found = secretSantaData.find(p => p.code === code);
-
-            if (found) {
-                inputContainer.style.display = 'none';
-                loadingBox.style.display = 'block';
-                
-                setTimeout(() => { loadingText.innerText = "Conectando con el servidor..."; }, 1500);
-                setTimeout(() => { loadingText.innerText = "Verificando lista de invitados..."; }, 3000); 
-                setTimeout(() => { loadingText.innerText = "Asignando amigo secreto..."; }, 4000);
-                
-                setTimeout(() => {
-                    loadingBox.style.display = 'none';
-                    resultBox.style.display = 'block';
-                    resultBox.style.backgroundColor = '#fdfdfd'; 
-                    resultBox.style.borderColor = '#C5A059'; 
-                    
-                    greetingDisplay.innerText = `Hola ${found.name},`;
-                    nameDisplay.innerText = found.target;
-                    nameDisplay.style.color = '#003366'; 
-                    cityDisplay.innerText = `Centro Universitario de ${found.city}`;
-                    
-                }, 5000);
-            } else {
-                resultBox.style.display = 'block';
-                resultBox.style.backgroundColor = '#fef2f2'; 
-                resultBox.style.borderColor = '#ef4444';
-                greetingDisplay.innerText = "";
-                nameDisplay.innerText = "Código incorrecto";
-                nameDisplay.style.color = '#b91c1c';
-                cityDisplay.innerText = "";
-            }
+    <style>
+        :root {
+            --sidebar-width: 280px;
         }
+
+        body { 
+            background-color: #0a0c10;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Alineación Perfecta */
+        .grid-master {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #0d1117;
+            border-right: 1px solid var(--vault-border);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            overflow-y: auto;
+            background: radial-gradient(circle at top right, #111827, #0a0c10);
+        }
+
+        /* Componentes Premium */
+        .executive-card {
+            background: rgba(17, 20, 29, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--vault-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .executive-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #94a3b8;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .money-font {
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -0.05em;
+        }
+
+        /* Inputs y Selects Profesionales */
+        input, select {
+            background: #0d1117 !important;
+            border: 1px solid var(--vault-border) !important;
+            border-radius: 8px;
+            padding: 0.625rem 1rem;
+            color: white !important;
+            font-size: 0.875rem;
+        }
+
+        input:focus {
+            border-color: #3b82f6 !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Reporte de Auditoría Pro */
+        .audit-sheet {
+            background: white;
+            color: #1e293b;
+            padding: 4rem;
+            border-radius: 8px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .loading-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+        @media print { .no-print { display: none !important; } }
+    </style>
+</head>
+<body>
+
+    <!-- PORTAL DE ACCESO SEGURO -->
+    <div id="login-screen" class="fixed inset-0 z-[1000] bg-vault-bg flex items-center justify-center p-6">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight text-white uppercase">Prestige Gateway</h1>
+                <p class="text-slate-500 text-sm mt-2">Ingrese sus credenciales operativas</p>
+            </div>
+            
+            <div class="space-y-4 bg-vault-card p-8 rounded-2xl border border-vault-border shadow-2xl">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Identificador</label>
+                    <input type="text" id="auth-user" class="w-full" placeholder="admin">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contraseña</label>
+                    <input type="password" id="auth-pass" class="w-full" placeholder="admin">
+                </div>
+                <button onclick="app.login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-blue-900/20">Iniciar Sesión</button>
+                <p id="login-error" class="text-vault-error text-[10px] font-bold text-center hidden uppercase tracking-wider">Acceso Denegado</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP WRAPPER -->
+    <div id="app-shell" class="hidden grid-master opacity-0 transition-opacity duration-700">
+        
+        <!-- SIDEBAR IZQUIERDO -->
+        <aside class="sidebar no-print">
+            <div class="flex items-center gap-3 mb-12">
+                <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center font-bold text-white shadow-lg">S</div>
+                <h2 class="text-lg font-bold tracking-tighter text-white">SEPYBET <span class="text-blue-500">PRESTIGE</span></h2>
+            </div>
+            
+            <nav class="flex-1 space-y-1">
+                <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-4 px-4">Menu Principal</p>
+                <button onclick="app.nav('dashboard')" id="nav-dashboard" class="nav-item">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-width="2"/></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="app.nav('import')" id="nav-import" class="nav-item">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-width="2"/></svg>
+                    <span>Carga de Datos</span>
+                </button>
+                <button onclick="app.nav('agents')" id="nav-agents" class="nav-item">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2"/></svg>
+                    <span>Gestión de Red</span>
+                </button>
+                <button onclick="app.nav('audit')" id="nav-audit" class="nav-item">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg>
+                    <span>Auditoría Final</span>
+                </button>
+            </nav>
+
+            <div class="mt-auto p-4 bg-white/5 rounded-xl border border-vault-border">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs">A</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[11px] font-bold text-white uppercase truncate tracking-tight">Admin Principal</p>
+                        <button onclick="location.reload()" class="text-[10px] text-vault-error font-bold hover:underline">Log Out</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content flex flex-col h-screen">
+            
+            <!-- HEADER SUPERIOR -->
+            <header class="h-20 flex items-center justify-between px-10 border-b border-vault-border no-print">
+                <div class="flex items-center gap-4">
+                    <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Dashboard</h2>
+                    <span class="px-3 py-1 bg-blue-600/10 text-blue-500 text-[10px] font-bold rounded-full border border-blue-500/20 uppercase tracking-widest">En Línea</span>
+                </div>
+                
+                <div id="header-tools" class="flex items-center gap-4">
+                    <!-- Dinámico -->
+                </div>
+            </header>
+
+            <div id="viewport" class="flex-1 overflow-y-auto p-10 no-scrollbar">
+
+                <!-- VISTA: DASHBOARD -->
+                <div id="view-dashboard" class="view space-y-8 animate-in fade-in duration-500">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="executive-card">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Volumen Depósitos</p>
+                            <h3 id="stat-in" class="text-2xl font-bold money-font text-white">$0.00</h3>
+                        </div>
+                        <div class="executive-card border-l-4 border-l-vault-error">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Volumen Retiros</p>
+                            <h3 id="stat-out" class="text-2xl font-bold money-font text-slate-400">-$0.00</h3>
+                        </div>
+                        <div class="executive-card bg-blue-600/10 border-blue-600/20 border-l-4 border-l-blue-600">
+                            <p class="text-[10px] font-bold text-blue-500 uppercase tracking-[0.2em] mb-3">GGR Neto Global</p>
+                            <h3 id="stat-ggr" class="text-2xl font-bold money-font text-white">$0.00</h3>
+                        </div>
+                        <div class="executive-card border-l-4 border-l-vault-success">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Liquidación Agentes</p>
+                            <h3 id="stat-fees" class="text-2xl font-bold money-font text-vault-success">$0.00</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-8">
+                        <div class="col-span-12 lg:col-span-8 executive-card h-[450px] flex flex-col">
+                            <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-8 italic">Distribución de Activos por Nodo</h4>
+                            <div class="flex-1 min-h-0">
+                                <canvas id="main-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-span-12 lg:col-span-4 executive-card flex flex-col">
+                            <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-6 italic text-center">Protocolo de Operaciones</h4>
+                            <div id="log-list" class="flex-1 space-y-3 overflow-y-auto pr-2 no-scrollbar opacity-60"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISTA: IMPORTAR -->
+                <div id="view-import" class="view hidden h-full flex items-center justify-center animate-in zoom-in duration-500">
+                    <div class="max-w-xl w-full executive-card p-16 text-center border-2 border-dashed border-slate-700">
+                        <div class="w-24 h-24 bg-blue-600/10 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="1.5"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Importar Inteligencia de Datos</h3>
+                        <p class="text-slate-500 text-sm mb-10 max-w-xs mx-auto">Sincronice su archivo .xlsx para habilitar la terminal de auditoría y liquidación.</p>
+                        
+                        <label class="group relative cursor-pointer inline-block">
+                            <input type="file" id="file-input" class="hidden" onchange="app.handleFile(this.files[0])">
+                            <span id="file-label" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-xl transition-all shadow-xl shadow-blue-900/20 inline-block">Seleccionar Master Excel</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- VISTA: AGENTES -->
+                <div id="view-agents" class="view hidden space-y-8 animate-in slide-in-from-right duration-500">
+                    <div class="grid grid-cols-12 gap-10">
+                        <div class="col-span-12 lg:col-span-4 space-y-6">
+                            <div class="executive-card space-y-8">
+                                <h3 class="text-sm font-bold text-white uppercase tracking-widest italic border-l-4 border-blue-600 pl-4">Anclar Nodo Maestro</h3>
+                                <div class="space-y-6">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Nombre Operativo</label>
+                                        <input type="text" id="node-name" class="w-full uppercase font-bold" placeholder="EJ: DELTA_STATION">
+                                    </div>
+                                    <div class="space-y-6">
+                                        <div class="flex justify-between items-center">
+                                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Fee de Liquidación</label>
+                                            <span id="fee-disp" class="text-2xl font-bold text-blue-500 money-font">20%</span>
+                                        </div>
+                                        <input type="range" id="node-fee" min="1" max="50" value="20" oninput="document.getElementById('fee-disp').innerText = this.value + '%'" class="w-full accent-blue-600 h-1 bg-slate-800 rounded-full appearance-none">
+                                    </div>
+                                    <button onclick="app.addAgent()" class="w-full bg-white hover:bg-blue-600 hover:text-white text-black font-black py-4 rounded-xl transition-all uppercase tracking-widest text-[11px]">Establecer Conexión</button>
+                                </div>
+                            </div>
+                            <div id="agent-list" class="space-y-3 max-h-[400px] overflow-y-auto no-scrollbar"></div>
+                        </div>
+
+                        <div class="col-span-12 lg:col-span-8 executive-card flex flex-col h-[750px] overflow-hidden">
+                            <div class="p-6 bg-white/5 border-b border-vault-border flex justify-between items-center">
+                                <h3 class="text-sm font-bold text-white uppercase tracking-widest">Mapeo de Terminales de Usuario</h3>
+                                <input type="text" id="user-search" oninput="app.renderAgents()" placeholder="Trace ID..." class="w-72 bg-transparent text-xs font-bold uppercase tracking-widest">
+                            </div>
+                            <div id="user-grid" class="flex-1 overflow-y-auto p-8 grid grid-cols-1 md:grid-cols-2 gap-4 content-start no-scrollbar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISTA: AUDITORÍA -->
+                <div id="view-audit" class="view hidden">
+                    <div id="audit-sheet" class="audit-sheet animate-in slide-in-from-bottom duration-1000">
+                        <!-- Header Reporte -->
+                        <div class="flex justify-between items-start border-b-2 border-slate-900/10 pb-10 mb-12">
+                            <div>
+                                <h1 class="text-4xl font-black tracking-tighter text-slate-900 uppercase">Statement of Earnings</h1>
+                                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.4em] mt-2">Sepybet Institutional Prestige Protocol v3.0</p>
+                            </div>
+                            <div class="text-right space-y-4">
+                                <div>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reference ID</p>
+                                    <p id="audit-id" class="text-xs font-mono font-bold text-slate-900 uppercase"></p>
+                                </div>
+                                <p id="audit-date" class="text-[10px] text-slate-400 font-bold uppercase"></p>
+                            </div>
+                        </div>
+
+                        <!-- Dashboard Auditoría -->
+                        <div id="audit-summary-grid" class="grid grid-cols-3 gap-8 mb-20"></div>
+
+                        <!-- Contenido Principal -->
+                        <div id="audit-body" class="space-y-24"></div>
+
+                        <!-- Footer -->
+                        <div class="mt-40 pt-16 border-t-2 border-slate-100">
+                            <div class="grid grid-cols-3 gap-20">
+                                <div class="text-center italic">
+                                    <div class="h-[1px] bg-slate-200 mb-2"></div>
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Sello Digital Corporativo</p>
+                                </div>
+                                <div class="flex flex-col items-center justify-center opacity-10">
+                                    <div class="w-16 h-16 bg-black rounded-full"></div>
+                                </div>
+                                <div class="text-center italic">
+                                    <div class="h-[1px] bg-slate-200 mb-2"></div>
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Validación de Auditoría</p>
+                                </div>
+                            </div>
+                            <p class="mt-20 text-center text-[10px] text-slate-300 font-bold uppercase tracking-[1em]">Privado • Confidencial</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const app = {
+            state: {
+                agents: [],
+                rawData: [],
+                adjustments: {},
+                currView: 'login',
+                charts: {},
+                isLogged: false
+            },
+
+            init() {
+                const data = localStorage.getItem('sepy_prestige_v3');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    this.state.agents = parsed.agents || [];
+                    this.state.adjustments = parsed.adjustments || {};
+                }
+            },
+
+            login() {
+                const u = document.getElementById('auth-user').value.toLowerCase();
+                const p = document.getElementById('auth-pass').value;
+                if (u === 'admin' && p === 'admin') {
+                    this.state.isLogged = true;
+                    document.getElementById('login-screen').style.display = 'none';
+                    const shell = document.getElementById('app-shell');
+                    shell.classList.remove('hidden');
+                    setTimeout(() => shell.style.opacity = '1', 50);
+                    this.nav('import');
+                    this.log("Handshake de seguridad validado.", "success");
+                } else {
+                    const err = document.getElementById('login-error');
+                    err.classList.remove('hidden');
+                    setTimeout(() => err.classList.add('hidden'), 2000);
+                }
+            },
+
+            nav(id) {
+                if (!this.state.isLogged) return;
+                this.state.currView = id;
+                document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+                document.getElementById('view-' + id).classList.remove('hidden');
+                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+                document.getElementById('nav-' + id).classList.add('active');
+
+                const titles = { dashboard: 'Resumen Maestro', import: 'Terminal de Inteligencia', agents: 'Arquitectura de Red', audit: 'Informe de Liquidación' };
+                document.getElementById('view-title').innerText = titles[id];
+
+                const tools = document.getElementById('header-tools');
+                tools.innerHTML = '';
+                if (id === 'audit') {
+                    tools.innerHTML = `
+                        <select id="h-filter" onchange="app.renderAudit()" class="text-[10px] font-black uppercase w-64"></select>
+                        <button onclick="app.exportPDF()" class="bg-white text-black font-black px-6 py-2 rounded-lg text-[10px] uppercase shadow-xl hover:bg-blue-600 hover:text-white transition-all">Generar Statement PDF</button>
+                    `;
+                }
+
+                if (id === 'dashboard') this.renderDashboard();
+                if (id === 'agents') this.renderAgents();
+                if (id === 'audit') this.renderAudit();
+            },
+
+            log(msg, type = 'info') {
+                const list = document.getElementById('log-list');
+                if (!list) return;
+                const time = new Date().toLocaleTimeString('es-EC', { hour12: false });
+                const color = type === 'success' ? 'text-vault-success' : (type === 'error' ? 'text-vault-error' : 'text-slate-500');
+                const div = document.createElement('div');
+                div.className = "flex gap-4 border-b border-white/5 pb-2 text-[10px] font-mono";
+                div.innerHTML = `<span class="opacity-30 italic">${time}</span><span class="${color} font-bold uppercase tracking-tighter">${msg}</span>`;
+                list.prepend(div);
+            },
+
+            save() {
+                localStorage.setItem('sepy_prestige_v3', JSON.stringify({
+                    agents: this.state.agents,
+                    adjustments: this.state.adjustments
+                }));
+            },
+
+            handleFile(file) {
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                    this.state.rawData = json;
+                    document.getElementById('file-label').innerText = `Matrix Ready (${json.length} IDs)`;
+                    this.log(`Procesados ${json.length} registros operativos.`, "success");
+                    // AUTO-NAVIGATE
+                    setTimeout(() => this.nav('dashboard'), 600);
+                };
+                reader.readAsArrayBuffer(file);
+            },
+
+            getBalances() {
+                const b = {};
+                this.state.rawData.forEach(row => {
+                    const u = row['Nombre de jugador/agente'] || row.Usuario || row.Player || 'X-ID';
+                    const a = Math.abs(parseFloat(row.Monto || row.Amount || 0));
+                    const ty = String(row['Tipo de operación'] || row.Type || '').toLowerCase();
+                    const st = String(row['Estado'] || row.Status || '').toLowerCase();
+
+                    if (u === 'X-ID' || st !== 'processed') return;
+                    if (!b[u]) b[u] = { in: 0, out: 0 };
+
+                    if (ty.includes('deposit') || ty.includes('ingreso')) b[u].in += a;
+                    else if (ty.includes('withdrawal') || ty.includes('retiro')) b[u].out += a;
+                });
+                return b;
+            },
+
+            calculateMatrix() {
+                const bal = this.getBalances();
+                return this.state.agents.map(ag => {
+                    let ti = 0, to = 0, ta = 0;
+                    const entities = ag.players.map(p => {
+                        const s = bal[p] || { in: 0, out: 0 };
+                        const adj = parseFloat(this.state.adjustments[p] || 0);
+                        const net = (s.in - s.out) - adj;
+                        ti += s.in; to += s.out; ta += adj;
+                        return { id: p, in: s.in, out: s.out, adj, net };
+                    });
+                    const ggr = (ti - to) - ta;
+                    const feeAmt = ggr > 0 ? (ggr * (ag.fee / 100)) : 0;
+                    return { ...ag, entities, ti, to, ta, ggr, feeAmt, health: ti > 0 ? ((ggr / ti) * 100).toFixed(1) : 0 };
+                });
+            },
+
+            renderDashboard() {
+                const raw = this.getBalances();
+                const matrix = this.calculateMatrix();
+                
+                const tIn = Object.values(raw).reduce((a, b) => a + b.in, 0);
+                const tOut = Object.values(raw).reduce((a, b) => a + b.out, 0);
+                const tGGR = matrix.reduce((a, b) => a + b.ggr, 0);
+                const tFee = matrix.reduce((a, b) => a + b.feeAmt, 0);
+
+                document.getElementById('stat-in').innerText = `$${tIn.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+                document.getElementById('stat-out').innerText = `-$${tOut.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+                document.getElementById('stat-ggr').innerText = `$${tGGR.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+                document.getElementById('stat-fees').innerText = `$${tFee.toLocaleString('es-EC', {minimumFractionDigits: 2})}`;
+
+                if (this.state.charts.main) this.state.charts.main.destroy();
+                const ctx = document.getElementById('main-chart').getContext('2d');
+                this.state.charts.main = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: matrix.map(x => x.name),
+                        datasets: [{
+                            label: 'GGR Nivelado',
+                            data: matrix.map(x => x.ggr),
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 12,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#475569', font: { family: 'JetBrains Mono', size: 10 } } },
+                            x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: 'bold', size: 9 } } }
+                        }
+                    }
+                });
+            },
+
+            addAgent() {
+                const name = document.getElementById('node-name').value.trim().toUpperCase();
+                const fee = parseInt(document.getElementById('node-fee').value);
+                if (!name || this.state.agents.some(x => x.name === name)) return;
+                this.state.agents.push({ name, fee, players: [] });
+                document.getElementById('node-name').value = '';
+                this.save();
+                this.renderAgents();
+                this.log(`Establecido canal de liquidación para ${name}.`, "success");
+            },
+
+            removeAgent(idx) {
+                this.state.agents.splice(idx, 1);
+                this.save();
+                this.renderAgents();
+            },
+
+            linkPlayer(idx, pid) {
+                this.state.agents.forEach(a => a.players = a.players.filter(x => x !== pid));
+                this.state.agents[idx].players.push(pid);
+                this.save();
+                this.renderAgents();
+            },
+
+            unlinkPlayer(pid) {
+                this.state.agents.forEach(a => a.players = a.players.filter(x => x !== pid));
+                this.save();
+                this.renderAgents();
+            },
+
+            renderAgents() {
+                const raw = this.getBalances();
+                const q = document.getElementById('user-search').value.toUpperCase();
+                const players = Object.keys(raw).filter(id => id.includes(q));
+
+                document.getElementById('agent-list').innerHTML = this.state.agents.map((a, i) => `
+                    <div class="executive-card flex justify-between items-center border-l-4 border-l-blue-600 p-6">
+                        <div>
+                            <p class="text-xs font-black text-white uppercase tracking-widest">${a.name}</p>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">${a.fee}% Fee • ${a.players.length} Terminales</p>
+                        </div>
+                        <button onclick="app.removeAgent(${i})" class="text-slate-600 hover:text-vault-error transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" stroke-width="2.5"/></svg>
+                        </button>
+                    </div>
+                `).join('');
+
+                document.getElementById('user-grid').innerHTML = players.map(pid => {
+                    const assigned = this.state.agents.find(a => a.players.includes(pid));
+                    return `
+                        <div class="executive-card flex flex-col gap-4 ${assigned ? 'bg-blue-600/5 border-blue-600/30' : ''}">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center font-black text-slate-500 text-sm italic">${pid.charAt(0)}</div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs font-black text-white truncate uppercase tracking-tighter leading-none mb-1">${pid}</p>
+                                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">${assigned ? 'Nodo: ' + assigned.name : 'Terminal Autónoma'}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1">
+                                ${assigned ? `<button onclick="app.unlinkPlayer('${pid}')" class="px-3 py-1.5 bg-vault-error/10 text-vault-error rounded-lg text-[9px] font-bold uppercase tracking-widest hover:bg-vault-error hover:text-white transition-all">Sever</button>` : ''}
+                                ${this.state.agents.map((a, i) => assigned?.name !== a.name ? `<button onclick="app.linkPlayer(${i}, '${pid}')" class="px-3 py-1.5 bg-slate-800 text-slate-400 rounded-lg text-[9px] font-bold uppercase hover:bg-blue-600 hover:text-white transition-all">${a.name}</button>` : '').join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            updateAdj(pid, val) {
+                this.state.adjustments[pid] = val;
+                this.save();
+                this.renderAudit();
+            },
+
+            renderAudit() {
+                const matrix = this.calculateMatrix();
+                const filter = document.getElementById('h-filter')?.value || 'ALL';
+                const filterSelect = document.getElementById('h-filter');
+                if (filterSelect) {
+                    const last = filterSelect.value;
+                    filterSelect.innerHTML = `<option value="ALL">CONSOLIDADO GLOBAL DE RED</option>` + this.state.agents.map(a => `<option value="${a.name}">${a.name}</option>`).join('');
+                    filterSelect.value = last || 'ALL';
+                }
+
+                const filtered = filter === 'ALL' ? matrix : matrix.filter(a => a.name === filter);
+                const gTi = matrix.reduce((a, b) => a + b.ti, 0);
+                const gGr = matrix.reduce((a, b) => a + b.ggr, 0);
+                const gFa = matrix.reduce((a, b) => a + b.feeAmt, 0);
+
+                document.getElementById('audit-id').innerText = 'PRSTG-X' + Math.random().toString(36).substr(2, 8).toUpperCase();
+                document.getElementById('audit-date').innerText = new Date().toLocaleString('es-EC', { dateStyle: 'full', timeStyle: 'short' });
+
+                document.getElementById('audit-summary-grid').innerHTML = `
+                    <div class="p-10 border-2 border-slate-100 rounded-3xl">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4">Total Liquidez Entrada</p>
+                        <p class="text-3xl font-black money-font text-slate-900">$${gTi.toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                    </div>
+                    <div class="p-10 bg-slate-900 rounded-3xl text-white shadow-2xl">
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mb-4 italic">Utilidad Neta Prestige</p>
+                        <p class="text-4xl font-black money-font text-white">$${(gGr - gFa).toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                    </div>
+                    <div class="p-10 border-2 border-slate-100 rounded-3xl">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4 italic">Provisionado Agentes</p>
+                        <p class="text-3xl font-black money-font text-blue-600">$${gFa.toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                    </div>
+                `;
+
+                document.getElementById('audit-body').innerHTML = filtered.map(a => `
+                    <div class="space-y-12">
+                        <div class="flex justify-between items-end border-b-4 border-slate-900 pb-8">
+                            <div>
+                                <h3 class="text-6xl font-black text-slate-900 italic tracking-tighter uppercase leading-none">${a.name}</h3>
+                                <div class="flex items-center gap-6 mt-6">
+                                    <span class="px-4 py-1 bg-slate-900 text-white text-[10px] font-black rounded uppercase tracking-widest">Efficiency: ${a.health}%</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] italic">Station Verified • Node Active</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 italic font-light">Settlement Amount (${a.fee}%)</p>
+                                <p class="text-7xl font-black money-font text-slate-900 tracking-tighter">$${a.feeAmt.toLocaleString('es-EC', {minimumFractionDigits: 2})}</p>
+                            </div>
+                        </div>
+
+                        <div class="overflow-hidden border-2 border-slate-900 rounded-3xl shadow-sm">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-900 text-[11px] font-bold text-white uppercase tracking-widest">
+                                    <tr>
+                                        <th class="py-6 px-8">Terminal ID</th>
+                                        <th class="py-6 px-4 text-center">Inflow (+)</th>
+                                        <th class="py-6 px-4 text-center">Outflow (-)</th>
+                                        <th class="py-6 px-4 text-center">Audit Adj.</th>
+                                        <th class="py-6 px-8 text-right font-black">Net Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y-2 divide-slate-100 text-sm">
+                                    ${a.entities.map(e => `
+                                        <tr class="hover:bg-slate-50 transition-colors">
+                                            <td class="py-6 px-8 font-black text-slate-900 uppercase tracking-tighter leading-none text-base italic">${e.id}</td>
+                                            <td class="py-6 px-4 text-center money-font text-slate-500">$${e.in.toLocaleString()}</td>
+                                            <td class="py-6 px-4 text-center money-font text-slate-400">-$${e.out.toLocaleString()}</td>
+                                            <td class="py-6 px-4 text-center no-print">
+                                                <input type="number" oninput="app.updateAdj('${e.id}', this.value)" value="${this.state.adjustments[e.id] || ''}" class="w-28 text-center font-black text-blue-600 bg-slate-100 border-none outline-none rounded">
+                                            </td>
+                                            <td class="py-6 px-8 text-right font-black money-font text-slate-900 text-2xl tracking-tighter">$${e.net.toLocaleString('es-EC', {minimumFractionDigits: 2})}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                                <tfoot class="bg-slate-100 text-slate-900 font-bold">
+                                    <tr>
+                                        <td colspan="4" class="py-8 px-8 text-right text-[12px] uppercase tracking-[0.5em] opacity-40 italic">Aggregate Node Yield:</td>
+                                        <td class="py-8 px-8 text-right text-6xl money-font tracking-tighter leading-none italic">$${a.ggr.toLocaleString('es-EC', {minimumFractionDigits: 2})}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            async exportPDF() {
+                const sheet = document.getElementById('audit-sheet');
+                document.querySelectorAll('.no-print').forEach(el => el.style.opacity = '0');
+                const canvas = await html2canvas(sheet, { scale: 3, backgroundColor: '#ffffff', useCORS: true });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                const w = pdf.internal.pageSize.getWidth();
+                const h = (canvas.height * w) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, w, h);
+                pdf.save(`SEPYBET_PRESTIGE_STATEMENT_${Date.now()}.pdf`);
+                document.querySelectorAll('.no-print').forEach(el => el.style.opacity = '1');
+                this.log("Reporte exportado con sello institucional.", "success");
+            }
+        };
+
+        window.onload = () => app.init();
     </script>
 </body>
 </html>

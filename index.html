@@ -2,763 +2,615 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorti365 | Vision 2026 Strategic Plan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Michelle | Una Sorpresa de Tito</title>
     
-    <!-- FUENTES MODERNAS & ELEGANTES -->
+    <!-- Fuentes Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;700;800&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
     
-    <!-- ICONOS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- GRÁFICOS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
-        /* --- 1. CORE VISUALS --- */
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-deep: #030304;
-            --bg-glass: rgba(20, 20, 20, 0.6);
-            --bg-modal: #0A0A0A;
-            
-            --gold-primary: #D4AF37;
-            --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #FAE19D 100%);
-            
-            --green-success: #00E096;
-            --green-glow: rgba(0, 224, 150, 0.15);
-            
-            --text-main: #FFFFFF;
-            --text-muted: #8F9BB3;
-            
-            --border-glass: 1px solid rgba(255, 255, 255, 0.08);
-            --border-active: 1px solid rgba(212, 175, 55, 0.5);
-            
-            --font-heading: 'Syncopate', sans-serif;
-            --font-body: 'Manrope', sans-serif;
+            --gold: #d4af37;
+            --gold-light: #f9eac3;
+            --gold-shadow: #8a6e18;
+            --bg-dark: #12080d;
+            --bg-accent: #2a1118;
+            --text-main: #f4f4f4;
+            --text-muted: #b0b0b0;
+            --accent-pink: #d64d6d;
+            --easing: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
         body {
-            background-color: var(--bg-deep);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            font-family: var(--font-body);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
-        /* Fondo Animado Sutil */
-        .ambient-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.05), transparent 40%),
-                        radial-gradient(circle at 85% 85%, rgba(0, 224, 150, 0.05), transparent 40%);
-            filter: blur(60px);
+        /* --- BACKGROUND ANIMADO --- */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--bg-accent), var(--bg-dark));
+            background-size: 200% 200%;
+            animation: ambientPulse 15s ease-in-out infinite;
+            z-index: -2;
         }
 
-        /* --- 2. TYPOGRAPHY --- */
-        h1, h2, h3, h4 { font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; }
-        h1 { font-size: clamp(40px, 5vw, 80px); line-height: 1.1; font-weight: 700; margin-bottom: 20px; }
-        h2 { font-size: 32px; color: #fff; margin-bottom: 10px; }
-        
-        .subtitle { color: var(--gold-primary); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 15px; }
-        .text-body { color: var(--text-muted); font-size: 16px; max-width: 700px; font-weight: 300; }
-
-        /* --- 3. LAYOUT & UTILS --- */
-        .container { max-width: 1300px; margin: 0 auto; padding: 0 40px; }
-        .section { padding: 100px 0; border-bottom: var(--border-glass); position: relative; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-
-        /* --- 4. COMPONENTS INTERACTIVOS --- */
-        .btn {
-            padding: 14px 28px; border-radius: 2px; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 1px; font-size: 11px; cursor: pointer; transition: 0.4s;
-            text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+        @keyframes ambientPulse {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .btn-gold {
-            background: var(--gold-gradient); color: #000; border: none;
-        }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2); }
-        
-        .btn-glass {
-            background: rgba(255,255,255,0.05); border: var(--border-glass); color: #fff; backdrop-filter: blur(10px);
-        }
-        .btn-glass:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
 
-        /* Tarjetas Clicables */
-        .card-trigger {
-            background: var(--bg-glass); border: var(--border-glass); padding: 30px;
-            backdrop-filter: blur(20px); transition: 0.3s; position: relative; overflow: hidden;
+        /* Ruido visual para textura (Film Grain) */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* --- PANTALLA DE CARGA --- */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        .loader-heart {
+            font-size: 3rem;
+            color: var(--accent-pink);
+            animation: heartbeat 1.5s infinite;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(214, 77, 109, 0.4);
+        }
+
+        .loading-line-container {
+            width: 200px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-line {
+            position: absolute;
+            left: 0; top: 0; height: 100%; width: 0%;
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold);
+            transition: width 0.3s ease-out;
+        }
+
+        .loading-text {
+            margin-top: 15px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- ESCENARIO --- */
+        .stage-container {
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .card-slide {
+            position: absolute;
+            width: 85%;
+            padding: 3rem 2rem;
+            background: rgba(20, 10, 15, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            pointer-events: none;
+            transition: all 0.8s var(--easing);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .card-slide.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .card-slide.exit {
+            opacity: 0;
+            transform: translateY(-40px) scale(0.95);
+        }
+
+        /* --- CAJA DE REGALO CSS --- */
+        #gift-box-trigger {
             cursor: pointer;
+            width: 140px;
+            height: 140px;
+            margin: 20px auto 40px;
+            position: relative;
+            transition: transform 0.3s ease;
+            animation: floatBox 3s ease-in-out infinite;
         }
-        .card-trigger:hover { 
-            border-color: var(--gold-primary); 
-            background: rgba(212, 175, 55, 0.05);
-            transform: translateY(-5px);
-        }
-        .card-icon { font-size: 24px; color: var(--gold-primary); margin-bottom: 20px; }
-        .trigger-hint {
-            position: absolute; bottom: 20px; right: 20px; font-size: 10px; color: var(--text-muted);
-            opacity: 0; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .card-trigger:hover .trigger-hint { opacity: 1; transform: translateX(-5px); }
 
-        /* --- 5. SISTEMA DE MODALES (VENTANAS FLOTANTES) --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 9999;
-            display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s;
+        @keyframes floatBox {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        .modal-overlay.active { display: flex; opacity: 1; }
+
+        #gift-box-trigger:hover {
+            transform: scale(1.05);
+        }
+
+        .gift-lid {
+            width: 140px;
+            height: 35px;
+            background: var(--accent-pink);
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 4px;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .gift-lid::after { /* Cinta vertical tapa */
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 100%;
+            background: var(--gold);
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .gift-lid::before { /* Lazo/Moño */
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 12px;
+            border-radius: 10px 10px 0 0;
+            background: var(--gold);
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .gift-body {
+            width: 126px;
+            height: 100px;
+            background: var(--accent-pink); /* Color base */
+            background: linear-gradient(135deg, var(--accent-pink) 0%, #a8324e 100%);
+            position: absolute;
+            bottom: 0;
+            left: 7px; /* Centrado respecto a la tapa */
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .gift-body::after { /* Cinta vertical cuerpo */
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 100%;
+            background: var(--gold);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .click-hint {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: pulseText 2s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Animación de apertura */
+        .box-opened .gift-lid {
+            transform: translateY(-60px) rotate(-15deg);
+            opacity: 0;
+            transition: all 0.6s ease-in;
+        }
+        .box-opened .gift-body {
+            transform: translateY(20px) scale(0.9);
+            opacity: 0;
+            transition: all 0.6s ease-in;
+        }
+        .box-opened .click-hint {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* --- CONTENIDO FINAL (Oculto inicialmente) --- */
+        #final-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
         
-        .modal-content {
-            background: var(--bg-modal); width: 90%; max-width: 900px; max-height: 90vh;
-            overflow-y: auto; border: 1px solid var(--gold-primary); padding: 0; position: relative;
-            box-shadow: 0 0 60px rgba(0,0,0,0.9); animation: modalUp 0.4s ease-out;
+        #final-content.visible {
+            opacity: 1;
         }
-        @keyframes modalUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
-        .modal-header {
-            background: rgba(255,255,255,0.05); padding: 30px 40px; border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; backdrop-filter: blur(10px);
+
+        /* --- TIPOGRAFÍA --- */
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        .modal-body { padding: 40px; }
-        .modal-close { font-size: 24px; color: #fff; cursor: pointer; transition: 0.3s; }
-        .modal-close:hover { color: var(--gold-primary); transform: rotate(90deg); }
 
-        /* Estilos dentro del Modal */
-        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
-        .detail-section h4 { color: var(--gold-primary); font-size: 14px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .detail-list li { list-style: none; margin-bottom: 12px; font-size: 14px; color: #ccc; display: flex; gap: 12px; line-height: 1.5; }
-        .detail-list i { color: var(--green-success); margin-top: 4px; flex-shrink: 0; }
-        .detail-highlight { background: rgba(0, 224, 150, 0.05); border: 1px solid var(--green-success); padding: 20px; border-radius: 4px; margin-top: 20px; }
-
-        /* --- 6. MODELOS DE NEGOCIO --- */
-        .price-tag { font-family: var(--font-heading); font-size: 36px; color: #fff; margin: 15px 0; }
-        .price-sub { font-size: 12px; color: var(--text-muted); font-family: var(--font-body); letter-spacing: 1px; }
-
-        /* --- 7. NAVBAR --- */
-        .navbar {
-            position: fixed; top: 0; left: 0; width: 100%; padding: 20px 60px; z-index: 1000;
-            background: rgba(3,3,4,0.9); backdrop-filter: blur(12px); border-bottom: var(--border-glass);
-            display: flex; justify-content: space-between; align-items: center;
+        p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+            margin-bottom: 2rem;
+            font-weight: 300;
         }
-        .logo { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -1px; }
-        .logo span { color: var(--gold-primary); }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .grid-2, .grid-3, .grid-4, .detail-grid { grid-template-columns: 1fr; }
-            .container { padding: 0 20px; }
-            .navbar { padding: 20px; }
-            h1 { font-size: 36px; }
+        .highlight {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--gold-light);
+            font-size: 1.1em;
         }
+
+        /* --- BOTONES --- */
+        .btn-luxury {
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 14px 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-luxury::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--gold);
+            z-index: -1;
+            transition: all 0.4s var(--easing);
+        }
+
+        .btn-luxury:hover {
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-luxury:hover::after {
+            width: 100%;
+        }
+
+        /* --- REGALOS --- */
+        .gift-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .gift-item {
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+            border-left: 2px solid #444;
+            padding: 1rem 1.2rem;
+            opacity: 0; /* Para animación */
+            transform: translateX(-10px);
+            transition: all 0.6s ease;
+        }
+
+        .gift-item.revealed {
+            opacity: 1;
+            transform: translateX(0);
+            border-left-color: var(--gold);
+        }
+
+        .gift-item.special.revealed {
+            border-left-color: var(--accent-pink);
+            background: linear-gradient(90deg, rgba(214, 77, 109, 0.1) 0%, transparent 100%);
+        }
+
+        .gift-title {
+            display: block;
+            font-family: 'Cinzel', serif;
+            color: var(--gold-light);
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .gift-desc {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: var(--accent-pink);
+            margin-top: 1rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s ease 1s; /* Delay para aparecer al final */
+        }
+        
+        .signature.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- CONFETI --- */
+        .confetti {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: var(--gold);
+            animation: fall linear forwards;
+            top: -10px;
+            z-index: 10;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh) rotate(720deg); }
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow"></div>
+    <div class="ambient-bg"></div>
+    <div class="noise-overlay"></div>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="logo">SORTI<span>365</span></div>
-        <div style="display: flex; gap: 30px;">
-            <a href="#models" style="color: #fff; text-decoration: none; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Negocio</a>
-            <a href="#roadmap" style="color: var(--gold-primary); text-decoration: none; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--gold-primary);">Estrategia 2026</a>
+    <!-- PANTALLA DE CARGA -->
+    <div id="loading-screen">
+        <div class="loader-heart">❤</div>
+        <div class="loading-line-container">
+            <div class="loading-line" id="progress-bar"></div>
         </div>
-    </nav>
+        <div class="loading-text" id="loading-text">Cargando Recuerdos...</div>
+    </div>
 
-    <!-- HERO SECTION -->
-    <section class="section" style="padding-top: 180px; min-height: 80vh;">
-        <div class="container">
-            <div class="grid-2">
-                <div>
-                    <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                        <span style="background: var(--gold-primary); color: #000; padding: 2px 8px; font-weight: 800; font-size: 10px;">CONFIDENCIAL</span>
-                        <span style="color: var(--gold-primary); font-family: 'Manrope'; letter-spacing: 2px; font-size: 12px;">PLAN ESTRATÉGICO 2026</span>
-                    </div>
-                    <h1>Vision 2026<br><span style="color: var(--gold-primary);">Total War.</span></h1>
-                    <p class="text-body" style="margin: 30px 0 50px;">
-                        Hemos diseñado el ecosistema de monetización más agresivo de la industria. 
-                        Desde tácticas de guerrilla hasta hospitalidad VIP en el Mundial. Todo está planeado.
-                    </p>
-                    <div style="display: flex; gap: 20px;">
-                        <button onclick="scrollToId('models')" class="btn btn-gold">Ver Propuesta</button>
-                        <button onclick="openModal('modal-prize')" class="btn btn-glass"><i class="fa-solid fa-trophy"></i> Ver Premio "La Bestia"</button>
-                    </div>
-                </div>
-                <!-- Interactive Chart Widget -->
-                <div class="card-trigger" onclick="openModal('modal-financials')">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <div>
-                            <div style="font-size: 10px; color: var(--green-success); text-transform: uppercase; letter-spacing: 2px;">Proyección Equity</div>
-                            <div style="font-size: 32px; font-weight: 700; color: #fff;">$145,200</div>
-                        </div>
-                        <i class="fa-solid fa-expand" style="color: #666;"></i>
-                    </div>
-                    <div style="height: 150px;">
-                        <canvas id="miniChart"></canvas>
-                    </div>
-                    <div class="trigger-hint">Clic para ver desglose financiero <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-            </div>
+    <!-- ESCENARIO PRINCIPAL -->
+    <div class="stage-container">
+        
+        <!-- SLIDE 1: INTRO -->
+        <div class="card-slide active" id="slide-1">
+            <h1>Michelle</h1>
+            <p>
+                A veces me pregunto qué hice tan bien en otra vida para merecer coincidir contigo en esta.<br><br>
+                Eres mi casualidad más bonita.
+            </p>
+            <button class="btn-luxury" onclick="goToSlide(2)">Comenzar</button>
         </div>
-    </section>
 
-    <!-- SECTION: MODELOS DE NEGOCIO (CARDS) -->
-    <section id="models" class="section">
-        <div class="container">
-            <span class="subtitle">Arquitectura de Negocio</span>
-            <h2 style="margin-bottom: 60px;">Selecciona tu Nivel</h2>
-
-            <div class="grid-3">
-                <!-- AMBASSADOR -->
-                <div class="card-trigger" onclick="openModal('modal-ambassador')">
-                    <div style="font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">NIVEL 1</div>
-                    <h3>Ambassador</h3>
-                    <div class="price-tag">CPA <span class="price-sub">/ FIJO</span></div>
-                    <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Campaña de visibilidad puntual sin compromiso a largo plazo.</p>
-                    <ul class="detail-list">
-                        <li><i class="fa-solid fa-check"></i> Pago 50% / 50%</li>
-                        <li><i class="fa-solid fa-check"></i> Acceso "Territorio Sorti"</li>
-                    </ul>
-                    <div class="trigger-hint">Ver Entregables & Requisitos <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-
-                <!-- GROWTH -->
-                <div class="card-trigger" onclick="openModal('modal-growth')">
-                    <div style="font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">NIVEL 2</div>
-                    <h3>Growth</h3>
-                    <div class="price-tag">Híbrido <span class="price-sub">/ BASE + %</span></div>
-                    <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Cobertura operativa con incentivo.</p>
-                    <ul class="detail-list">
-                        <li><i class="fa-solid fa-check"></i> Fee Mensual</li>
-                        <li><i class="fa-solid fa-check"></i> <strong>30% Comisión</strong> (4 Meses)</li>
-                    </ul>
-                    <div class="trigger-hint">Ver Estructura de Costos <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-
-                <!-- VIP -->
-                <div class="card-trigger" style="border: 1px solid var(--gold-primary); background: linear-gradient(180deg, rgba(212, 175, 55, 0.05), rgba(0,0,0,0.5));" onclick="openModal('modal-vip')">
-                    <div style="position: absolute; top:0; right:0; background: var(--gold-primary); color: #000; font-size: 10px; padding: 5px 15px; font-weight: 800;">RECOMENDADO</div>
-                    <div style="font-size: 10px; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">NIVEL 3</div>
-                    <h3 style="color: var(--gold-primary);">Equity Partner</h3>
-                    <div class="price-tag" style="color: var(--gold-primary);">40% <span class="price-sub" style="color: #fff;">/ NGR NETO</span></div>
-                    <p style="font-size: 13px; color: #ccc; margin-bottom: 20px;">Socio capitalista sobre la utilidad.</p>
-                    <ul class="detail-list">
-                        <li><i class="fa-solid fa-crown" style="color: var(--gold-primary);"></i> <strong>40% Utilidad Neta</strong></li>
-                        <li><i class="fa-solid fa-infinity" style="color: var(--gold-primary);"></i> <strong>6 Meses</strong> (Renovable)</li>
-                        <li><i class="fa-solid fa-plane" style="color: var(--gold-primary);"></i> Elegible Mundial 2026</li>
-                    </ul>
-                    <div class="trigger-hint" style="color: var(--gold-primary);">Ver Plan de Ganancias <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-            </div>
+        <!-- SLIDE 2: GRATITUD -->
+        <div class="card-slide" id="slide-2">
+            <h1>Gracias</h1>
+            <p>
+                Por ser refugio en la tormenta y luz en la oscuridad. Por cada risa, por cada silencio cómodo y por sostenerme cuando el mundo pesa.
+            </p>
+            <p>
+                <span class="highlight">Tu existencia mejora la mía.</span>
+            </p>
+            <button class="btn-luxury" onclick="goToSlide(3)">Continuar</button>
         </div>
-    </section>
 
-    <!-- SECTION: ROADMAP 2026 (INTERACTIVE) -->
-    <section id="roadmap" class="section">
-        <div class="container">
-            <span class="subtitle">Estrategia Operativa</span>
-            <h2 style="margin-bottom: 60px;">Calendario United 2026</h2>
-
-            <div class="grid-3">
-                
-                <!-- Q1: BUILD UP -->
-                <div class="card-trigger" onclick="openModal('modal-q1')">
-                    <h3 style="font-size: 18px; margin-bottom: 5px;">Fase 1: Build Up</h3>
-                    <div style="font-size: 12px; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">ENE - MAR 2026</div>
-                    <p style="font-size: 13px; color: #888;">Preparación de terreno y captación temprana de leads.</p>
-                    <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-                        <div style="font-size: 11px; color: #fff;">ESTRATEGIAS:</div>
-                        <ul class="detail-list" style="margin-top: 10px;">
-                            <li><i class="fa-solid fa-caret-right"></i> Champions League</li>
-                            <li><i class="fa-solid fa-caret-right"></i> Apuestas Futuras</li>
-                        </ul>
-                    </div>
-                    <div class="trigger-hint">Desplegar Tácticas Q1 <i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <!-- Q2: THE HYPE -->
-                <div class="card-trigger" onclick="openModal('modal-q2')">
-                    <h3 style="font-size: 18px; margin-bottom: 5px;">Fase 2: The Hype</h3>
-                    <div style="font-size: 12px; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">ABR - MAY 2026</div>
-                    <p style="font-size: 13px; color: #888;">El momento de mayor conversión pre-evento.</p>
-                    <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-                        <div style="font-size: 11px; color: #fff;">ESTRATEGIAS:</div>
-                        <ul class="detail-list" style="margin-top: 10px;">
-                            <li><i class="fa-solid fa-caret-right"></i> La Quiniela del Millón</li>
-                            <li><i class="fa-solid fa-caret-right"></i> Blindaje de Mayo</li>
-                        </ul>
-                    </div>
-                    <div class="trigger-hint">Desplegar Tácticas Q2 <i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <!-- Q3: GUERRA TOTAL -->
-                <div class="card-trigger" style="border-color: var(--gold-primary); background: rgba(212, 175, 55, 0.05);" onclick="openModal('modal-q3')">
-                    <div style="position: absolute; top:0; right:0; background: var(--gold-primary); color: #000; font-size: 9px; padding: 2px 8px; font-weight: 800;">MAIN EVENT</div>
-                    <h3 style="font-size: 18px; margin-bottom: 5px; color: var(--gold-primary);">Fase 3: UNITED 2026</h3>
-                    <div style="font-size: 12px; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">JUN - JUL 2026</div>
-                    <p style="font-size: 13px; color: #ccc;">30 Días de facturación intensiva. Guerra Total.</p>
-                    <div style="margin-top: 20px; border-top: 1px solid rgba(212, 175, 55, 0.2); padding-top: 15px;">
-                        <div style="font-size: 11px; color: #fff;">ESTRATEGIAS:</div>
-                        <ul class="detail-list" style="margin-top: 10px;">
-                            <li><i class="fa-solid fa-bolt" style="color: var(--gold-primary);"></i> Parlay del Día</li>
-                            <li><i class="fa-solid fa-bolt" style="color: var(--gold-primary);"></i> Sorti Lounge</li>
-                            <li><i class="fa-solid fa-bolt" style="color: var(--gold-primary);"></i> Pago Anticipado</li>
-                        </ul>
-                    </div>
-                    <div class="trigger-hint" style="color: var(--gold-primary);">Desplegar Guerra Total <i class="fa-solid fa-plus"></i></div>
-                </div>
-
-            </div>
+        <!-- SLIDE 3: PREÁMBULO -->
+        <div class="card-slide" id="slide-3">
+            <h1>Para Ti</h1>
+            <p>
+                Hoy no necesito una fecha en el calendario para recordarte que eres <span class="highlight">el amor de mi vida</span>.
+            </p>
+            <p>
+                He preparado algo especial. Un pequeño gesto para devolverte un poco de todo lo que me das.
+            </p>
+            <button class="btn-luxury" onclick="goToSlide(4)">Ver Sorpresa</button>
         </div>
-    </section>
 
-    <!-- TACTICAS DE CAMPO -->
-    <section class="section" style="background: #08090C;">
-        <div class="container">
-            <span class="subtitle">Despliegue Físico</span>
-            <h2 style="margin-bottom: 40px;">Marketing de Terreno</h2>
+        <!-- SLIDE 4: CAJA DE REGALO Y CONTENIDO -->
+        <div class="card-slide" id="slide-4">
             
-            <div class="grid-2">
-                <div class="card-trigger" onclick="openModal('modal-stadium')">
-                    <div class="card-icon"><i class="fa-solid fa-tv"></i></div>
-                    <h3>Sorti Stadium Network</h3>
-                    <p style="font-size: 14px; color: #888;">Alianza con Sports Bars de Lujo. Instalación de pantallas y kioskos de apuesta en mesa.</p>
-                    <div class="trigger-hint">Ver Operativa <i class="fa-solid fa-arrow-right"></i></div>
+            <!-- FASE 1: CAJA CERRADA -->
+            <div id="gift-wrapper">
+                <div id="gift-box-trigger" onclick="openGift()">
+                    <div class="gift-lid"></div>
+                    <div class="gift-body"></div>
                 </div>
-                <div class="card-trigger" onclick="openModal('modal-territorio')">
-                    <div class="card-icon"><i class="fa-solid fa-map-location-dot"></i></div>
-                    <h3>Territorio Sorti</h3>
-                    <p style="font-size: 14px; color: #888;">Red de puntos estáticos (Barberías/Licorerías) con QR para captación masiva.</p>
-                    <div class="trigger-hint">Ver Operativa <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
+                <div class="click-hint" id="hint-text">Toca para abrir</div>
             </div>
-        </div>
-    </section>
 
-    <!-- FOOTER -->
-    <footer style="padding: 80px 0; background: #000; border-top: 1px solid #111; text-align: center;">
-        <div class="container">
-            <h2 style="margin-bottom: 10px; font-size: 24px;">SORTI<span>365</span></h2>
-            <p style="font-size: 12px; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px;">Corporate Partnership Program</p>
-            <a href="https://wa.me/593989573624?text=Hola,%20me%20interesa%20iniciar%20una%20alianza%20estrat%C3%A9gica%20con%20Sorti365" class="btn btn-gold" target="_blank"><i class="fa-brands fa-whatsapp"></i> Contactar por WhatsApp</a>
-            <div style="margin-top: 60px; font-size: 11px; color: #333;">© 2025 Sorti365. Documento Confidencial.</div>
-        </div>
-    </footer>
-
-    <!-- ========================================== -->
-    <!-- MODALES DETALLADOS (CONTENIDO OCULTO) -->
-    <!-- ========================================== -->
-
-    <!-- MODAL: AMBASSADOR -->
-    <div id="modal-ambassador" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: #fff;">Modelo Ambassador (Nivel 1)</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-ambassador')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">Modelo de entrada basado en un fee fijo por campaña (CPA). Ideal para perfiles que buscan liquidez inmediata.</p>
-                <div class="detail-grid">
-                    <div class="detail-section">
-                        <h4>ENTREGABLES</h4>
-                        <ul class="detail-list">
-                            <li><i class="fa-solid fa-check"></i> 4 Stories Semanales.</li>
-                            <li><i class="fa-solid fa-check"></i> 1 Reel Mensual (Nativo).</li>
-                            <li><i class="fa-solid fa-check"></i> Link en Bio (30 Días).</li>
-                        </ul>
-                    </div>
-                    <div class="detail-section">
-                        <h4>CONDICIONES FINANCIERAS</h4>
-                        <ul class="detail-list">
-                            <li><i class="fa-solid fa-dollar-sign"></i> 50% Anticipo a la firma.</li>
-                            <li><i class="fa-solid fa-dollar-sign"></i> 50% Contra-entrega final.</li>
-                            <li><i class="fa-solid fa-chart-line"></i> Bono por volumen de registros.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://wa.me/593989573624?text=Me%20interesa%20el%20Modelo%20Ambassador" class="btn btn-gold" target="_blank">Aplicar por WhatsApp</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: GROWTH -->
-    <div id="modal-growth" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: #fff;">Modelo Growth (Nivel 2)</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-growth')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">Estructura híbrida para mitigar riesgos operativos manteniendo un upside de ganancia.</p>
-                <div class="detail-grid">
-                    <div class="detail-section">
-                        <h4>ESTRUCTURA DE PAGO</h4>
-                        <ul class="detail-list">
-                            <li><i class="fa-solid fa-shield"></i> <strong>Fee Base:</strong> Cubre costos de producción/ads.</li>
-                            <li><i class="fa-solid fa-percent"></i> <strong>Variable:</strong> 30% RevShare del Mes 2 al 5.</li>
-                        </ul>
-                    </div>
-                    <div class="detail-section">
-                        <h4>SOPORTE INCLUIDO</h4>
-                        <ul class="detail-list">
-                            <li><i class="fa-solid fa-pen-nib"></i> Equipo de Diseño Gráfico asignado.</li>
-                            <li><i class="fa-solid fa-chart-pie"></i> Reportes quincenales de rendimiento.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://wa.me/593989573624?text=Me%20interesa%20el%20Modelo%20Growth" class="btn btn-gold" target="_blank">Aplicar por WhatsApp</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: PARTNER VIP -->
-    <div id="modal-vip" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: var(--gold-primary);">Equity Partner (Nivel 3)</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-vip')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">El modelo diseñado para quienes entienden el valor del LTV (Lifetime Value). Te conviertes en accionista de las ganancias de tus referidos.</p>
+            <!-- FASE 2: CONTENIDO REVELADO -->
+            <div id="final-content">
+                <h1 style="font-size: 1.5rem;">Mereces el Cielo</h1>
                 
-                <div class="detail-grid">
-                    <div class="detail-section">
-                        <h4>ESTRUCTURA DE GANANCIAS</h4>
-                        <ul class="detail-list">
-                            <li><i class="fa-solid fa-check"></i> <strong>40% NGR:</strong> Comisión sobre la utilidad neta.</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Sin Techo:</strong> Si un usuario pierde $10k, tú ganas $4k.</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>No Negative Carryover:</strong> Si la casa pierde un mes, tu saldo empieza en 0 el siguiente.</li>
-                        </ul>
+                <div class="gift-container">
+                    <div class="gift-item" id="gift-1">
+                        <span class="gift-title">I. Ritual de Renovación</span>
+                        <span class="gift-desc">Protocolo facial personalizado + Drenaje linfático y aparatología de vanguardia.</span>
                     </div>
-                    <div class="detail-section">
-                        <h4>ENTREGABLES REQUERIDOS</h4>
-                        <ul class="detail-list">
-                            <li><i class="fa-solid fa-bullhorn"></i> Embajador de Marca (Exclusividad).</li>
-                            <li><i class="fa-solid fa-bullhorn"></i> 2 Streaming en Vivo mensuales.</li>
-                            <li><i class="fa-solid fa-bullhorn"></i> Gestión de Comunidad VIP en Telegram.</li>
-                        </ul>
+                    <div class="gift-item" id="gift-2">
+                        <span class="gift-title">II. Piel de Seda</span>
+                        <span class="gift-desc">Limpieza profunda y Hollywood Peel para que brilles como siempre.</span>
+                    </div>
+                    <div class="gift-item special" id="gift-3">
+                        <span class="gift-title">III. Escapada en el Poseidón</span>
+                        <span class="gift-desc">Un día entero de relax y lujo en el Hotel Poseidon. Solo tú y tu paz.</span>
                     </div>
                 </div>
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://wa.me/593989573624?text=Quiero%20ser%20Equity%20Partner%20VIP" class="btn btn-gold" target="_blank">Iniciar Alianza VIP</a>
-                </div>
+
+                <div class="signature" id="final-signature">Con todo mi amor,<br>Tito Feijo</div>
             </div>
         </div>
+
     </div>
 
-    <!-- MODAL: FINANCIALS -->
-    <div id="modal-financials" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: var(--green-success);">Proyección Financiera Detallada</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-financials')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">Desglose de ingresos estimados bajo el modelo Partner VIP (40%) vs Modelo Fijo.</p>
-                <div style="margin-top: 30px;">
-                    <table style="width: 100%; border-collapse: collapse; color: #ccc;">
-                        <tr style="border-bottom: 1px solid #333;">
-                            <th style="text-align: left; padding: 10px; color: var(--gold-primary);">MES</th>
-                            <th style="text-align: left; padding: 10px;">PAGO FIJO</th>
-                            <th style="text-align: left; padding: 10px; color: var(--green-success);">PARTNER VIP (Acumulado)</th>
-                        </tr>
-                        <tr><td style="padding: 10px;">Q1</td><td>$4,500</td><td style="color: #fff;">$12,000</td></tr>
-                        <tr><td style="padding: 10px;">Q2</td><td>$4,500</td><td style="color: #fff;">$35,000</td></tr>
-                        <tr><td style="padding: 10px;">Q3 (Mundial)</td><td>$4,500</td><td style="color: var(--green-success); font-weight: 700;">$75,000</td></tr>
-                        <tr><td style="padding: 10px;">Q4</td><td>$4,500</td><td style="color: #fff;">$145,000</td></tr>
-                    </table>
-                    <p style="margin-top: 20px; font-size: 12px; color: #666;">*Estimación basada en retención del 60% y ticket promedio de mercado.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Q1 -->
-    <div id="modal-q1" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: #fff;">Fase 1: Build Up (Q1)</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-q1')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">Esta fase es crucial para preparar el terreno. No buscamos ventas inmediatas masivas, sino captar la atención.</p>
-                
-                <div class="detail-section" style="margin-top: 30px;">
-                    <h4>ESTRATEGIAS EXPLICADAS</h4>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <strong style="color: var(--gold-primary);">1. Champions League (Octavos y Cuartos)</strong>
-                        <p style="font-size: 13px; color: #ccc; margin-top: 5px;">
-                            <strong>¿Qué es?</strong> La Champions es el torneo de clubes más importante. En Febrero empiezan los partidos de eliminación directa (matar o morir).
-                            <br><strong>¿Por qué funciona?</strong> Porque hay emoción pura. Si tu equipo pierde, queda fuera. Aprovecharemos ese drama para reactivar a usuarios que se registraron hace meses pero dejaron de apostar.
-                            <br><strong>Acción:</strong> Enviaremos mensajes tipo "Hoy juega el Madrid, ¿te lo vas a perder?" para que vuelvan a entrar a la app.
-                        </p>
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <strong style="color: var(--gold-primary);">2. Apuestas Futuras</strong>
-                        <p style="font-size: 13px; color: #ccc; margin-top: 5px;">
-                            <strong>¿Qué es?</strong> Permitir que la gente apueste HOY a quién ganará el Mundial en Julio.
-                            <br><strong>¿Por qué funciona?</strong> Porque las cuotas (ganancias) son mucho más altas si apuestas meses antes. Vendemos la "ilusión" de ganar mucho dinero con poca inversión.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Q2 -->
-    <div id="modal-q2" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: #fff;">Fase 2: The Hype (Q2)</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-q2')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">Aquí empieza la fiebre. La gente ya sabe que viene el Mundial y quiere participar.</p>
-                
-                <div class="detail-section" style="margin-top: 30px;">
-                    <h4>ESTRATEGIAS EXPLICADAS</h4>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <strong style="color: var(--gold-primary);">1. La Quiniela del Millón</strong>
-                        <p style="font-size: 13px; color: #ccc; margin-top: 5px;">
-                            <strong>¿Qué es?</strong> Un juego gratuito donde el usuario intenta predecir todos los resultados del Mundial.
-                            <br><strong>¿El Truco?</strong> Para participar GRATIS, deben darnos su número de WhatsApp y Correo.
-                            <br><strong>Objetivo:</strong> Crear una base de datos gigante de gente interesada en fútbol para luego venderles apuestas reales durante el torneo.
-                        </p>
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <strong style="color: var(--gold-primary);">2. Blindaje de Mayo</strong>
-                        <p style="font-size: 13px; color: #ccc; margin-top: 5px;">
-                            <strong>¿Qué es?</strong> Una promoción financiera. "Deposita $50 hoy en Mayo, y te regalamos $25 extra (Bono del 50%) que solo podrás usar cuando empiece el Mundial en Junio".
-                            <br><strong>Objetivo:</strong> Asegurar que los usuarios tengan dinero cargado en su cuenta ANTES de que empiece el primer partido. Así garantizamos que jueguen con nosotros y no con la competencia.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Q3 UNITED 2026 -->
-    <div id="modal-q3" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: var(--gold-primary);">Fase 3: UNITED 2026 (Guerra Total)</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-q3')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body" style="margin-bottom: 30px;">
-                    11 Junio - 19 Julio. El evento principal. Aquí es donde se hace el dinero de verdad.
-                </p>
-
-                <div class="detail-section">
-                    <h4>SEMANA 1-2: FASE DE GRUPOS</h4>
-                    <div class="detail-highlight">
-                        <strong style="color: #fff;">ESTRATEGIA: "El Parlay del Día"</strong>
-                        <p style="font-size: 13px; color: #aaa; margin-top: 5px;">
-                            <strong>¿Qué es un Parlay?</strong> Es una apuesta combinada. Ejemplo: "Gana Brasil Y Gana Francia Y Gana Argentina". Para ganar, debes acertar los 3. Si fallas uno, pierdes todo.
-                            <br><strong>Nuestra Oferta:</strong> "Si haces un Parlay de 4 equipos y fallas solo por uno, te devolvemos tu dinero".
-                            <br><strong>¿Por qué?</strong> Esto elimina el miedo a perder. La gente apostará más cantidad y más veces porque siente que tiene un "seguro".
-                        </p>
-                    </div>
-                </div>
-
-                <div class="detail-section" style="margin-top: 30px;">
-                    <h4>SEMANA 3: ELIMINATORIAS</h4>
-                    <div class="detail-highlight" style="border-color: var(--gold-primary); background: rgba(212, 175, 55, 0.05);">
-                        <strong style="color: #fff;">ESTRATEGIA: "Pago Anticipado"</strong>
-                        <p style="font-size: 13px; color: #aaa; margin-top: 5px;">
-                            <strong>¿Qué es?</strong> Si apuestas a que un equipo gana y ese equipo se pone 2-0 arriba en el marcador, ¡te pagamos inmediatamente como ganada!
-                            <br><strong>¿El beneficio?</strong> No tienes que sufrir hasta el minuto 90. Si luego al equipo le empatan 2-2, tú ya cobraste. Esto genera una satisfacción increíble en el cliente y fidelidad absoluta a la marca.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="detail-section" style="margin-top: 30px;">
-                    <h4>SEMANA 4: FINALES & CIERRE</h4>
-                    <ul class="detail-list">
-                        <li>
-                            <div>
-                                <strong>Sorti Lounge:</strong> Eventos físicos en bares aliados donde los usuarios de la app tienen descuentos en cerveza y comida. Creamos comunidad real.
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: SORTI STADIUM -->
-    <div id="modal-stadium" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: #fff;">Táctica: Sorti Stadium Network</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-stadium')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">Sustituimos la guerrilla barata por alianzas Premium con los 5 mejores Sports Bars de la ciudad.</p>
-                <div class="detail-grid">
-                    <div class="detail-section">
-                        <h4>IMPLEMENTACIÓN</h4>
-                        <ul class="detail-list">
-                            <li><i class="fa-solid fa-tv"></i> Pantallas Gigantes patrocinadas por Sorti.</li>
-                            <li><i class="fa-solid fa-tablet-screen-button"></i> Tablets en mesa para apostar en vivo sin usar datos móviles.</li>
-                            <li><i class="fa-solid fa-user-tie"></i> Meseros capacitados como "Cajeros" (reciben propina por recarga).</li>
-                        </ul>
-                    </div>
-                    <div class="detail-section">
-                        <h4>EL GANCHO</h4>
-                        <p style="font-size: 13px; color: #ccc;">
-                            "Ven a ver el Mundial al Sorti Stadium".
-                            <br><br>
-                            Ambiente de estadio, apuestas en tiempo real y premios instantáneos (cubetazos de cerveza) por cada gol de la selección.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: TERRITORIO SORTI -->
-    <div id="modal-territorio" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: #fff;">Táctica: Territorio Sorti</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-territorio')"></i>
-            </div>
-            <div class="modal-body">
-                <p class="text-body">Red de puntos estáticos de alta conversión en lugares con alto tiempo de espera (Barberías, Licorerías).</p>
-                <div class="detail-section">
-                    <h4>MECÁNICA</h4>
-                    <ul class="detail-list">
-                        <li>Espejos inteligentes con QR.</li>
-                        <li>"Escanea y recibe tu primera jugada de $3 gratis".</li>
-                        <li>Capacitación al dueño del local como micro-influencer.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: PREMIO (LA BESTIA) -->
-    <div id="modal-prize" class="modal-overlay">
-        <div class="modal-content" style="max-width: 1000px;">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: var(--gold-primary);">Estrategia B2C: "La Bestia"</h3>
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-prize')"></i>
-            </div>
-            <div class="modal-body">
-                <div class="grid-2">
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1599408226068-19aa4043b743?q=80&w=2070&auto=format&fit=crop" style="width: 100%; border-radius: 8px; border: 1px solid var(--gold-primary);">
-                    </div>
-                    <div>
-                        <h4>MECÁNICA "LOW ENTRY"</h4>
-                        <p style="font-size: 13px; color: #ccc; margin-bottom: 20px;">
-                            Democratizamos el juego. El usuario no necesita ser rico, solo necesita jugar inteligente.
-                        </p>
-                        <ul class="detail-list">
-                            <li>
-                                <div>
-                                    <strong style="color: #fff;">Ticket Normal:</strong>
-                                    <br>Recarga de $5.00 = 1 Oportunidad.
-                                </div>
-                            </li>
-                            <li style="border: 1px solid var(--green-success); padding: 10px; border-radius: 4px;">
-                                <div>
-                                    <strong style="color: var(--green-success);">Ticket "Hat-Trick":</strong>
-                                    <br>Si apuestas esos $5 en un Parlay de 3+ líneas...
-                                    <br>➜ Recibes 3 Tickets (x3 Chances).
-                                    <br>➜ Si pierdes, recibes 1 Ticket de "Consuelo".
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCRIPTS LÓGICOS -->
     <script>
-        // CONTROL DE MODALES
-        function openModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            } else {
-                console.error("Modal not found: " + id);
-            }
-        }
+        // --- SISTEMA DE CARGA FAKE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-bar');
+            const loadingText = document.getElementById('loading-text');
+            const loadingScreen = document.getElementById('loading-screen');
+            let progress = 0;
 
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        }
+            const interval = setInterval(() => {
+                progress += Math.random() * 5;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = `${progress}%`;
 
-        function scrollToId(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // CERRAR AL CLIC FUERA
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                const modals = document.querySelectorAll('.modal-overlay');
-                modals.forEach(m => m.classList.remove('active'));
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // GRÁFICO MINI
-        document.addEventListener("DOMContentLoaded", function() {
-            const canvas = document.getElementById('miniChart');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const gradient = ctx.createLinearGradient(0, 0, 0, 150);
-                gradient.addColorStop(0, 'rgba(0, 224, 150, 0.4)');
-                gradient.addColorStop(1, 'rgba(0, 224, 150, 0)');
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-                        datasets: [{
-                            data: [12000, 25000, 48000, 75000, 110000, 145000],
-                            borderColor: '#00E096',
-                            backgroundColor: gradient,
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            fill: true,
-                            tension: 0.4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { x: { display: false }, y: { display: false } }
-                    }
-                });
-            }
+                if (progress > 30 && progress < 60) loadingText.innerText = "Sintonizando Corazón...";
+                if (progress > 60 && progress < 90) loadingText.innerText = "Preparando Detalles...";
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    loadingText.innerText = "Listo";
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        loadingScreen.style.visibility = 'hidden';
+                    }, 800);
+                }
+            }, 100);
         });
-    </script>
 
+        // --- NAVEGACIÓN ENTRE SLIDES ---
+        function goToSlide(slideNumber) {
+            const currentSlide = document.querySelector('.card-slide.active');
+            const nextSlide = document.getElementById(`slide-${slideNumber}`);
+
+            if (currentSlide && nextSlide) {
+                currentSlide.classList.remove('active');
+                currentSlide.classList.add('exit');
+
+                setTimeout(() => {
+                    currentSlide.classList.remove('exit');
+                    nextSlide.classList.add('active');
+                }, 400);
+            }
+        }
+
+        // --- SISTEMA DE APERTURA DE REGALO ---
+        function openGift() {
+            const giftWrapper = document.getElementById('gift-wrapper');
+            const content = document.getElementById('final-content');
+            
+            // 1. Animar apertura de caja
+            giftWrapper.classList.add('box-opened');
+            
+            // 2. Lanzar confeti inmediatamente
+            createConfetti();
+
+            // 3. Esconder caja y mostrar contenido
+            setTimeout(() => {
+                giftWrapper.style.display = 'none';
+                content.style.display = 'block';
+                
+                // Pequeño delay para que el display:block procese antes de la opacidad
+                setTimeout(() => {
+                    content.classList.add('visible');
+                    revealListItems(); // Iniciar cascada de texto
+                }, 50);
+            }, 600);
+        }
+
+        function revealListItems() {
+            const gifts = [
+                document.getElementById('gift-1'),
+                document.getElementById('gift-2'),
+                document.getElementById('gift-3')
+            ];
+
+            gifts.forEach((gift, index) => {
+                setTimeout(() => {
+                    gift.classList.add('revealed');
+                }, 300 + (index * 800)); // Tiempo entre cada item
+            });
+
+            setTimeout(() => {
+                document.getElementById('final-signature').classList.add('show');
+                createConfetti(); // Segunda ronda de confeti al terminar
+            }, 3000);
+        }
+
+        // --- SISTEMA DE CONFETI ---
+        function createConfetti() {
+            const colors = ['#d4af37', '#f9eac3', '#d64d6d', '#ffffff'];
+            const container = document.body;
+
+            for (let i = 0; i < 80; i++) { // Más confeti
+                const confetto = document.createElement('div');
+                confetto.classList.add('confetti');
+                
+                confetto.style.left = Math.random() * 100 + 'vw';
+                confetto.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetto.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetto.style.opacity = Math.random();
+                
+                container.appendChild(confetto);
+
+                setTimeout(() => {
+                    confetto.remove();
+                }, 5000);
+            }
+        }
+    </script>
 </body>
 </html>

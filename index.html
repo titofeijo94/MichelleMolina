@@ -54,7 +54,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Ruido visual para textura (Film Grain) */
         .noise-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -135,7 +134,7 @@
         .card-slide {
             position: absolute;
             width: 85%;
-            padding: 3rem 2rem;
+            padding: 2.5rem 1.8rem;
             background: rgba(20, 10, 15, 0.4);
             border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 4px;
@@ -163,9 +162,9 @@
         /* --- CAJA DE REGALO CSS --- */
         #gift-box-trigger {
             cursor: pointer;
-            width: 140px;
-            height: 140px;
-            margin: 20px auto 40px;
+            width: 130px;
+            height: 130px;
+            margin: 10px auto 30px;
             position: relative;
             transition: transform 0.3s ease;
             animation: floatBox 3s ease-in-out infinite;
@@ -181,8 +180,8 @@
         }
 
         .gift-lid {
-            width: 140px;
-            height: 35px;
+            width: 130px;
+            height: 32px;
             background: var(--accent-pink);
             position: absolute;
             top: 0;
@@ -193,46 +192,44 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .gift-lid::after { /* Cinta vertical tapa */
+        .gift-lid::after {
             content: '';
             position: absolute;
-            width: 25px;
+            width: 22px;
             height: 100%;
             background: var(--gold);
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
 
-        .gift-lid::before { /* Lazo/Moño */
+        .gift-lid::before {
             content: '';
             position: absolute;
-            width: 50px;
-            height: 12px;
+            width: 45px;
+            height: 10px;
             border-radius: 10px 10px 0 0;
             background: var(--gold);
-            top: -12px;
+            top: -10px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .gift-body {
-            width: 126px;
-            height: 100px;
-            background: var(--accent-pink); /* Color base */
+            width: 118px;
+            height: 90px;
             background: linear-gradient(135deg, var(--accent-pink) 0%, #a8324e 100%);
             position: absolute;
             bottom: 0;
-            left: 7px; /* Centrado respecto a la tapa */
+            left: 6px;
             border-radius: 0 0 4px 4px;
             z-index: 1;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
-        .gift-body::after { /* Cinta vertical cuerpo */
+        .gift-body::after {
             content: '';
             position: absolute;
-            width: 25px;
+            width: 22px;
             height: 100%;
             background: var(--gold);
             left: 50%;
@@ -240,8 +237,8 @@
         }
 
         .click-hint {
-            margin-top: 20px;
-            font-size: 0.8rem;
+            margin-top: 15px;
+            font-size: 0.75rem;
             color: var(--gold);
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -253,7 +250,6 @@
             50% { opacity: 1; }
         }
 
-        /* Animación de apertura */
         .box-opened .gift-lid {
             transform: translateY(-60px) rotate(-15deg);
             opacity: 0;
@@ -264,12 +260,8 @@
             opacity: 0;
             transition: all 0.6s ease-in;
         }
-        .box-opened .click-hint {
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
 
-        /* --- CONTENIDO FINAL (Oculto inicialmente) --- */
+        /* --- CONTENIDO FINAL --- */
         #final-content {
             display: none;
             opacity: 0;
@@ -280,23 +272,21 @@
             opacity: 1;
         }
 
-
-        /* --- TIPOGRAFÍA --- */
         h1 {
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--gold);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             font-weight: 500;
             line-height: 1.2;
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         p {
-            font-size: 1rem;
-            line-height: 1.8;
+            font-size: 0.95rem;
+            line-height: 1.7;
             color: #e0e0e0;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-weight: 300;
         }
 
@@ -312,9 +302,9 @@
             background: transparent;
             color: var(--gold);
             border: 1px solid var(--gold);
-            padding: 14px 40px;
+            padding: 12px 35px;
             font-family: 'Cinzel', serif;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
@@ -346,16 +336,16 @@
         .gift-container {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
             text-align: left;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .gift-item {
             background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 100%);
             border-left: 2px solid #444;
-            padding: 1rem 1.2rem;
-            opacity: 0; /* Para animación */
+            padding: 0.8rem 1rem;
+            opacity: 0;
             transform: translateX(-10px);
             transition: all 0.6s ease;
         }
@@ -375,24 +365,24 @@
             display: block;
             font-family: 'Cinzel', serif;
             color: var(--gold-light);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 4px;
         }
 
         .gift-desc {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
         .signature {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--accent-pink);
-            margin-top: 1rem;
+            margin-top: 0.8rem;
             opacity: 0;
             transform: scale(0.8);
-            transition: all 1s ease 1s; /* Delay para aparecer al final */
+            transition: all 1s ease 0.5s;
         }
         
         .signature.show {
@@ -447,30 +437,40 @@
         <div class="card-slide" id="slide-2">
             <h1>Gracias</h1>
             <p>
-                Por ser refugio en la tormenta y luz en la oscuridad. Por cada risa, por cada silencio cómodo y por sostenerme cuando el mundo pesa.
+                Por ser mi refugio en la tormenta y mi paz en el caos. Gracias por cada risa compartida y por enseñarme el valor de lo real.
             </p>
             <p>
-                <span class="highlight">Tu existencia mejora la mía.</span>
+                <span class="highlight">Eres mi oración contestada y mi hogar.</span>
             </p>
             <button class="btn-luxury" onclick="goToSlide(3)">Continuar</button>
         </div>
 
-        <!-- SLIDE 3: PREÁMBULO -->
+        <!-- SLIDE 3: BENDICIÓN (NUEVO) -->
         <div class="card-slide" id="slide-3">
-            <h1>Para Ti</h1>
+            <h1>Bendición</h1>
             <p>
-                Hoy no necesito una fecha en el calendario para recordarte que eres <span class="highlight">el amor de mi vida</span>.
+                Agradezco a <span class="highlight">Dios</span> por haber cruzado nuestros caminos. Tenerte a mi lado es sentir Su amor en la tierra todos los días.
             </p>
             <p>
-                He preparado algo especial. Un pequeño gesto para devolverte un poco de todo lo que me das.
+                Que Él ilumine siempre nuestro caminar y cuide de este amor tan puro que nos une.
             </p>
-            <button class="btn-luxury" onclick="goToSlide(4)">Ver Sorpresa</button>
+            <button class="btn-luxury" onclick="goToSlide(4)">Seguir</button>
         </div>
 
-        <!-- SLIDE 4: CAJA DE REGALO Y CONTENIDO -->
+        <!-- SLIDE 4: PREÁMBULO -->
         <div class="card-slide" id="slide-4">
-            
-            <!-- FASE 1: CAJA CERRADA -->
+            <h1>Para Ti</h1>
+            <p>
+                Hoy no necesito un motivo especial para decirte que eres <span class="highlight">el amor de mi vida</span>.
+            </p>
+            <p>
+                He preparado algo para que te sientas tan especial como lo que eres para mí.
+            </p>
+            <button class="btn-luxury" onclick="goToSlide(5)">Ver Sorpresa</button>
+        </div>
+
+        <!-- SLIDE 5: CAJA DE REGALO -->
+        <div class="card-slide" id="slide-5">
             <div id="gift-wrapper">
                 <div id="gift-box-trigger" onclick="openGift()">
                     <div class="gift-lid"></div>
@@ -479,22 +479,21 @@
                 <div class="click-hint" id="hint-text">Toca para abrir</div>
             </div>
 
-            <!-- FASE 2: CONTENIDO REVELADO -->
             <div id="final-content">
-                <h1 style="font-size: 1.5rem;">Mereces el Cielo</h1>
+                <h1 style="font-size: 1.4rem;">Mereces el Cielo</h1>
                 
                 <div class="gift-container">
                     <div class="gift-item" id="gift-1">
                         <span class="gift-title">I. Ritual de Renovación</span>
-                        <span class="gift-desc">Protocolo facial personalizado + Drenaje linfático y aparatología de vanguardia.</span>
+                        <span class="gift-desc">Protocolo facial personalizado + Drenaje linfático.</span>
                     </div>
                     <div class="gift-item" id="gift-2">
                         <span class="gift-title">II. Piel de Seda</span>
-                        <span class="gift-desc">Limpieza profunda y Hollywood Peel para que brilles como siempre.</span>
+                        <span class="gift-desc">Limpieza profunda y Hollywood Peel profesional.</span>
                     </div>
                     <div class="gift-item special" id="gift-3">
                         <span class="gift-title">III. Escapada en el Poseidón</span>
-                        <span class="gift-desc">Un día entero de relax y lujo en el Hotel Poseidon. Solo tú y tu paz.</span>
+                        <span class="gift-desc">Un día entero de relax absoluto en el Hotel Poseidon.</span>
                     </div>
                 </div>
 
@@ -513,7 +512,7 @@
             let progress = 0;
 
             const interval = setInterval(() => {
-                progress += Math.random() * 5;
+                progress += Math.random() * 8;
                 if (progress > 100) progress = 100;
                 
                 progressBar.style.width = `${progress}%`;
@@ -552,21 +551,16 @@
             const giftWrapper = document.getElementById('gift-wrapper');
             const content = document.getElementById('final-content');
             
-            // 1. Animar apertura de caja
             giftWrapper.classList.add('box-opened');
-            
-            // 2. Lanzar confeti inmediatamente
             createConfetti();
 
-            // 3. Esconder caja y mostrar contenido
             setTimeout(() => {
                 giftWrapper.style.display = 'none';
                 content.style.display = 'block';
                 
-                // Pequeño delay para que el display:block procese antes de la opacidad
                 setTimeout(() => {
                     content.classList.add('visible');
-                    revealListItems(); // Iniciar cascada de texto
+                    revealListItems();
                 }, 50);
             }, 600);
         }
@@ -581,34 +575,28 @@
             gifts.forEach((gift, index) => {
                 setTimeout(() => {
                     gift.classList.add('revealed');
-                }, 300 + (index * 800)); // Tiempo entre cada item
+                }, 300 + (index * 800));
             });
 
             setTimeout(() => {
                 document.getElementById('final-signature').classList.add('show');
-                createConfetti(); // Segunda ronda de confeti al terminar
+                createConfetti();
             }, 3000);
         }
 
-        // --- SISTEMA DE CONFETI ---
         function createConfetti() {
             const colors = ['#d4af37', '#f9eac3', '#d64d6d', '#ffffff'];
             const container = document.body;
 
-            for (let i = 0; i < 80; i++) { // Más confeti
+            for (let i = 0; i < 70; i++) {
                 const confetto = document.createElement('div');
                 confetto.classList.add('confetti');
-                
                 confetto.style.left = Math.random() * 100 + 'vw';
                 confetto.style.background = colors[Math.floor(Math.random() * colors.length)];
                 confetto.style.animationDuration = (Math.random() * 3 + 2) + 's';
                 confetto.style.opacity = Math.random();
-                
                 container.appendChild(confetto);
-
-                setTimeout(() => {
-                    confetto.remove();
-                }, 5000);
+                setTimeout(() => confetto.remove(), 5000);
             }
         }
     </script>

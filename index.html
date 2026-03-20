@@ -199,7 +199,8 @@
             alertSuccess.classList.add('hidden');
             alertError.classList.add('hidden');
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            // Solución: Agregamos mode: 'no-cors' para evitar el bloqueo de seguridad (CORS) del navegador
+            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
                 .then(response => {
                     // Éxito: Mostrar alerta verde y limpiar formulario
                     alertSuccess.classList.remove('hidden');

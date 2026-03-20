@@ -2,603 +2,231 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Para Michelle | Una Sorpresa de Tito</title>
-    
-    <!-- Fuentes Premium -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso de Estudiantes - Isla Mall</title>
+    <!-- Tailwind CSS para el diseño -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* --- CORE VARIABLES --- */
-        :root {
-            --gold: #d4af37;
-            --gold-light: #f9eac3;
-            --gold-shadow: #8a6e18;
-            --bg-dark: #12080d;
-            --bg-accent: #2a1118;
-            --text-main: #f4f4f4;
-            --text-muted: #b0b0b0;
-            --accent-pink: #d64d6d;
-            --easing: cubic-bezier(0.22, 1, 0.36, 1);
+        .loader {
+            border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #ffffff;
+            width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Montserrat', sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        /* --- BACKGROUND ANIMADO --- */
-        .ambient-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, var(--bg-accent), var(--bg-dark));
-            background-size: 200% 200%;
-            animation: ambientPulse 15s ease-in-out infinite;
-            z-index: -2;
-        }
-
-        @keyframes ambientPulse {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .noise-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* --- PANTALLA DE CARGA --- */
-        #loading-screen {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease, visibility 1s;
-        }
-
-        .loader-heart {
-            font-size: 3rem;
-            color: var(--accent-pink);
-            animation: heartbeat 1.5s infinite;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 20px rgba(214, 77, 109, 0.4);
-        }
-
-        .loading-line-container {
-            width: 200px;
-            height: 2px;
-            background: rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-line {
-            position: absolute;
-            left: 0; top: 0; height: 100%; width: 0%;
-            background: var(--gold);
-            box-shadow: 0 0 10px var(--gold);
-            transition: width 0.3s ease-out;
-        }
-
-        .loading-text {
-            margin-top: 15px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            color: var(--gold);
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.15); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
-            100% { transform: scale(1); }
-        }
-
-        /* --- ESCENARIO --- */
-        .stage-container {
-            width: 100%;
-            max-width: 600px;
-            height: 100vh;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1000px;
-        }
-
-        .card-slide {
-            position: absolute;
-            width: 85%;
-            padding: 2.5rem 1.8rem;
-            background: rgba(20, 10, 15, 0.4);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 4px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px) scale(0.95);
-            pointer-events: none;
-            transition: all 0.8s var(--easing);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .card-slide.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .card-slide.exit {
-            opacity: 0;
-            transform: translateY(-40px) scale(0.95);
-        }
-
-        /* --- CAJA DE REGALO CSS --- */
-        #gift-box-trigger {
-            cursor: pointer;
-            width: 130px;
-            height: 130px;
-            margin: 10px auto 30px;
-            position: relative;
-            transition: transform 0.3s ease;
-            animation: floatBox 3s ease-in-out infinite;
-        }
-
-        @keyframes floatBox {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        #gift-box-trigger:hover {
-            transform: scale(1.05);
-        }
-
-        .gift-lid {
-            width: 130px;
-            height: 32px;
-            background: var(--accent-pink);
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 4px;
-            z-index: 2;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .gift-lid::after {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 100%;
-            background: var(--gold);
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .gift-lid::before {
-            content: '';
-            position: absolute;
-            width: 45px;
-            height: 10px;
-            border-radius: 10px 10px 0 0;
-            background: var(--gold);
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .gift-body {
-            width: 118px;
-            height: 90px;
-            background: linear-gradient(135deg, var(--accent-pink) 0%, #a8324e 100%);
-            position: absolute;
-            bottom: 0;
-            left: 6px;
-            border-radius: 0 0 4px 4px;
-            z-index: 1;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        .gift-body::after {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 100%;
-            background: var(--gold);
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .click-hint {
-            margin-top: 15px;
-            font-size: 0.75rem;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: pulseText 2s infinite;
-        }
-
-        @keyframes pulseText {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        .box-opened .gift-lid {
-            transform: translateY(-60px) rotate(-15deg);
-            opacity: 0;
-            transition: all 0.6s ease-in;
-        }
-        .box-opened .gift-body {
-            transform: translateY(20px) scale(0.9);
-            opacity: 0;
-            transition: all 0.6s ease-in;
-        }
-
-        /* --- CONTENIDO FINAL --- */
-        #final-content {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-        
-        #final-content.visible {
-            opacity: 1;
-        }
-
-        h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
-            color: var(--gold);
-            margin-bottom: 1.2rem;
-            font-weight: 500;
-            line-height: 1.2;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-
-        p {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: #e0e0e0;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-        }
-
-        .highlight {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: var(--gold-light);
-            font-size: 1.1em;
-        }
-
-        /* --- BOTONES --- */
-        .btn-luxury {
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            padding: 12px 35px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .btn-luxury::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 0%; height: 100%;
-            background: var(--gold);
-            z-index: -1;
-            transition: all 0.4s var(--easing);
-        }
-
-        .btn-luxury:hover {
-            color: var(--bg-dark);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-        }
-
-        .btn-luxury:hover::after {
-            width: 100%;
-        }
-
-        /* --- REGALOS --- */
-        .gift-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            text-align: left;
-            margin-bottom: 1.5rem;
-        }
-
-        .gift-item {
-            background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-            border-left: 2px solid #444;
-            padding: 0.8rem 1rem;
-            opacity: 0;
-            transform: translateX(-10px);
-            transition: all 0.6s ease;
-        }
-
-        .gift-item.revealed {
-            opacity: 1;
-            transform: translateX(0);
-            border-left-color: var(--gold);
-        }
-
-        .gift-item.special.revealed {
-            border-left-color: var(--accent-pink);
-            background: linear-gradient(90deg, rgba(214, 77, 109, 0.1) 0%, transparent 100%);
-        }
-
-        .gift-title {
-            display: block;
-            font-family: 'Cinzel', serif;
-            color: var(--gold-light);
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-        }
-
-        .gift-desc {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .signature {
-            font-family: 'Great Vibes', cursive;
-            font-size: 2.2rem;
-            color: var(--accent-pink);
-            margin-top: 0.8rem;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 1s ease 0.5s;
-        }
-        
-        .signature.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* --- CONFETI --- */
-        .confetti {
-            position: absolute;
-            width: 6px; height: 6px;
-            background: var(--gold);
-            animation: fall linear forwards;
-            top: -10px;
-            z-index: 10;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(105vh) rotate(720deg); }
-        }
-
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 font-sans text-slate-900 min-h-screen pb-12">
 
-    <div class="ambient-bg"></div>
-    <div class="noise-overlay"></div>
-
-    <!-- PANTALLA DE CARGA -->
-    <div id="loading-screen">
-        <div class="loader-heart">❤</div>
-        <div class="loading-line-container">
-            <div class="loading-line" id="progress-bar"></div>
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm backdrop-blur-md bg-white/90">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-indigo-600 to-blue-600 p-2 rounded-lg text-white shadow-md">
+                    <i data-lucide="user-plus" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-800">Nuevo Registro</h1>
+                    <p class="text-xs text-slate-500">Ingreso directo a base de datos de UTPL</p>
+                </div>
+            </div>
+            <!-- ENLACE QUE CONECTA A TU OTRA PÁGINA -->
+            <a href="index.html" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                <i data-lucide="pie-chart" class="w-4 h-4"></i> Ver Reporte General
+            </a>
         </div>
-        <div class="loading-text" id="loading-text">Cargando Recuerdos...</div>
-    </div>
+    </header>
 
-    <!-- ESCENARIO PRINCIPAL -->
-    <div class="stage-container">
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- SLIDE 1: INTRO -->
-        <div class="card-slide active" id="slide-1">
-            <h1>Michelle</h1>
-            <p>
-                A veces me pregunto qué hice tan bien en otra vida para merecer coincidir contigo en esta.<br><br>
-                Eres mi casualidad más bonita.
-            </p>
-            <button class="btn-luxury" onclick="goToSlide(2)">Comenzar</button>
-        </div>
-
-        <!-- SLIDE 2: GRATITUD -->
-        <div class="card-slide" id="slide-2">
-            <h1>Gracias</h1>
-            <p>
-                Por ser mi refugio en la tormenta y mi paz en el caos. Gracias por cada risa compartida y por enseñarme el valor de lo real.
-            </p>
-            <p>
-                <span class="highlight">Eres mi oración contestada y mi hogar.</span>
-            </p>
-            <button class="btn-luxury" onclick="goToSlide(3)">Continuar</button>
-        </div>
-
-        <!-- SLIDE 3: BENDICIÓN (NUEVO) -->
-        <div class="card-slide" id="slide-3">
-            <h1>Bendición</h1>
-            <p>
-                Agradezco a <span class="highlight">Dios</span> por haber cruzado nuestros caminos. Tenerte a mi lado es sentir Su amor en la tierra todos los días.
-            </p>
-            <p>
-                Que Él ilumine siempre nuestro caminar y cuide de este amor tan puro que nos une.
-            </p>
-            <button class="btn-luxury" onclick="goToSlide(4)">Seguir</button>
-        </div>
-
-        <!-- SLIDE 4: PREÁMBULO -->
-        <div class="card-slide" id="slide-4">
-            <h1>Para Ti</h1>
-            <p>
-                Hoy no necesito un motivo especial para decirte que eres <span class="highlight">el amor de mi vida</span>.
-            </p>
-            <p>
-                He preparado algo para que te sientas tan especial como lo que eres para mí.
-            </p>
-            <button class="btn-luxury" onclick="goToSlide(5)">Ver Sorpresa</button>
-        </div>
-
-        <!-- SLIDE 5: CAJA DE REGALO -->
-        <div class="card-slide" id="slide-5">
-            <div id="gift-wrapper">
-                <div id="gift-box-trigger" onclick="openGift()">
-                    <div class="gift-lid"></div>
-                    <div class="gift-body"></div>
-                </div>
-                <div class="click-hint" id="hint-text">Toca para abrir</div>
+        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+            <div class="bg-indigo-600 p-6 text-white">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                    Formulario de Admisiones
+                </h2>
+                <p class="text-indigo-100 text-sm mt-1">Completa los datos del estudiante. Se agregarán automáticamente a la hoja de cálculo de Isla Mall.</p>
             </div>
 
-            <div id="final-content">
-                <h1 style="font-size: 1.4rem;">Mereces el Cielo</h1>
+            <form id="registro-form" name="submit-to-google-sheet" class="p-6 space-y-6">
                 
-                <div class="gift-container">
-                    <div class="gift-item" id="gift-1">
-                        <span class="gift-title">I. Ritual de Renovación</span>
-                        <span class="gift-desc">Protocolo facial personalizado + Drenaje linfático.</span>
-                    </div>
-                    <div class="gift-item" id="gift-2">
-                        <span class="gift-title">II. Piel de Seda</span>
-                        <span class="gift-desc">Limpieza profunda y Hollywood Peel profesional.</span>
-                    </div>
-                    <div class="gift-item special" id="gift-3">
-                        <span class="gift-title">III. Escapada en el Poseidón</span>
-                        <span class="gift-desc">Un día entero de relax absoluto en el Hotel Poseidon.</span>
+                <!-- Datos Personales -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2">Datos Personales</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Nombres y Apellidos *</label>
+                            <div class="relative">
+                                <i data-lucide="user" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <input type="text" name="Nombres" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Cédula *</label>
+                            <div class="relative">
+                                <i data-lucide="credit-card" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <input type="text" name="Cedula" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Teléfono *</label>
+                            <div class="relative">
+                                <i data-lucide="phone" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <input type="tel" name="Telefono" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Correo Electrónico</label>
+                            <div class="relative">
+                                <i data-lucide="mail" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <input type="email" name="Correo" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="signature" id="final-signature">Con todo mi amor,<br>Tito Feijo</div>
-            </div>
+                <!-- Datos Académicos -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2">Información Académica</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Fecha de Registro *</label>
+                            <div class="relative">
+                                <i data-lucide="calendar" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <input type="date" name="Fecha" id="fecha-input" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Categoría (Tipo) *</label>
+                            <div class="relative">
+                                <i data-lucide="tag" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <select name="TIPO" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer appearance-none">
+                                    <option value="" disabled selected>Seleccione...</option>
+                                    <option value="TEC">Tecnologías (TEC)</option>
+                                    <option value="MEL">Grado (MEL)</option>
+                                    <option value="POS">Posgrado (POS)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-1 md:col-span-2">
+                            <label class="text-sm font-semibold text-slate-700">Carrera de Interés *</label>
+                            <div class="relative">
+                                <i data-lucide="graduation-cap" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <input type="text" name="Carrera" required placeholder="Ej: Psicología, Derecho, etc." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datos Internos -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2">Datos Internos</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Promotor/a *</label>
+                            <div class="relative">
+                                <i data-lucide="briefcase" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                                <select name="Promotora" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer appearance-none">
+                                    <option value="" disabled selected>Seleccione...</option>
+                                    <option value="Andres Lozano">Andres Lozano</option>
+                                    <option value="Robert Castro">Robert Castro</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-slate-700">Observaciones</label>
+                            <textarea name="Observaciones" rows="3" placeholder="Información adicional sobre el prospecto..." class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensajes de Alerta -->
+                <div id="alert-success" class="hidden bg-green-50 text-green-800 p-4 rounded-xl border border-green-200 flex items-center gap-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                    <div>
+                        <p class="font-bold text-sm">¡Registro exitoso!</p>
+                        <p class="text-xs">El estudiante ha sido guardado en la hoja de cálculo.</p>
+                    </div>
+                </div>
+
+                <div id="alert-error" class="hidden bg-red-50 text-red-800 p-4 rounded-xl border border-red-200 flex items-center gap-3">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                    <div>
+                        <p class="font-bold text-sm">Ocurrió un error</p>
+                        <p class="text-xs">No se pudo guardar. Revisa el enlace del script.</p>
+                    </div>
+                </div>
+
+                <!-- Botón Submit -->
+                <div class="pt-4">
+                    <button type="submit" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                        <i data-lucide="save" class="w-5 h-5"></i>
+                        <span>Guardar Registro</span>
+                    </button>
+                </div>
+            </form>
         </div>
 
-    </div>
+    </main>
 
     <script>
-        // --- SISTEMA DE CARGA FAKE ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const progressBar = document.getElementById('progress-bar');
-            const loadingText = document.getElementById('loading-text');
-            const loadingScreen = document.getElementById('loading-screen');
-            let progress = 0;
+        // Inicializar Iconos
+        lucide.createIcons();
 
-            const interval = setInterval(() => {
-                progress += Math.random() * 8;
-                if (progress > 100) progress = 100;
-                
-                progressBar.style.width = `${progress}%`;
+        // Establecer la fecha de hoy por defecto en el input de fecha
+        document.getElementById('fecha-input').valueAsDate = new Date();
 
-                if (progress > 30 && progress < 60) loadingText.innerText = "Sintonizando Corazón...";
-                if (progress > 60 && progress < 90) loadingText.innerText = "Preparando Detalles...";
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    loadingText.innerText = "Listo";
-                    setTimeout(() => {
-                        loadingScreen.style.opacity = '0';
-                        loadingScreen.style.visibility = 'hidden';
-                    }, 800);
-                }
-            }, 100);
-        });
+        // ====================================================================
+        // ⚠️ IMPORTANTE: PEGA AQUÍ LA URL DEL PASO 1 (TERMINA EN /exec) ⚠️
+        // ====================================================================
+        const scriptURL = 'AQUI_PEGA_TU_URL_DE_GOOGLE_APPS_SCRIPT';
+        
+        const form = document.forms['submit-to-google-sheet'];
+        const submitBtn = document.getElementById('submit-btn');
+        const alertSuccess = document.getElementById('alert-success');
+        const alertError = document.getElementById('alert-error');
 
-        // --- NAVEGACIÓN ENTRE SLIDES ---
-        function goToSlide(slideNumber) {
-            const currentSlide = document.querySelector('.card-slide.active');
-            const nextSlide = document.getElementById(`slide-${slideNumber}`);
-
-            if (currentSlide && nextSlide) {
-                currentSlide.classList.remove('active');
-                currentSlide.classList.add('exit');
-
-                setTimeout(() => {
-                    currentSlide.classList.remove('exit');
-                    nextSlide.classList.add('active');
-                }, 400);
-            }
-        }
-
-        // --- SISTEMA DE APERTURA DE REGALO ---
-        function openGift() {
-            const giftWrapper = document.getElementById('gift-wrapper');
-            const content = document.getElementById('final-content');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
             
-            giftWrapper.classList.add('box-opened');
-            createConfetti();
+            // Estado de carga
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loader"></div> <span class="ml-2">Guardando en la nube...</span>';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-70');
+            
+            alertSuccess.classList.add('hidden');
+            alertError.classList.add('hidden');
 
-            setTimeout(() => {
-                giftWrapper.style.display = 'none';
-                content.style.display = 'block';
-                
-                setTimeout(() => {
-                    content.classList.add('visible');
-                    revealListItems();
-                }, 50);
-            }, 600);
-        }
-
-        function revealListItems() {
-            const gifts = [
-                document.getElementById('gift-1'),
-                document.getElementById('gift-2'),
-                document.getElementById('gift-3')
-            ];
-
-            gifts.forEach((gift, index) => {
-                setTimeout(() => {
-                    gift.classList.add('revealed');
-                }, 300 + (index * 800));
-            });
-
-            setTimeout(() => {
-                document.getElementById('final-signature').classList.add('show');
-                createConfetti();
-            }, 3000);
-        }
-
-        function createConfetti() {
-            const colors = ['#d4af37', '#f9eac3', '#d64d6d', '#ffffff'];
-            const container = document.body;
-
-            for (let i = 0; i < 70; i++) {
-                const confetto = document.createElement('div');
-                confetto.classList.add('confetti');
-                confetto.style.left = Math.random() * 100 + 'vw';
-                confetto.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetto.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                confetto.style.opacity = Math.random();
-                container.appendChild(confetto);
-                setTimeout(() => confetto.remove(), 5000);
-            }
-        }
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    // Éxito: Mostrar alerta verde y limpiar formulario
+                    alertSuccess.classList.remove('hidden');
+                    form.reset();
+                    document.getElementById('fecha-input').valueAsDate = new Date(); // Restaurar fecha de hoy
+                    
+                    // Restaurar botón a la normalidad
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70');
+                    lucide.createIcons();
+                    
+                    // Ocultar alerta de éxito después de 4 segundos
+                    setTimeout(() => alertSuccess.classList.add('hidden'), 4000);
+                })
+                .catch(error => {
+                    // Error: Mostrar alerta roja
+                    console.error('Error!', error.message);
+                    alertError.classList.remove('hidden');
+                    
+                    // Restaurar botón
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70');
+                    lucide.createIcons();
+                });
+        });
     </script>
 </body>
 </html>

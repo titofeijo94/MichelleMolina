@@ -45,7 +45,6 @@
                     <i data-lucide="clipboard-list" class="w-6 h-6"></i>
                     Formulario de Admisiones
                 </h2>
-                <p class="text-indigo-100 text-sm mt-1">Completa los datos del estudiante. Se agregarán automáticamente a la hoja de cálculo de Isla Mall.</p>
             </div>
 
             <form id="registro-form" name="submit-to-google-sheet" class="p-6 space-y-6">
@@ -178,9 +177,9 @@
         document.getElementById('fecha-input').valueAsDate = new Date();
 
         // ====================================================================
-        // ⚠️ IMPORTANTE: PEGA AQUÍ LA URL DEL PASO 1 (TERMINA EN /exec) ⚠️
+        // URL DE GOOGLE APPS SCRIPT (YA CONFIGURADA)
         // ====================================================================
-        const scriptURL = 'AQUI_PEGA_TU_URL_DE_GOOGLE_APPS_SCRIPT';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxdcISirdj2Iaw70K87c-1t0gaeq4Y4Wn4Bp1EutI0VfgvaatxNXaQSu-KOmEz3ZQ0z/exec';
         
         const form = document.forms['submit-to-google-sheet'];
         const submitBtn = document.getElementById('submit-btn');

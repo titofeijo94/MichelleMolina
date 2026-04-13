@@ -50,45 +50,32 @@
             color: #fdfdfd;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            /* Cursor normal restaurado */
             cursor: auto !important;
         }
 
-        /* --- Efecto Grano de Cine Sutil --- */
-        .film-grain::after {
-            content: "";
-            position: fixed;
-            top: -100%; left: -100%;
-            width: 300%; height: 300%;
-            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23n)"/%3E%3C/svg%3E');
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 9999;
-            animation: grain 1.5s steps(3) infinite;
-        }
-        @keyframes grain { 0% { transform: translate(0,0) } 50% { transform: translate(-5%,-5%) } }
-
-        /* --- Estilo Bento --- */
+        /* --- Estilo Bento Grid Corregido (Formato Vertical) --- */
         .bento-card {
             position: relative;
             overflow: hidden;
             background: #080808;
             border: 1px solid rgba(255,255,255,0.05);
             height: 100%;
-            min-height: 480px; /* Tamaño grande en móvil */
         }
-        @media (min-width: 768px) {
-            .bento-card { min-height: auto; }
+
+        /* En móvil, forzamos altura para que se vean grandes */
+        @media (max-width: 768px) {
+            .bento-card { min-height: 550px; }
+            .bento-card.short { min-height: 350px; }
         }
 
         .bento-card img, .bento-card video {
             width: 100%; height: 100%; object-fit: cover;
             transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1);
-            filter: brightness(0.95);
         }
+        
+        /* Efecto hover suave */
         .bento-card:hover img, .bento-card:hover video {
-            transform: scale(1.05);
-            filter: brightness(1.1);
+            transform: scale(1.03);
         }
 
         /* --- Social Dock --- */
@@ -112,12 +99,12 @@
         }
         .dock-btn.wa { background: rgba(37, 211, 102, 0.9); }
         .dock-btn.ig { background: rgba(225, 48, 108, 0.9); }
-        .dock-btn:hover { transform: scale(1.1) rotate(5deg); }
+        .dock-btn:hover { transform: scale(1.1); }
 
-        /* --- Modal --- */
+        /* --- Modal Optimization --- */
         .modal-view {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(20px); opacity: 0; visibility: hidden;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
+            backdrop-filter: blur(25px); opacity: 0; visibility: hidden;
             z-index: 11000; transition: all 0.5s ease;
         }
         .modal-view.active { opacity: 1; visibility: visible; }
@@ -131,21 +118,21 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- Hero Movement (Parallax) --- */
+        /* --- Parallax Movimiento Hero --- */
         #hero-media-container {
             will-change: transform;
             transition: transform 0.1s linear;
         }
         .hero-text-content {
             will-change: transform;
-            transition: transform 0.12s linear;
+            transition: transform 0.15s linear;
         }
         .hero-overlay {
-            background: linear-gradient(to bottom, rgba(2,2,2,0.4) 0%, transparent 40%, rgba(2,2,2,0.8) 100%);
+            background: linear-gradient(to bottom, rgba(2,2,2,0.1) 0%, transparent 50%, rgba(2,2,2,0.6) 100%);
         }
     </style>
 </head>
-<body class="film-grain">
+<body>
 
     <!-- Preloader -->
     <div id="preloader" class="fixed inset-0 bg-black z-[20000] flex items-center justify-center transition-opacity duration-1000">
@@ -178,32 +165,31 @@
         </div>
     </nav>
 
-    <!-- Intro / Hero Section con Video de Fondo y Movimiento -->
+    <!-- Intro / Hero Section con Parallax Real -->
     <section class="relative h-[100dvh] flex flex-col justify-center px-6 md:px-24 overflow-hidden bg-black">
         
-        <!-- Contenido Superior (Texto) -->
-        <div class="hero-text-content z-10 w-full">
-            <h2 class="text-[9px] md:text-xs uppercase tracking-[0.8em] mb-6 text-brand-accent reveal font-semibold">Director • Productor • Filmmaker</h2>
-            <h1 class="text-5xl md:text-[10vw] font-serif leading-[0.9] mb-10 reveal flex flex-col tracking-tighter">
-                <span class="block">The Art of</span>
-                <span class="italic font-light text-zinc-300 md:ml-[15vw]">Visual Motion.</span>
-            </h1>
-        </div>
-        
-        <!-- Video de Fondo (Intro) -->
+        <!-- Video de Fondo Nítido -->
         <div id="hero-media-container" class="absolute inset-0 -z-10 scale-110">
             <video id="hero-video" 
                    autoplay loop muted playsinline preload="auto"
-                   class="w-full h-full object-cover opacity-90">
+                   class="w-full h-full object-cover">
                 <source src="video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4" type="video/mp4">
             </video>
-            <!-- Overlay para mejorar legibilidad del texto -->
             <div class="absolute inset-0 hero-overlay"></div>
         </div>
 
+        <!-- Texto Superior Flotante -->
+        <div class="hero-text-content z-10 w-full">
+            <h2 class="text-[9px] md:text-xs uppercase tracking-[0.8em] mb-6 text-brand-accent reveal font-semibold">Director • Productor • Filmmaker</h2>
+            <h1 class="text-5xl md:text-[10vw] font-serif leading-[0.85] mb-10 reveal flex flex-col tracking-tighter">
+                <span class="block">The Art of</span>
+                <span class="italic font-light text-white md:ml-[15vw]">Visual Motion.</span>
+            </h1>
+        </div>
+
         <!-- Indicador de Scroll -->
-        <div class="absolute bottom-10 right-10 flex items-center gap-4 opacity-40">
-            <span class="text-[8px] uppercase tracking-widest">Deslizar</span>
+        <div class="absolute bottom-10 right-10 flex items-center gap-4 opacity-50">
+            <span class="text-[8px] uppercase tracking-widest text-white">Scroll</span>
             <div class="w-10 h-[1px] bg-white"></div>
         </div>
     </section>
@@ -224,12 +210,12 @@
         </div>
     </div>
 
-    <!-- Portafolio Bento Grid -->
+    <!-- Portafolio Bento Grid (Ajustado para Videos Verticales) -->
     <section id="work" class="py-24 md:py-48 px-4 md:px-16 bg-brand-bg">
         <div class="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 auto-rows-auto">
             
-            <!-- Video Reel principal -->
-            <div class="md:col-span-8 md:row-span-2 bento-card reveal group"
+            <!-- Video Reel principal (Vertical 9:16) - Ocupa 4 columnas para no estirarse -->
+            <div class="md:col-span-4 md:row-span-2 bento-card reveal group"
                  onclick="openModal('Showreel', 'Director Reel 2024', 'video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4')">
                 <video autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover">
                     <source src="video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4" type="video/mp4">
@@ -239,8 +225,8 @@
                 </div>
             </div>
 
-            <!-- Foto Editorial -->
-            <div class="md:col-span-4 bento-card reveal"
+            <!-- Foto Editorial Playa (Horizontal) - Ocupa el espacio restante para balancear -->
+            <div class="md:col-span-8 bento-card reveal short"
                  onclick="openModal('Editorial', 'Beach Concept', 'img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg', true)">
                 <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg">
             </div>
@@ -251,13 +237,13 @@
                 <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg">
             </div>
 
-            <!-- Video Vertical "Contenido Premium" -->
+            <!-- Video Vertical "Be a Legend" - Ajustado a 4 columnas para mantener formato Reel -->
             <div class="md:col-span-4 md:row-span-2 bento-card reveal group"
                  onclick="openModal('Campaign', 'Be a Legend', 'video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4')">
                 <video autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover">
                     <source src="video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4" type="video/mp4">
                 </video>
-                <div class="absolute top-6 left-6"><span class="text-[9px] bg-brand-accent text-black px-3 py-1 font-bold uppercase tracking-widest">Premium Content</span></div>
+                <div class="absolute top-6 left-6"><span class="text-[9px] bg-brand-accent text-black px-3 py-1 font-bold uppercase tracking-widest">Premium Vertical</span></div>
                 <div class="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity">
                     <i class="fa-solid fa-play text-white text-3xl"></i>
                 </div>
@@ -270,13 +256,13 @@
             </div>
 
             <!-- Foto Studio -->
-            <div class="md:col-span-4 bento-card reveal"
+            <div class="md:col-span-4 bento-card reveal short"
                  onclick="openModal('Studio', 'Intimacy', 'img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg', true)">
                 <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg">
             </div>
 
             <!-- Foto Paisaje -->
-            <div class="md:col-span-4 bento-card reveal"
+            <div class="md:col-span-4 bento-card reveal short"
                  onclick="openModal('Cinematic', 'Horizon', 'img/SaveClip.App_620468364_18560710276016823_6779873021513494856_n.jpg', true)">
                 <img src="img/SaveClip.App_620468364_18560710276016823_6779873021513494856_n.jpg">
             </div>
@@ -297,8 +283,7 @@
                 <h3 class="text-[10px] uppercase tracking-[0.7em] text-brand-accent mb-10 font-bold">01 / El Director</h3>
                 <h2 class="text-4xl md:text-8xl font-serif mb-12">Guillermo Vera</h2>
                 <div class="space-y-8 text-zinc-300 font-light leading-relaxed text-lg">
-                    <p>Director y Productor Visual con base en Ecuador. Especializado en crear narrativas que fusionan el mundo editorial con la fuerza cinematográfica.</p>
-                    <p>Mi enfoque es elevar cada fotograma a una obra de arte. Si buscas una identidad visual única y de alta gama, has llegado al lugar correcto.</p>
+                    <p>Director y Productor Visual con base en Ecuador. Mi trabajo se centra en elevar la imagen comercial a través de una narrativa puramente cinematográfica.</p>
                 </div>
                 <div class="mt-14">
                     <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="text-[11px] uppercase tracking-[0.4em] border-b border-white/40 pb-2 hover:border-brand-accent transition font-bold">@guillermoveraec</a>
@@ -307,7 +292,6 @@
             <div class="reveal flex justify-center">
                 <div class="w-full max-w-[500px] aspect-[3/4] overflow-hidden rounded-sm relative group">
                     <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[2s]">
-                    <div class="absolute inset-0 border border-brand-accent/20 m-6 pointer-events-none"></div>
                 </div>
             </div>
         </div>
@@ -315,23 +299,21 @@
 
     <!-- Footer -->
     <footer id="contact" class="py-32 md:py-56 px-6 text-center bg-black">
-        <h2 class="text-6xl md:text-[12vw] font-serif italic mb-20 reveal tracking-tighter mix-blend-difference">Let's Create.</h2>
+        <h2 class="text-6xl md:text-[12vw] font-serif italic mb-20 reveal tracking-tighter">Let's Create.</h2>
         <div class="reveal mb-32">
             <a href="mailto:hola@guillermovera.com" class="text-xl md:text-6xl font-serif hover:text-brand-accent transition underline underline-offset-[15px] decoration-zinc-800">hola@guillermovera.com</a>
         </div>
         <div class="max-w-8xl mx-auto pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.5em] text-zinc-500 gap-10">
             <p>&copy; <span id="year"></span> Guillermo Vera Studio</p>
-            <p class="text-zinc-700 font-bold uppercase tracking-widest">ECUADOR • LATAM</p>
+            <p class="text-zinc-700">ECUADOR • LATAM</p>
         </div>
     </footer>
 
-    <!-- Modal Pro (Inmersivo y Gigante) -->
+    <!-- Modal Pro -->
     <div id="mediaModal" class="modal-view">
         <button onclick="closeModal()" class="absolute top-6 right-6 text-white text-5xl z-[12000] p-4"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-content">
-            <div id="modalContainer" class="w-full h-full flex items-center justify-center overflow-hidden">
-                <!-- Contenido dinámico -->
-            </div>
+            <div id="modalContainer" class="w-full h-full flex items-center justify-center overflow-hidden"></div>
             <div class="mt-6 text-center text-white p-4">
                 <h3 id="mTitle" class="text-3xl font-serif italic">Título</h3>
             </div>
@@ -346,23 +328,11 @@
                 preloader.style.opacity = '0';
                 setTimeout(() => preloader.remove(), 1000);
             }, 1000);
-            
-            // Forzar play en videos
-            const videos = document.querySelectorAll('video[autoplay]');
-            videos.forEach(v => {
-                const playPromise = v.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        v.muted = true;
-                        v.play();
-                    });
-                }
-            });
         });
 
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // --- Movimiento Hero (Parallax para Computadora y Móvil) ---
+        // --- Movimiento Parallax (Computadora y Móvil) ---
         const heroMedia = document.getElementById('hero-media-container');
         const heroText = document.querySelector('.hero-text-content');
 
@@ -371,14 +341,14 @@
             const windowHeight = window.innerHeight;
             
             if (scroll < windowHeight) {
-                // Zoom y desplazamiento dinámico al fondo
-                const zoomFactor = 1.1 + (scroll / 2500);
-                const translateY = scroll * 0.12;
+                // Zoom y desplazamiento dinámico
+                const zoomFactor = 1.1 + (scroll / 1500); 
+                const translateY = scroll * 0.2; 
                 heroMedia.style.transform = `scale(${zoomFactor}) translateY(${translateY}px)`;
                 
-                // Movimiento fluido del texto
-                heroText.style.transform = `translateY(${scroll * 0.35}px)`;
-                heroText.style.opacity = 1 - (scroll / (windowHeight * 0.85));
+                // Texto se mueve a otra velocidad
+                heroText.style.transform = `translateY(${scroll * 0.4}px)`;
+                heroText.style.opacity = 1 - (scroll / (windowHeight * 0.9));
             }
         }, { passive: true });
 
@@ -398,10 +368,7 @@
                     </video>
                 `;
                 const v = document.getElementById('vPlayer');
-                v.play().catch(() => {
-                    v.muted = true;
-                    v.play();
-                });
+                v.play().catch(() => { v.muted = true; v.play(); });
             }
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -413,7 +380,7 @@
             document.body.style.overflow = '';
         }
 
-        // --- Reveal Observer ---
+        // --- Reveal ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('active');
@@ -422,7 +389,6 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Cerrar con escape
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
     </script>
 </body>

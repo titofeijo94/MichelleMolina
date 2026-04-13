@@ -8,7 +8,7 @@
     <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@100;300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
     
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,15 +25,23 @@
                     },
                     colors: {
                         brand: {
-                            bg: '#050505',
-                            dark: '#0a0a0a',
-                            darker: '#030303',
-                            accent: '#c5a358',
-                            light: '#e5e5e5'
+                            bg: '#030303',
+                            dark: '#080808',
+                            darker: '#000000',
+                            accent: '#d4af37', /* Un dorado más elegante */
+                            light: '#f5f5f5',
+                            muted: '#737373'
                         }
                     },
                     animation: {
-                        'spin-slow': 'spin 8s linear infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' }
+                        }
                     }
                 }
             }
@@ -47,10 +55,10 @@
         }
 
         body {
-            background-color: #050505;
-            color: #e5e5e5;
+            background-color: #030303;
+            color: #f5f5f5;
             overflow-x: hidden;
-            cursor: none; /* Oculto para cursor custom */
+            cursor: none;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -59,7 +67,7 @@
         #preloader {
             position: fixed;
             inset: 0;
-            background-color: #050505;
+            background-color: #000;
             z-index: 99999;
             display: flex;
             justify-content: center;
@@ -72,13 +80,10 @@
         .loader-text span {
             display: inline-block;
             transform: translateY(100%);
-            animation: slideUpFade 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-        }
-        @keyframes slideUpFade {
-            to { transform: translateY(0); }
+            animation: slideUpFade 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
-        /* --- CURSOR PERSONALIZADO AVANZADO --- */
+        /* --- CURSOR PERSONALIZADO --- */
         @media (pointer: fine) {
             #cursor, #cursor-follower {
                 position: fixed;
@@ -97,13 +102,13 @@
             #cursor-follower {
                 width: var(--cursor-follower-size);
                 height: var(--cursor-follower-size);
-                border: 1px solid rgba(255,255,255,0.5);
-                transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+                border: 1px solid rgba(255,255,255,0.4);
+                transition: width 0.4s ease, height 0.4s ease, background-color 0.4s ease, border-color 0.4s ease;
                 will-change: transform;
             }
             .cursor-hover #cursor-follower {
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
                 background: white;
                 border-color: transparent;
                 mix-blend-mode: difference;
@@ -117,26 +122,16 @@
             #cursor, #cursor-follower { display: none !important; }
         }
 
-        /* --- EFECTO GRANO OPTIMIZADO --- */
+        /* --- EFECTO GRANO FOTOGRÁFICO --- */
         .grain::before {
             content: "";
             position: fixed;
             top: -100%; left: -100%;
             width: 300%; height: 300%;
-            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-            opacity: 0.03;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+            opacity: 0.04;
             pointer-events: none;
-            animation: grain 8s steps(10) infinite;
             z-index: 9998;
-            will-change: transform;
-        }
-        @keyframes grain {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -10%); }
-            30% { transform: translate(5%, 10%); }
-            50% { transform: translate(-15%, 10%); }
-            70% { transform: translate(10%, -5%); }
-            90% { transform: translate(-10%, 10%); }
         }
 
         /* --- ANIMACIONES REVEAL --- */
@@ -156,7 +151,7 @@
         
         .section-reveal {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(50px);
             transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1), transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
             will-change: opacity, transform;
         }
@@ -165,12 +160,13 @@
             transform: translateY(0);
         }
 
-        /* --- TARJETAS PORTAFOLIO --- */
+        /* --- TARJETAS PORTAFOLIO MEJORADAS --- */
         .work-card {
             position: relative;
             overflow: hidden;
-            background: #111;
-            border-radius: 2px;
+            background: #080808;
+            border-radius: 4px; /* Bordes ligeramente redondeados para un look más moderno */
+            border: 1px solid rgba(255,255,255,0.03);
             cursor: pointer;
         }
         .img-wrapper {
@@ -182,46 +178,52 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), filter 1s ease;
-            filter: grayscale(40%) brightness(0.8);
-            transform: scale(1.05); /* Margen para parallax */
+            transition: transform 1.8s cubic-bezier(0.19, 1, 0.22, 1), filter 1s ease;
+            filter: grayscale(20%) brightness(0.85);
+            transform: scale(1.05);
             will-change: transform;
         }
         .work-card:hover img, .work-card:hover video {
-            transform: scale(1.1);
-            filter: grayscale(0%) brightness(1.1);
+            transform: scale(1.12);
+            filter: grayscale(0%) brightness(1.05);
         }
         .work-card .overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 2.5rem 2rem;
+            padding: 3rem 2.5rem;
             opacity: 0;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.7s ease;
             pointer-events: none;
         }
         .work-card:hover .overlay {
             opacity: 1;
         }
-        
-        /* Typography Clamp for responsiveness */
-        .hero-title {
-            font-size: clamp(3rem, 10vw + 1rem, 10rem);
+
+        /* Nav Glassmorphism */
+        .nav-scrolled {
+            background-color: rgba(3, 3, 3, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
         }
-        .footer-title {
-            font-size: clamp(3rem, 12vw, 12rem);
-        }
+
+        /* Tipografía fluida */
+        .hero-title { font-size: clamp(3.5rem, 10vw, 11rem); }
+        .footer-title { font-size: clamp(4rem, 13vw, 14rem); }
+        .section-title { font-size: clamp(3rem, 6vw, 6rem); }
     </style>
 </head>
 <body class="grain font-sans selection:bg-brand-accent selection:text-black">
 
     <!-- Preloader -->
     <div id="preloader">
-        <div class="loader-text text-brand-light font-serif text-2xl italic tracking-wider">
-            <span>G. Vera Studio</span>
+        <div class="loader-text text-brand-light font-serif text-3xl italic tracking-widest">
+            <span>Estudio G. Vera</span>
         </div>
     </div>
 
@@ -230,55 +232,66 @@
     <div id="cursor-follower"></div>
 
     <!-- Navegación -->
-    <nav class="fixed top-0 w-full z-[110] px-6 md:px-12 py-8 flex justify-between items-center mix-blend-difference">
-        <a href="#" class="text-xl md:text-2xl font-serif font-bold tracking-tighter uppercase interactive-el text-white">G. Vera</a>
+    <nav id="navbar" class="fixed top-0 w-full z-[110] px-6 md:px-12 py-8 flex justify-between items-center transition-all duration-500">
+        <a href="#" class="text-xl md:text-2xl font-serif font-bold tracking-tighter uppercase interactive-el text-white mix-blend-difference">G. Vera</a>
         
         <!-- Menú Desktop -->
-        <div class="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.3em] font-light text-white">
-            <a href="#work" class="hover:text-brand-accent transition-colors interactive-el">Portfolio</a>
-            <a href="#studio" class="hover:text-brand-accent transition-colors interactive-el">Studio</a>
-            <a href="#about" class="hover:text-brand-accent transition-colors interactive-el">Bio</a>
-            <a href="#contact" class="hover:text-brand-accent transition-colors interactive-el">Contact</a>
+        <div class="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.3em] font-medium text-white mix-blend-difference">
+            <a href="#work" class="hover:text-brand-accent transition-colors interactive-el relative group">
+                Portafolio
+                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a href="#studio" class="hover:text-brand-accent transition-colors interactive-el relative group">
+                Estudio
+                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a href="#services" class="hover:text-brand-accent transition-colors interactive-el relative group">
+                Servicios
+                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a href="#contact" class="hover:text-brand-accent transition-colors interactive-el relative group">
+                Contacto
+                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-accent transition-all duration-300 group-hover:w-full"></span>
+            </a>
         </div>
         
         <!-- Botón Menú Móvil -->
-        <button id="mobile-menu-btn" aria-label="Abrir menú" class="md:hidden text-2xl interactive-el hover:opacity-70 transition text-white">
+        <button id="mobile-menu-btn" aria-label="Abrir menú" class="md:hidden text-2xl interactive-el hover:text-brand-accent transition text-white mix-blend-difference">
             <i class="fa-solid fa-bars-staggered"></i>
         </button>
     </nav>
 
     <!-- Overlay Menú Móvil -->
-    <div id="mobile-menu" class="fixed inset-0 bg-brand-bg/95 z-[105] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-500 backdrop-blur-xl">
-        <button id="close-menu-btn" aria-label="Cerrar menú" class="absolute top-10 right-8 text-3xl text-white opacity-70 hover:opacity-100 transition">
+    <div id="mobile-menu" class="fixed inset-0 bg-brand-bg/98 z-[115] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-700 backdrop-blur-2xl">
+        <button id="close-menu-btn" aria-label="Cerrar menú" class="absolute top-8 right-8 text-3xl text-white opacity-70 hover:opacity-100 hover:rotate-90 transition-all duration-300">
             <i class="fa-solid fa-xmark"></i>
         </button>
-        <div class="flex flex-col gap-8 text-center text-sm uppercase tracking-[0.4em] font-light w-full">
-            <div class="overflow-hidden"><a href="#work" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-100 hover:text-brand-accent">Portfolio</a></div>
-            <div class="overflow-hidden"><a href="#studio" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-200 hover:text-brand-accent">Studio</a></div>
-            <div class="overflow-hidden"><a href="#about" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-300 hover:text-brand-accent">Bio</a></div>
-            <div class="overflow-hidden"><a href="#contact" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-400 hover:text-brand-accent">Contact</a></div>
+        <div class="flex flex-col gap-10 text-center text-sm uppercase tracking-[0.4em] font-light w-full">
+            <div class="overflow-hidden"><a href="#work" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-100 hover:text-brand-accent">Portafolio</a></div>
+            <div class="overflow-hidden"><a href="#studio" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-200 hover:text-brand-accent">Estudio</a></div>
+            <div class="overflow-hidden"><a href="#services" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-300 hover:text-brand-accent">Servicios</a></div>
+            <div class="overflow-hidden"><a href="#contact" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-400 hover:text-brand-accent">Contacto</a></div>
         </div>
     </div>
 
     <!-- Hero Section -->
     <section class="relative h-screen flex flex-col justify-center px-6 md:px-20 overflow-hidden">
         <div class="z-10 w-full max-w-7xl mx-auto mt-20 md:mt-0">
-            <h2 class="text-[10px] md:text-xs uppercase tracking-[0.5em] mb-6 md:mb-8 text-zinc-400 reveal-text active">
-                <span>Director • Producer • Storyteller</span>
+            <h2 class="text-[9px] md:text-xs uppercase tracking-[0.6em] mb-8 text-brand-accent reveal-text active font-medium">
+                <span>Director • Productor • Narrador Visual</span>
             </h2>
             <h1 class="hero-title font-serif leading-[0.85] mb-12 flex flex-col">
-                <span class="reveal-text active"><span style="transition-delay: 0.1s">The Art of</span></span>
-                <span class="reveal-text active"><span style="transition-delay: 0.3s" class="font-light italic text-brand-light">Visual Motion.</span></span>
+                <span class="reveal-text active"><span style="transition-delay: 0.1s">El Arte del</span></span>
+                <span class="reveal-text active"><span style="transition-delay: 0.3s" class="font-light italic text-white">Movimiento Visual.</span></span>
             </h1>
         </div>
         
         <!-- Fondo Hero -->
         <div class="absolute inset-0 -z-10 bg-black">
-            <!-- Usamos un video de fondo elegante o una imagen de alta calidad -->
             <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" 
                  alt="Background Texture" 
-                 class="w-full h-full object-cover opacity-30 scale-105 transform origin-center animate-[pulse_15s_ease-in-out_infinite_alternate]">
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-brand-bg/80"></div>
+                 class="w-full h-full object-cover opacity-40 scale-105 transform origin-center animate-[pulse_15s_ease-in-out_infinite_alternate]">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-bg/50 to-brand-bg"></div>
         </div>
 
         <!-- Scroll Indicator -->
@@ -286,82 +299,139 @@
             <div class="h-16 md:h-24 w-[1px] bg-white/20 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-full bg-white animate-[slideDown_2s_ease-in-out_infinite]"></div>
             </div>
-            <span class="rotate-90 md:rotate-0 mt-6 md:mt-0 origin-left">Explore</span>
+            <span class="rotate-90 md:rotate-0 mt-6 md:mt-0 origin-left">Explorar</span>
         </div>
     </section>
 
+    <!-- Marquee Banner (Nueva sección dinámica) -->
+    <div class="py-6 border-y border-white/5 bg-brand-darker overflow-hidden flex whitespace-nowrap relative z-10">
+        <div class="animate-marquee flex gap-12 text-[10px] md:text-xs uppercase tracking-[0.4em] text-brand-muted font-light">
+            <span>DIRECCIÓN CREATIVA</span> <span class="text-brand-accent">✦</span>
+            <span>PRODUCCIÓN VISUAL</span> <span class="text-brand-accent">✦</span>
+            <span>CINE FASHION</span> <span class="text-brand-accent">✦</span>
+            <span>FOTOGRAFÍA EDITORIAL</span> <span class="text-brand-accent">✦</span>
+            <span>ETALONAJE</span> <span class="text-brand-accent">✦</span>
+            <span>DIRECCIÓN CREATIVA</span> <span class="text-brand-accent">✦</span>
+            <span>PRODUCCIÓN VISUAL</span> <span class="text-brand-accent">✦</span>
+            <span>CINE FASHION</span> <span class="text-brand-accent">✦</span>
+            <span>FOTOGRAFÍA EDITORIAL</span> <span class="text-brand-accent">✦</span>
+            <span>ETALONAJE</span> <span class="text-brand-accent">✦</span>
+        </div>
+    </div>
+
     <!-- Galería de Trabajos -->
-    <section id="work" class="py-32 px-4 md:px-8 bg-brand-dark">
+    <section id="work" class="py-32 md:py-48 px-4 md:px-8 bg-brand-bg relative">
         <div class="max-w-[1400px] mx-auto">
-            <div class="mb-20 md:mb-32 section-reveal flex flex-col md:flex-row justify-between items-end gap-8">
+            <div class="mb-24 md:mb-40 section-reveal flex flex-col md:flex-row justify-between items-end gap-8 border-b border-white/10 pb-12">
                 <div>
-                    <h3 class="text-[10px] uppercase tracking-[0.5em] text-brand-accent mb-6">Recent Works</h3>
-                    <h2 class="text-5xl md:text-8xl font-serif italic leading-none">Curated <br>Productions</h2>
+                    <h3 class="text-[10px] uppercase tracking-[0.5em] text-brand-accent mb-6 font-medium">Proyectos Recientes</h3>
+                    <h2 class="section-title font-serif italic leading-none">Producciones <br>Selectas</h2>
                 </div>
-                <a href="#" class="interactive-el text-[10px] uppercase tracking-widest border-b border-white/30 pb-1 hover:border-white transition-colors duration-300">View All Archive</a>
+                <a href="#" class="interactive-el text-[10px] uppercase tracking-widest border-b border-white/30 pb-1 hover:border-brand-accent hover:text-brand-accent transition-colors duration-300">Ver Archivo Completo</a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
+            <!-- Grid Bento Style -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10">
                 
                 <!-- Trabajo 1 -->
-                <div class="md:col-span-5 work-card interactive-el section-reveal h-[500px] md:h-[650px]">
+                <div class="md:col-span-7 work-card interactive-el section-reveal h-[500px] md:h-[700px]">
                     <div class="img-wrapper parallax-container">
-                        <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Editorial Production">
+                        <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Producción Editorial">
                     </div>
                     <div class="overlay">
-                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Editorial</p>
-                        <h4 class="text-3xl md:text-4xl font-serif italic">Visual Concepts</h4>
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3 font-medium">Editorial</p>
+                        <h4 class="text-3xl md:text-5xl font-serif italic">Conceptos Visuales</h4>
                     </div>
                 </div>
 
-                <!-- Trabajo 2 (Video Reel) -->
-                <div class="md:col-span-7 work-card interactive-el section-reveal h-[500px] md:h-[650px] md:mt-24 relative">
-                    <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 z-10 flex items-center gap-2 text-[10px] uppercase tracking-wider">
-                        <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Reel
-                    </div>
-                    <div class="img-wrapper">
-                        <!-- Placeholder Video de alta calidad -->
-                        <video src="video/SaveClip.App_AQOurXEE2VwNlg_yihzDL3qQy-JAyOi-FmeWLMmZmmFB_lvi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLIbnYhZY.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+                <!-- Trabajo 2 (Lifestyle) -->
+                <div class="md:col-span-5 work-card interactive-el section-reveal h-[500px] md:h-[700px] md:mt-32">
+                    <div class="img-wrapper parallax-container">
+                        <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Fotografía Lifestyle">
                     </div>
                     <div class="overlay">
-                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Direction / Production</p>
-                        <h4 class="text-3xl md:text-5xl font-serif italic">Creative Execution</h4>
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3 font-medium">Lifestyle</p>
+                        <h4 class="text-3xl md:text-4xl font-serif italic">Historia Auténtica</h4>
                     </div>
                 </div>
 
-                <!-- Trabajo 3 -->
-                <div class="md:col-span-7 work-card interactive-el section-reveal h-[500px] md:h-[600px]">
-                    <div class="img-wrapper parallax-container">
-                        <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Lifestyle Photography">
+                <!-- Trabajo 3 (VIDEO REEL CON PLAY) -->
+                <div class="md:col-span-12 work-card section-reveal h-[500px] md:h-[850px] mt-10 md:mt-20 group" onclick="toggleVideo(this)">
+                    <!-- Etiqueta superior -->
+                    <div class="absolute top-6 right-6 md:top-10 md:right-10 bg-black/40 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20 z-20 flex items-center gap-3 text-[10px] uppercase tracking-widest transition-opacity duration-300 video-badge">
+                        <div class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></div> Motion Reel
                     </div>
-                    <div class="overlay">
-                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Lifestyle</p>
-                        <h4 class="text-3xl md:text-4xl font-serif italic">Authentic Story</h4>
+                    
+                    <div class="img-wrapper bg-black">
+                        <!-- El video carga pausado y sin controles nativos -->
+                        <video src="video/SaveClip.App_AQOurXEE2VwNlg_yihzDL3qQy-JAyOi-FmeWLMmZmmFB_lvi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLIbnYhZY.mp4" 
+                               loop playsinline 
+                               class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"></video>
+                    </div>
+
+                    <!-- Overlay de Play Customizado -->
+                    <div class="play-overlay absolute inset-0 bg-black/50 flex flex-col justify-center items-center z-10 transition-all duration-500 cursor-pointer backdrop-blur-[2px] group-hover:bg-black/30">
+                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border border-white/50 flex items-center justify-center bg-black/20 group-hover:scale-110 group-hover:bg-brand-accent group-hover:border-brand-accent transition-all duration-500">
+                            <i class="fa-solid fa-play text-2xl md:text-3xl text-white ml-2"></i>
+                        </div>
+                        <h4 class="text-2xl md:text-4xl font-serif italic mt-8 text-white">Reproducir Reel</h4>
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mt-3 font-medium">Dirección & Producción</p>
                     </div>
                 </div>
 
                 <!-- Trabajo 4 -->
-                <div class="md:col-span-5 work-card interactive-el section-reveal h-[500px] md:h-[600px] md:-mt-16">
+                <div class="md:col-span-6 work-card interactive-el section-reveal h-[500px] md:h-[650px] mt-10 md:mt-20">
                     <div class="img-wrapper parallax-container">
-                        <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Brand Content">
+                        <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Contenido de Marca">
                     </div>
                     <div class="overlay">
-                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Brand Content</p>
-                        <h4 class="text-3xl md:text-4xl font-serif italic">Commercial Identity</h4>
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3 font-medium">Contenido de Marca</p>
+                        <h4 class="text-3xl md:text-4xl font-serif italic">Identidad Comercial</h4>
                     </div>
                 </div>
 
-                <!-- Trabajo 5 (Full Width) -->
-                <div class="md:col-span-12 work-card interactive-el section-reveal h-[500px] md:h-[800px] mt-8 md:mt-16">
+                <!-- Trabajo 5 -->
+                <div class="md:col-span-6 work-card interactive-el section-reveal h-[500px] md:h-[650px] mt-10 md:mt-40">
                     <div class="img-wrapper parallax-container">
-                        <img src="img/SaveClip.App_619675486_18374644621087632_7551809787766852121_n.jpg" alt="Fashion Film">
+                        <img src="img/SaveClip.App_619675486_18374644621087632_7551809787766852121_n.jpg" alt="Cine Fashion">
                     </div>
                     <div class="overlay">
-                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Visual Narrative</p>
-                        <h4 class="text-4xl md:text-7xl font-serif italic">Cinema Aesthetics</h4>
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3 font-medium">Narrativa Visual</p>
+                        <h4 class="text-3xl md:text-4xl font-serif italic">Estética Cinematográfica</h4>
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </section>
+
+    <!-- Nueva Sección: Servicios / Especialidades -->
+    <section id="services" class="py-32 md:py-40 px-6 md:px-12 bg-brand-dark border-y border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24 section-reveal">
+                <h3 class="text-[10px] uppercase tracking-[0.5em] text-brand-accent mb-6 font-medium">02 / Especialidades</h3>
+                <h2 class="text-4xl md:text-6xl font-serif italic">Enfoque de Trabajo</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <!-- Servicio 1 -->
+                <div class="section-reveal border-t border-white/10 pt-8 group">
+                    <div class="text-brand-accent text-3xl mb-6 opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-clapperboard"></i></div>
+                    <h4 class="text-2xl font-serif mb-4">Dirección Creativa</h4>
+                    <p class="text-brand-muted text-sm font-light leading-relaxed">Conceptualización y desarrollo de ideas visuales que conectan con la audiencia. Desde el moodboard inicial hasta la visión final en el set.</p>
+                </div>
+                <!-- Servicio 2 -->
+                <div class="section-reveal border-t border-white/10 pt-8 group" style="transition-delay: 0.1s;">
+                    <div class="text-brand-accent text-3xl mb-6 opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-camera"></i></div>
+                    <h4 class="text-2xl font-serif mb-4">Producción Visual</h4>
+                    <p class="text-brand-muted text-sm font-light leading-relaxed">Ejecución impecable de campañas fotográficas y piezas en movimiento. Gestión de recursos, locaciones y talento para lograr el más alto estándar.</p>
+                </div>
+                <!-- Servicio 3 -->
+                <div class="section-reveal border-t border-white/10 pt-8 group" style="transition-delay: 0.2s;">
+                    <div class="text-brand-accent text-3xl mb-6 opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-film"></i></div>
+                    <h4 class="text-2xl font-serif mb-4">Post-Producción</h4>
+                    <p class="text-brand-muted text-sm font-light leading-relaxed">El toque final donde la magia ocurre. Etalonaje avanzado, corrección de color y edición para garantizar una estética cinematográfica premium.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -371,18 +441,18 @@
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
             
             <div class="lg:col-span-5 section-reveal order-2 lg:order-1">
-                <h3 class="text-[10px] uppercase tracking-[0.5em] text-zinc-500 mb-8 italic font-serif text-xl">01 / The Producer</h3>
+                <h3 class="text-[10px] uppercase tracking-[0.5em] text-brand-accent mb-8 font-medium">03 / El Creador</h3>
                 <h2 class="text-5xl md:text-7xl font-serif mb-10 leading-[1.1]">Guillermo Vera</h2>
-                <div class="space-y-6 text-zinc-400 font-light leading-relaxed text-sm md:text-base">
-                    <p>Producción visual integral. Mi trabajo como productor y director se basa en la intersección entre la estética editorial y la funcionalidad comercial.</p>
-                    <p>Cada proyecto es una oportunidad para diseñar una narrativa que no solo sea atractiva, sino que permanezca en la memoria del espectador, cuidando cada detalle desde la concepción hasta el etalonaje final.</p>
+                <div class="space-y-6 text-brand-muted font-light leading-relaxed text-sm md:text-base">
+                    <p>Especialista en producción visual integral. Mi trabajo como productor y director se fundamenta en la intersección perfecta entre la alta estética editorial y el impacto comercial.</p>
+                    <p>Considero que cada proyecto es una oportunidad única para diseñar una narrativa visual que no solo sea atractiva, sino que perdure en la memoria del espectador, cuidando obsesivamente cada detalle desde la concepción de la idea hasta el etalonaje final de la pieza.</p>
                 </div>
                 
-                <div class="mt-12 flex flex-wrap gap-10 items-center">
-                    <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="interactive-el text-[10px] uppercase tracking-widest border-b border-white/30 pb-2 hover:border-brand-accent hover:text-brand-accent transition-colors duration-300">
-                        Instagram Profile
+                <div class="mt-14 flex flex-wrap gap-10 items-center">
+                    <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="interactive-el text-[10px] uppercase tracking-[0.3em] border-b border-brand-muted pb-2 hover:border-brand-accent hover:text-brand-accent transition-all duration-300 font-medium">
+                        Perfil de Instagram
                     </a>
-                    <div class="flex gap-6 text-lg opacity-60">
+                    <div class="flex gap-6 text-xl opacity-60">
                         <a href="#" aria-label="Vimeo" class="interactive-el hover:opacity-100 hover:text-brand-accent transition-all transform hover:scale-110"><i class="fa-brands fa-vimeo-v"></i></a>
                         <a href="#" aria-label="LinkedIn" class="interactive-el hover:opacity-100 hover:text-brand-accent transition-all transform hover:scale-110"><i class="fa-brands fa-linkedin-in"></i></a>
                     </div>
@@ -390,12 +460,13 @@
             </div>
             
             <div class="lg:col-span-7 section-reveal order-1 lg:order-2">
-                <div class="aspect-[4/5] bg-zinc-900 overflow-hidden relative group">
+                <div class="aspect-[4/5] bg-zinc-900 overflow-hidden relative group rounded-sm">
                     <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" 
-                         alt="G. Vera Profile" 
+                         alt="Perfil Guillermo Vera" 
                          class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100">
-                    <!-- Marco decorativo -->
-                    <div class="absolute inset-0 border border-white/10 m-6 pointer-events-none transition-transform duration-700 group-hover:scale-[0.98]"></div>
+                    <!-- Marco decorativo dorado sutil -->
+                    <div class="absolute inset-0 border border-brand-accent/20 m-6 pointer-events-none transition-transform duration-700 group-hover:scale-[0.97] opacity-0 group-hover:opacity-100"></div>
+                    <div class="absolute inset-0 border border-white/10 m-6 pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
                 </div>
             </div>
 
@@ -405,25 +476,25 @@
     <!-- Contacto -->
     <footer id="contact" class="py-32 md:py-48 px-6 border-t border-white/5 bg-brand-darker relative overflow-hidden">
         <!-- Decoración de fondo footer -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-[0.02] pointer-events-none flex items-center justify-center">
-            <i class="fa-solid fa-camera text-[40rem] rotate-12"></i>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-[0.015] pointer-events-none flex items-center justify-center">
+            <i class="fa-solid fa-camera-retro text-[40rem] rotate-12"></i>
         </div>
 
-        <div class="max-w-5xl mx-auto text-center section-reveal relative z-10 flex flex-col items-center">
-            <p class="text-[10px] uppercase tracking-[0.5em] text-brand-accent mb-6">Available for Global Bookings</p>
-            <h2 class="footer-title font-serif italic mb-16 leading-[0.9]">Let's Create.</h2>
+        <div class="max-w-6xl mx-auto text-center section-reveal relative z-10 flex flex-col items-center">
+            <p class="text-[10px] uppercase tracking-[0.6em] text-brand-accent mb-8 font-medium">Disponible para Proyectos Globales</p>
+            <h2 class="footer-title font-serif italic mb-16 leading-[0.9]">Creemos <br>Juntos.</h2>
             
-            <a href="mailto:hola@guillermovera.com" class="interactive-el text-xl md:text-4xl font-serif hover:text-brand-accent transition-colors duration-500 relative inline-block group">
+            <a href="mailto:hola@guillermovera.com" class="interactive-el text-2xl md:text-5xl font-serif hover:text-brand-accent transition-colors duration-500 relative inline-block group py-4">
                 hola@guillermovera.com
-                <span class="absolute -bottom-2 left-0 w-full h-[1px] bg-white/20 group-hover:bg-brand-accent transition-colors duration-500"></span>
+                <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-brand-accent transition-all duration-500 group-hover:w-full"></span>
             </a>
             
-            <div class="w-full mt-32 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-[9px] uppercase tracking-[0.2em] text-zinc-500 gap-6">
-                <p>&copy; <span id="current-year"></span> Guillermo Vera • Visual Producer</p>
-                <p>Ecuador • Latin America</p>
+            <div class="w-full mt-32 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-[9px] uppercase tracking-[0.3em] text-brand-muted gap-8">
+                <p>&copy; <span id="current-year"></span> Guillermo Vera • Productor Visual</p>
+                <p class="text-brand-light">Ecuador • Latinoamérica</p>
                 <div class="flex gap-8">
-                    <a href="#" class="interactive-el hover:text-white transition">Privacy</a>
-                    <a href="#" class="interactive-el hover:text-white transition">Inquiry</a>
+                    <a href="#" class="interactive-el hover:text-brand-accent transition-colors">Privacidad</a>
+                    <a href="#" class="interactive-el hover:text-brand-accent transition-colors">Consultas</a>
                 </div>
             </div>
         </div>
@@ -447,7 +518,7 @@
                 preloader.style.opacity = '0';
                 preloader.style.visibility = 'hidden';
                 document.body.style.overflow = ''; // Restaurar scroll
-            }, 800);
+            }, 1000);
             
             document.getElementById('current-year').textContent = new Date().getFullYear();
         });
@@ -456,7 +527,56 @@
         document.body.style.overflow = 'hidden';
 
         // -----------------------------
-        // Lógica de Cursor Magnético (Optimizado)
+        // Funcionalidad de Video (Play/Pause)
+        // -----------------------------
+        function toggleVideo(container) {
+            const video = container.querySelector('video');
+            const overlay = container.querySelector('.play-overlay');
+            const badge = container.querySelector('.video-badge');
+            
+            if (video.paused) {
+                // Iniciar video con sonido
+                video.muted = false;
+                video.play();
+                // Ocultar elementos superpuestos
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+                if(badge) badge.style.opacity = '0';
+                
+                // Opcional: Pausar el video si el usuario hace scroll y sale de la pantalla
+                const observer = new IntersectionObserver((entries) => {
+                    if(!entries[0].isIntersecting && !video.paused) {
+                        video.pause();
+                        overlay.style.opacity = '1';
+                        overlay.style.pointerEvents = 'auto';
+                        if(badge) badge.style.opacity = '1';
+                    }
+                });
+                observer.observe(container);
+
+            } else {
+                // Pausar video
+                video.pause();
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+                if(badge) badge.style.opacity = '1';
+            }
+        }
+
+        // -----------------------------
+        // Navbar Transparente a Sólido
+        // -----------------------------
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+
+        // -----------------------------
+        // Lógica de Cursor Magnético
         // -----------------------------
         if (window.matchMedia("(pointer: fine)").matches) {
             const cursor = document.getElementById('cursor');
@@ -467,27 +587,21 @@
             let followerX = mouseX;
             let followerY = mouseY;
             
-            // Actualizar variables de posición reales
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
             });
 
-            // Animación suave del seguidor usando requestAnimationFrame
             const renderCursor = () => {
-                // El cursor pequeño es instantáneo
                 cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-                
-                // Lerp para el seguidor grande
                 followerX += (mouseX - followerX) * 0.15;
                 followerY += (mouseY - followerY) * 0.15;
                 follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
-                
                 requestAnimationFrame(renderCursor);
             };
             requestAnimationFrame(renderCursor);
 
-            // Efecto Hover Magnético
+            // Añadir selector para que la tarjeta de video también cambie el cursor
             const interactiveElements = document.querySelectorAll('.interactive-el, a, button, .work-card');
             interactiveElements.forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
@@ -507,23 +621,19 @@
             const isOpen = !mobileMenu.classList.contains('pointer-events-none');
             
             if (isOpen) {
-                // Cerrar
                 mobileMenu.classList.remove('opacity-100');
                 mobileMenu.classList.add('opacity-0', 'pointer-events-none');
                 document.body.style.overflow = '';
                 
-                // Resetear animación de links
                 mobileLinks.forEach(link => {
                     link.classList.add('translate-y-full');
                     link.classList.remove('translate-y-0');
                 });
             } else {
-                // Abrir
                 mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
                 mobileMenu.classList.add('opacity-100');
                 document.body.style.overflow = 'hidden';
                 
-                // Animar links en cascada
                 setTimeout(() => {
                     mobileLinks.forEach(link => {
                         link.classList.remove('translate-y-full');
@@ -550,16 +660,15 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Dejar de observar por rendimiento
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Seleccionar elementos que no tienen 'active' por defecto
         document.querySelectorAll('.section-reveal, h2:not(.hero-title) .reveal-text').forEach(el => observer.observe(el));
 
         // -----------------------------
-        // Efecto Parallax en Scroll (Optimizado)
+        // Efecto Parallax en Scroll
         // -----------------------------
         const parallaxContainers = document.querySelectorAll('.parallax-container');
         let ticking = false;
@@ -568,18 +677,16 @@
             if (window.innerWidth > 768) {
                 parallaxContainers.forEach(container => {
                     const rect = container.getBoundingClientRect();
-                    // Solo si está visible en pantalla
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         const elementCenter = rect.top + rect.height / 2;
                         const windowCenter = window.innerHeight / 2;
                         const distance = elementCenter - windowCenter;
                         
-                        // Mover imagen en dirección opuesta al scroll
                         const offset = distance * 0.1; 
                         
                         const img = container.querySelector('img, video');
                         if(img) {
-                            img.style.transform = `translate3d(0, ${offset}px, 0) scale(1.15)`;
+                            img.style.transform = `translate3d(0, ${offset}px, 0) scale(1.12)`;
                         }
                     }
                 });
@@ -592,7 +699,7 @@
                 window.requestAnimationFrame(updateParallax);
                 ticking = true;
             }
-        }, { passive: true }); // Mejora el rendimiento del scroll
+        }, { passive: true });
 
     </script>
 </body>

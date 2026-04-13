@@ -1,232 +1,599 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingreso de Estudiantes - Isla Mall</title>
-    <!-- Tailwind CSS para el diseño -->
+    <title>Guillermo Vera | Director Creativo & Productor Visual</title>
+    
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@100;300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS con Configuración Integrada -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Iconos Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        .loader {
-            border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #ffffff;
-            width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#050505',
+                            dark: '#0a0a0a',
+                            darker: '#030303',
+                            accent: '#c5a358',
+                            light: '#e5e5e5'
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                    }
+                }
+            }
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </script>
+
+    <style>
+        :root {
+            --cursor-size: 8px;
+            --cursor-follower-size: 40px;
+        }
+
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            overflow-x: hidden;
+            cursor: none; /* Oculto para cursor custom */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #050505;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s cubic-bezier(0.19, 1, 0.22, 1), visibility 1s;
+        }
+        .loader-text {
+            overflow: hidden;
+        }
+        .loader-text span {
+            display: inline-block;
+            transform: translateY(100%);
+            animation: slideUpFade 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+        @keyframes slideUpFade {
+            to { transform: translateY(0); }
+        }
+
+        /* --- CURSOR PERSONALIZADO AVANZADO --- */
+        @media (pointer: fine) {
+            #cursor, #cursor-follower {
+                position: fixed;
+                top: 0; left: 0;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                transform: translate(-50%, -50%);
+                mix-blend-mode: difference;
+            }
+            #cursor {
+                width: var(--cursor-size);
+                height: var(--cursor-size);
+                background: white;
+            }
+            #cursor-follower {
+                width: var(--cursor-follower-size);
+                height: var(--cursor-follower-size);
+                border: 1px solid rgba(255,255,255,0.5);
+                transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+                will-change: transform;
+            }
+            .cursor-hover #cursor-follower {
+                width: 80px;
+                height: 80px;
+                background: white;
+                border-color: transparent;
+                mix-blend-mode: difference;
+            }
+            .cursor-hover #cursor {
+                opacity: 0;
+            }
+        }
+        @media (pointer: coarse) {
+            body { cursor: auto; }
+            #cursor, #cursor-follower { display: none !important; }
+        }
+
+        /* --- EFECTO GRANO OPTIMIZADO --- */
+        .grain::before {
+            content: "";
+            position: fixed;
+            top: -100%; left: -100%;
+            width: 300%; height: 300%;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+            opacity: 0.03;
+            pointer-events: none;
+            animation: grain 8s steps(10) infinite;
+            z-index: 9998;
+            will-change: transform;
+        }
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            30% { transform: translate(5%, 10%); }
+            50% { transform: translate(-15%, 10%); }
+            70% { transform: translate(10%, -5%); }
+            90% { transform: translate(-10%, 10%); }
+        }
+
+        /* --- ANIMACIONES REVEAL --- */
+        .reveal-text {
+            overflow: hidden;
+            line-height: 1.1;
+        }
+        .reveal-text > span {
+            display: inline-block;
+            transform: translateY(110%);
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: transform;
+        }
+        .reveal-text.active > span {
+            transform: translateY(0);
+        }
+        
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1), transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: opacity, transform;
+        }
+        .section-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- TARJETAS PORTAFOLIO --- */
+        .work-card {
+            position: relative;
+            overflow: hidden;
+            background: #111;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .img-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .work-card img, .work-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), filter 1s ease;
+            filter: grayscale(40%) brightness(0.8);
+            transform: scale(1.05); /* Margen para parallax */
+            will-change: transform;
+        }
+        .work-card:hover img, .work-card:hover video {
+            transform: scale(1.1);
+            filter: grayscale(0%) brightness(1.1);
+        }
+        .work-card .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2.5rem 2rem;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+        }
+        .work-card:hover .overlay {
+            opacity: 1;
+        }
+        
+        /* Typography Clamp for responsiveness */
+        .hero-title {
+            font-size: clamp(3rem, 10vw + 1rem, 10rem);
+        }
+        .footer-title {
+            font-size: clamp(3rem, 12vw, 12rem);
+        }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-900 min-h-screen pb-12">
+<body class="grain font-sans selection:bg-brand-accent selection:text-black">
 
-    <!-- HEADER -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm backdrop-blur-md bg-white/90">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-gradient-to-br from-indigo-600 to-blue-600 p-2 rounded-lg text-white shadow-md">
-                    <i data-lucide="user-plus" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-800">Nuevo Registro</h1>
-                    <p class="text-xs text-slate-500">Ingreso directo a base de datos de UTPL</p>
-                </div>
-            </div>
-            <!-- ENLACE ACTUALIZADO -->
-            <a href="https://titofeijo94.github.io/promotesutpl/" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
-                <i data-lucide="pie-chart" class="w-4 h-4"></i> Ver Reporte General
-            </a>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-text text-brand-light font-serif text-2xl italic tracking-wider">
+            <span>G. Vera Studio</span>
         </div>
-    </header>
+    </div>
 
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Cursores -->
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+
+    <!-- Navegación -->
+    <nav class="fixed top-0 w-full z-[110] px-6 md:px-12 py-8 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="text-xl md:text-2xl font-serif font-bold tracking-tighter uppercase interactive-el text-white">G. Vera</a>
         
-        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
-            <div class="bg-indigo-600 p-6 text-white">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <i data-lucide="clipboard-list" class="w-6 h-6"></i>
-                    Formulario de Admisiones
-                </h2>
-            </div>
+        <!-- Menú Desktop -->
+        <div class="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.3em] font-light text-white">
+            <a href="#work" class="hover:text-brand-accent transition-colors interactive-el">Portfolio</a>
+            <a href="#studio" class="hover:text-brand-accent transition-colors interactive-el">Studio</a>
+            <a href="#about" class="hover:text-brand-accent transition-colors interactive-el">Bio</a>
+            <a href="#contact" class="hover:text-brand-accent transition-colors interactive-el">Contact</a>
+        </div>
+        
+        <!-- Botón Menú Móvil -->
+        <button id="mobile-menu-btn" aria-label="Abrir menú" class="md:hidden text-2xl interactive-el hover:opacity-70 transition text-white">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+    </nav>
 
-            <form id="registro-form" name="submit-to-google-sheet" class="p-6 space-y-6">
-                
-                <!-- Datos Personales -->
-                <div>
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2">Datos Personales</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Nombres y Apellidos *</label>
-                            <div class="relative">
-                                <i data-lucide="user" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <input type="text" name="Nombres" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
-                            </div>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Cédula *</label>
-                            <div class="relative">
-                                <i data-lucide="credit-card" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <input type="text" name="Cedula" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
-                            </div>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Teléfono *</label>
-                            <div class="relative">
-                                <i data-lucide="phone" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <input type="tel" name="Telefono" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
-                            </div>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Correo Electrónico</label>
-                            <div class="relative">
-                                <i data-lucide="mail" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <input type="email" name="Correo" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Overlay Menú Móvil -->
+    <div id="mobile-menu" class="fixed inset-0 bg-brand-bg/95 z-[105] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-500 backdrop-blur-xl">
+        <button id="close-menu-btn" aria-label="Cerrar menú" class="absolute top-10 right-8 text-3xl text-white opacity-70 hover:opacity-100 transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="flex flex-col gap-8 text-center text-sm uppercase tracking-[0.4em] font-light w-full">
+            <div class="overflow-hidden"><a href="#work" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-100 hover:text-brand-accent">Portfolio</a></div>
+            <div class="overflow-hidden"><a href="#studio" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-200 hover:text-brand-accent">Studio</a></div>
+            <div class="overflow-hidden"><a href="#about" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-300 hover:text-brand-accent">Bio</a></div>
+            <div class="overflow-hidden"><a href="#contact" class="mobile-link block transform translate-y-full transition-transform duration-500 delay-400 hover:text-brand-accent">Contact</a></div>
+        </div>
+    </div>
 
-                <!-- Datos Académicos -->
-                <div>
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2">Información Académica</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Fecha de Registro *</label>
-                            <div class="relative">
-                                <i data-lucide="calendar" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <input type="date" name="Fecha" id="fecha-input" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer">
-                            </div>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Categoría (Tipo) *</label>
-                            <div class="relative">
-                                <i data-lucide="tag" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <select name="TIPO" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer appearance-none">
-                                    <option value="" disabled selected>Seleccione...</option>
-                                    <option value="TEC">Tecnologías (TEC)</option>
-                                    <option value="MEL">Grado (MEL)</option>
-                                    <option value="POS">Posgrado (POS)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="space-y-1 md:col-span-2">
-                            <label class="text-sm font-semibold text-slate-700">Carrera de Interés *</label>
-                            <div class="relative">
-                                <i data-lucide="graduation-cap" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <input type="text" name="Carrera" required placeholder="Ej: Psicología, Derecho, etc." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Datos Internos -->
-                <div>
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2">Datos Internos</h3>
-                    <div class="grid grid-cols-1 gap-4">
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Promotor/a *</label>
-                            <div class="relative">
-                                <i data-lucide="briefcase" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                                <select name="Promotora" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer appearance-none">
-                                    <option value="" disabled selected>Seleccione...</option>
-                                    <option value="Andres Lozano">Andres Lozano</option>
-                                    <option value="Robert Castro">Robert Castro</option>
-                                    <option value="Otro">Otro</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-sm font-semibold text-slate-700">Observaciones</label>
-                            <textarea name="Observaciones" rows="3" placeholder="Información adicional sobre el prospecto..." class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mensajes de Alerta -->
-                <div id="alert-success" class="hidden bg-green-50 text-green-800 p-4 rounded-xl border border-green-200 flex items-center gap-3">
-                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
-                    <div>
-                        <p class="font-bold text-sm">¡Registro exitoso!</p>
-                        <p class="text-xs">El estudiante ha sido guardado en la hoja de cálculo.</p>
-                    </div>
-                </div>
-
-                <div id="alert-error" class="hidden bg-red-50 text-red-800 p-4 rounded-xl border border-red-200 flex items-center gap-3">
-                    <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
-                    <div>
-                        <p class="font-bold text-sm">Ocurrió un error</p>
-                        <p class="text-xs">No se pudo guardar. Revisa el enlace del script.</p>
-                    </div>
-                </div>
-
-                <!-- Botón Submit -->
-                <div class="pt-4">
-                    <button type="submit" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
-                        <i data-lucide="save" class="w-5 h-5"></i>
-                        <span>Guardar Registro</span>
-                    </button>
-                </div>
-            </form>
+    <!-- Hero Section -->
+    <section class="relative h-screen flex flex-col justify-center px-6 md:px-20 overflow-hidden">
+        <div class="z-10 w-full max-w-7xl mx-auto mt-20 md:mt-0">
+            <h2 class="text-[10px] md:text-xs uppercase tracking-[0.5em] mb-6 md:mb-8 text-zinc-400 reveal-text active">
+                <span>Director • Producer • Storyteller</span>
+            </h2>
+            <h1 class="hero-title font-serif leading-[0.85] mb-12 flex flex-col">
+                <span class="reveal-text active"><span style="transition-delay: 0.1s">The Art of</span></span>
+                <span class="reveal-text active"><span style="transition-delay: 0.3s" class="font-light italic text-brand-light">Visual Motion.</span></span>
+            </h1>
+        </div>
+        
+        <!-- Fondo Hero -->
+        <div class="absolute inset-0 -z-10 bg-black">
+            <!-- Usamos un video de fondo elegante o una imagen de alta calidad -->
+            <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" 
+                 alt="Background Texture" 
+                 class="w-full h-full object-cover opacity-30 scale-105 transform origin-center animate-[pulse_15s_ease-in-out_infinite_alternate]">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-brand-bg/80"></div>
         </div>
 
-    </main>
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-12 right-6 md:right-12 flex flex-col items-center gap-4 opacity-50 text-[9px] uppercase tracking-widest">
+            <div class="h-16 md:h-24 w-[1px] bg-white/20 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full bg-white animate-[slideDown_2s_ease-in-out_infinite]"></div>
+            </div>
+            <span class="rotate-90 md:rotate-0 mt-6 md:mt-0 origin-left">Explore</span>
+        </div>
+    </section>
+
+    <!-- Galería de Trabajos -->
+    <section id="work" class="py-32 px-4 md:px-8 bg-brand-dark">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="mb-20 md:mb-32 section-reveal flex flex-col md:flex-row justify-between items-end gap-8">
+                <div>
+                    <h3 class="text-[10px] uppercase tracking-[0.5em] text-brand-accent mb-6">Recent Works</h3>
+                    <h2 class="text-5xl md:text-8xl font-serif italic leading-none">Curated <br>Productions</h2>
+                </div>
+                <a href="#" class="interactive-el text-[10px] uppercase tracking-widest border-b border-white/30 pb-1 hover:border-white transition-colors duration-300">View All Archive</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
+                
+                <!-- Trabajo 1 -->
+                <div class="md:col-span-5 work-card interactive-el section-reveal h-[500px] md:h-[650px]">
+                    <div class="img-wrapper parallax-container">
+                        <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Editorial Production">
+                    </div>
+                    <div class="overlay">
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Editorial</p>
+                        <h4 class="text-3xl md:text-4xl font-serif italic">Visual Concepts</h4>
+                    </div>
+                </div>
+
+                <!-- Trabajo 2 (Video Reel) -->
+                <div class="md:col-span-7 work-card interactive-el section-reveal h-[500px] md:h-[650px] md:mt-24 relative">
+                    <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 z-10 flex items-center gap-2 text-[10px] uppercase tracking-wider">
+                        <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Reel
+                    </div>
+                    <div class="img-wrapper">
+                        <!-- Placeholder Video de alta calidad -->
+                        <video src="video/SaveClip.App_AQOurXEE2VwNlg_yihzDL3qQy-JAyOi-FmeWLMmZmmFB_lvi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLIbnYhZY.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+                    </div>
+                    <div class="overlay">
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Direction / Production</p>
+                        <h4 class="text-3xl md:text-5xl font-serif italic">Creative Execution</h4>
+                    </div>
+                </div>
+
+                <!-- Trabajo 3 -->
+                <div class="md:col-span-7 work-card interactive-el section-reveal h-[500px] md:h-[600px]">
+                    <div class="img-wrapper parallax-container">
+                        <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Lifestyle Photography">
+                    </div>
+                    <div class="overlay">
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Lifestyle</p>
+                        <h4 class="text-3xl md:text-4xl font-serif italic">Authentic Story</h4>
+                    </div>
+                </div>
+
+                <!-- Trabajo 4 -->
+                <div class="md:col-span-5 work-card interactive-el section-reveal h-[500px] md:h-[600px] md:-mt-16">
+                    <div class="img-wrapper parallax-container">
+                        <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Brand Content">
+                    </div>
+                    <div class="overlay">
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Brand Content</p>
+                        <h4 class="text-3xl md:text-4xl font-serif italic">Commercial Identity</h4>
+                    </div>
+                </div>
+
+                <!-- Trabajo 5 (Full Width) -->
+                <div class="md:col-span-12 work-card interactive-el section-reveal h-[500px] md:h-[800px] mt-8 md:mt-16">
+                    <div class="img-wrapper parallax-container">
+                        <img src="img/SaveClip.App_619675486_18374644621087632_7551809787766852121_n.jpg" alt="Fashion Film">
+                    </div>
+                    <div class="overlay">
+                        <p class="text-[10px] uppercase tracking-widest text-brand-accent mb-3">Visual Narrative</p>
+                        <h4 class="text-4xl md:text-7xl font-serif italic">Cinema Aesthetics</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Studio / Biography Section -->
+    <section id="studio" class="py-32 md:py-48 px-6 md:px-12 bg-brand-bg relative">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+            
+            <div class="lg:col-span-5 section-reveal order-2 lg:order-1">
+                <h3 class="text-[10px] uppercase tracking-[0.5em] text-zinc-500 mb-8 italic font-serif text-xl">01 / The Producer</h3>
+                <h2 class="text-5xl md:text-7xl font-serif mb-10 leading-[1.1]">Guillermo Vera</h2>
+                <div class="space-y-6 text-zinc-400 font-light leading-relaxed text-sm md:text-base">
+                    <p>Producción visual integral. Mi trabajo como productor y director se basa en la intersección entre la estética editorial y la funcionalidad comercial.</p>
+                    <p>Cada proyecto es una oportunidad para diseñar una narrativa que no solo sea atractiva, sino que permanezca en la memoria del espectador, cuidando cada detalle desde la concepción hasta el etalonaje final.</p>
+                </div>
+                
+                <div class="mt-12 flex flex-wrap gap-10 items-center">
+                    <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="interactive-el text-[10px] uppercase tracking-widest border-b border-white/30 pb-2 hover:border-brand-accent hover:text-brand-accent transition-colors duration-300">
+                        Instagram Profile
+                    </a>
+                    <div class="flex gap-6 text-lg opacity-60">
+                        <a href="#" aria-label="Vimeo" class="interactive-el hover:opacity-100 hover:text-brand-accent transition-all transform hover:scale-110"><i class="fa-brands fa-vimeo-v"></i></a>
+                        <a href="#" aria-label="LinkedIn" class="interactive-el hover:opacity-100 hover:text-brand-accent transition-all transform hover:scale-110"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-7 section-reveal order-1 lg:order-2">
+                <div class="aspect-[4/5] bg-zinc-900 overflow-hidden relative group">
+                    <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" 
+                         alt="G. Vera Profile" 
+                         class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100">
+                    <!-- Marco decorativo -->
+                    <div class="absolute inset-0 border border-white/10 m-6 pointer-events-none transition-transform duration-700 group-hover:scale-[0.98]"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <footer id="contact" class="py-32 md:py-48 px-6 border-t border-white/5 bg-brand-darker relative overflow-hidden">
+        <!-- Decoración de fondo footer -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-[0.02] pointer-events-none flex items-center justify-center">
+            <i class="fa-solid fa-camera text-[40rem] rotate-12"></i>
+        </div>
+
+        <div class="max-w-5xl mx-auto text-center section-reveal relative z-10 flex flex-col items-center">
+            <p class="text-[10px] uppercase tracking-[0.5em] text-brand-accent mb-6">Available for Global Bookings</p>
+            <h2 class="footer-title font-serif italic mb-16 leading-[0.9]">Let's Create.</h2>
+            
+            <a href="mailto:hola@guillermovera.com" class="interactive-el text-xl md:text-4xl font-serif hover:text-brand-accent transition-colors duration-500 relative inline-block group">
+                hola@guillermovera.com
+                <span class="absolute -bottom-2 left-0 w-full h-[1px] bg-white/20 group-hover:bg-brand-accent transition-colors duration-500"></span>
+            </a>
+            
+            <div class="w-full mt-32 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-[9px] uppercase tracking-[0.2em] text-zinc-500 gap-6">
+                <p>&copy; <span id="current-year"></span> Guillermo Vera • Visual Producer</p>
+                <p>Ecuador • Latin America</p>
+                <div class="flex gap-8">
+                    <a href="#" class="interactive-el hover:text-white transition">Privacy</a>
+                    <a href="#" class="interactive-el hover:text-white transition">Inquiry</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Animación para la línea vertical del Hero */
+        @keyframes slideDown {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+    </style>
 
     <script>
-        // Inicializar Iconos
-        lucide.createIcons();
-
-        // Establecer la fecha de hoy por defecto en el input de fecha
-        document.getElementById('fecha-input').valueAsDate = new Date();
-
-        // ====================================================================
-        // URL DE GOOGLE APPS SCRIPT (YA CONFIGURADA)
-        // ====================================================================
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxdcISirdj2Iaw70K87c-1t0gaeq4Y4Wn4Bp1EutI0VfgvaatxNXaQSu-KOmEz3ZQ0z/exec';
-        
-        const form = document.forms['submit-to-google-sheet'];
-        const submitBtn = document.getElementById('submit-btn');
-        const alertSuccess = document.getElementById('alert-success');
-        const alertError = document.getElementById('alert-error');
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
+        // -----------------------------
+        // Inicialización y Preloader
+        // -----------------------------
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                document.body.style.overflow = ''; // Restaurar scroll
+            }, 800);
             
-            // Estado de carga
-            const originalBtnText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<div class="loader"></div> <span class="ml-2">Guardando en la nube...</span>';
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-70');
-            
-            alertSuccess.classList.add('hidden');
-            alertError.classList.add('hidden');
-
-            // Solución: Agregamos mode: 'no-cors' para evitar el bloqueo de seguridad (CORS) del navegador
-            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
-                .then(response => {
-                    // Éxito: Mostrar alerta verde y limpiar formulario
-                    alertSuccess.classList.remove('hidden');
-                    form.reset();
-                    document.getElementById('fecha-input').valueAsDate = new Date(); // Restaurar fecha de hoy
-                    
-                    // Restaurar botón a la normalidad
-                    submitBtn.innerHTML = originalBtnText;
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('opacity-70');
-                    lucide.createIcons();
-                    
-                    // Ocultar alerta de éxito después de 4 segundos
-                    setTimeout(() => alertSuccess.classList.add('hidden'), 4000);
-                })
-                .catch(error => {
-                    // Error: Mostrar alerta roja
-                    console.error('Error!', error.message);
-                    alertError.classList.remove('hidden');
-                    
-                    // Restaurar botón
-                    submitBtn.innerHTML = originalBtnText;
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('opacity-70');
-                    lucide.createIcons();
-                });
+            document.getElementById('current-year').textContent = new Date().getFullYear();
         });
+
+        // Bloquear scroll durante carga
+        document.body.style.overflow = 'hidden';
+
+        // -----------------------------
+        // Lógica de Cursor Magnético (Optimizado)
+        // -----------------------------
+        if (window.matchMedia("(pointer: fine)").matches) {
+            const cursor = document.getElementById('cursor');
+            const follower = document.getElementById('cursor-follower');
+            
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let followerX = mouseX;
+            let followerY = mouseY;
+            
+            // Actualizar variables de posición reales
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Animación suave del seguidor usando requestAnimationFrame
+            const renderCursor = () => {
+                // El cursor pequeño es instantáneo
+                cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+                
+                // Lerp para el seguidor grande
+                followerX += (mouseX - followerX) * 0.15;
+                followerY += (mouseY - followerY) * 0.15;
+                follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
+                
+                requestAnimationFrame(renderCursor);
+            };
+            requestAnimationFrame(renderCursor);
+
+            // Efecto Hover Magnético
+            const interactiveElements = document.querySelectorAll('.interactive-el, a, button, .work-card');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+        }
+
+        // -----------------------------
+        // Menú Móvil Funcional
+        // -----------------------------
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            const isOpen = !mobileMenu.classList.contains('pointer-events-none');
+            
+            if (isOpen) {
+                // Cerrar
+                mobileMenu.classList.remove('opacity-100');
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+                
+                // Resetear animación de links
+                mobileLinks.forEach(link => {
+                    link.classList.add('translate-y-full');
+                    link.classList.remove('translate-y-0');
+                });
+            } else {
+                // Abrir
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100');
+                document.body.style.overflow = 'hidden';
+                
+                // Animar links en cascada
+                setTimeout(() => {
+                    mobileLinks.forEach(link => {
+                        link.classList.remove('translate-y-full');
+                        link.classList.add('translate-y-0');
+                    });
+                }, 100);
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // -----------------------------
+        // Observador de Animación Scroll (Reveal)
+        // -----------------------------
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Dejar de observar por rendimiento
+                }
+            });
+        }, observerOptions);
+
+        // Seleccionar elementos que no tienen 'active' por defecto
+        document.querySelectorAll('.section-reveal, h2:not(.hero-title) .reveal-text').forEach(el => observer.observe(el));
+
+        // -----------------------------
+        // Efecto Parallax en Scroll (Optimizado)
+        // -----------------------------
+        const parallaxContainers = document.querySelectorAll('.parallax-container');
+        let ticking = false;
+
+        function updateParallax() {
+            if (window.innerWidth > 768) {
+                parallaxContainers.forEach(container => {
+                    const rect = container.getBoundingClientRect();
+                    // Solo si está visible en pantalla
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        const elementCenter = rect.top + rect.height / 2;
+                        const windowCenter = window.innerHeight / 2;
+                        const distance = elementCenter - windowCenter;
+                        
+                        // Mover imagen en dirección opuesta al scroll
+                        const offset = distance * 0.1; 
+                        
+                        const img = container.querySelector('img, video');
+                        if(img) {
+                            img.style.transform = `translate3d(0, ${offset}px, 0) scale(1.15)`;
+                        }
+                    }
+                });
+            }
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }, { passive: true }); // Mejora el rendimiento del scroll
+
     </script>
 </body>
 </html>

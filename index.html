@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO y Metadatos Open Graph -->
     <title>Guillermo Vera | Visual Director & Film Producer</title>
+    <meta name="description" content="Portafolio oficial de Guillermo Vera. Director visual y productor cinematográfico especializado en bodas, editorial y brand storytelling.">
+    <meta property="og:title" content="Guillermo Vera | Visual Director & Cinematic Weddings">
+    <meta property="og:description" content="Explora el archivo visual de Guillermo Vera. Cinematografía de alto nivel, fotografía editorial y producción audiovisual premium.">
+    <meta property="og:image" content="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg">
+    <meta property="og:url" content="https://www.guillermovera.com/">
+    <meta property="og:type" content="website">
     
     <!-- Tipografía de Élite -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +23,9 @@
     
     <!-- Framework & Plugins -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -63,6 +74,12 @@
             overflow-x: hidden;
         }
 
+        /* --- Accesibilidad para pantallas táctiles --- */
+        @media (pointer: coarse) {
+            body { cursor: auto !important; }
+            #custom-cursor, #cursor-ring { display: none !important; }
+        }
+
         /* --- Estética de Grano de Cine --- */
         .grain-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -85,18 +102,19 @@
             width: 70px; height: 70px; background: rgba(197, 163, 88, 0.1); border-color: var(--accent);
         }
 
-        /* --- Animaciones de Revelado --- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* --- Animaciones base para GSAP --- */
+        .reveal { opacity: 0; visibility: hidden; }
 
-        /* --- Bento Grid & Hover FX --- */
+        /* --- Bento Grid & Micro-interacciones Premium --- */
         .bento-item { overflow: hidden; position: relative; background: #111; border-radius: 4px; }
         .bento-item img, .bento-item video { 
             width: 100%; height: 100%; object-fit: cover; 
-            filter: grayscale(1) brightness(0.6); transition: all 0.8s ease; 
+            filter: grayscale(1) brightness(0.6); 
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), filter 0.8s ease; 
         }
         .bento-item:hover img, .bento-item:hover video { 
-            filter: grayscale(0) brightness(1); transform: scale(1.05); 
+            filter: grayscale(0) brightness(1.05) contrast(1.05); 
+            transform: scale(1.08); 
         }
         .bento-overlay {
             position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
@@ -112,9 +130,6 @@
         /* --- Estilo de Modal --- */
         #modal { backdrop-filter: blur(20px); opacity: 0; pointer-events: none; transition: 0.6s ease; z-index: 1000;}
         #modal.active { opacity: 1; pointer-events: all; }
-
-        /* --- Scroll Snap (Opcional) --- */
-        .snap-section { scroll-snap-align: start; }
     </style>
 </head>
 <body class="selection:bg-brand-gold selection:text-black">
@@ -123,23 +138,21 @@
     <div id="custom-cursor"></div>
     <div id="cursor-ring"></div>
 
-    <!-- Preloader (Logo g + Nombre Guillermo Vera Ampliado) -->
+    <!-- Preloader -->
     <div id="loader" class="fixed inset-0 bg-brand-black z-[10000] flex flex-col items-center justify-center transition-opacity duration-1000">
         <div class="flex flex-col items-center gap-12 mb-8 animate-pulse">
-            <!-- Isotipo 'g' -->
-            <img src="img/IMG_2643.png" alt="G Logo" class="w-48 md:w-64 invert object-contain opacity-100">
-            <!-- Nombre Guillermo Vera (Agrandado significativamente) -->
-            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-24 md:h-48 invert object-contain opacity-100">
+            <img src="img/IMG_2643.png" alt="Isotipo animado de carga Guillermo Vera" class="w-48 md:w-64 invert object-contain opacity-100">
+            <img src="img/IMG_2645.png" alt="Logotipo principal Guillermo Vera Studio" class="h-24 md:h-48 invert object-contain opacity-100">
         </div>
         <div class="w-96 h-[1px] bg-white/10 relative overflow-hidden mt-12">
             <div class="absolute inset-0 bg-brand-gold w-full -translate-x-full animate-[marquee_2s_infinite]"></div>
         </div>
     </div>
 
-    <!-- Header / Nav (Solo Isotipo en Esquina) -->
-    <nav class="fixed top-0 w-full z-50 px-8 py-10 flex justify-between items-center mix-blend-difference">
+    <!-- Header / Nav -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50 px-8 py-8 flex justify-between items-center mix-blend-difference transition-all duration-500">
         <a href="#" class="hover:opacity-70 transition duration-500">
-            <img src="img/IMG_2643.png" alt="G" class="h-16 md:h-24 invert object-contain">
+            <img src="img/IMG_2643.png" alt="Isotipo minimalista Guillermo Vera" class="h-16 md:h-24 invert object-contain">
         </a>
         <div class="hidden md:flex items-center space-x-12">
             <a href="#proyectos" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Proyectos</a>
@@ -155,9 +168,9 @@
 
     <!-- Hero Section -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- Hero Video Background -->
-        <div class="absolute inset-0 z-0">
-            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60">
+        <!-- Hero Video Background (GSAP Parallax Wrapper) -->
+        <div class="hero-bg absolute inset-0 z-0 h-[120%] -top-[10%]">
+            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60" aria-label="Video de fondo reel cinematográfico">
                 <source src="video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4" type="video/mp4">
             </video>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/20 to-brand-black"></div>
@@ -180,7 +193,7 @@
         </div>
     </section>
 
-    <!-- Portfolio Section (Con el layout original y todas las fotos/textos) -->
+    <!-- Portfolio Section -->
     <section id="proyectos" class="py-32 px-8 md:px-20 relative bg-brand-black">
         <div class="max-w-[1400px] mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
@@ -198,7 +211,7 @@
                 
                 <!-- Item 1: Large Video Highlight -->
                 <div class="md:col-span-2 md:row-span-2 bento-item reveal group cursor-pointer" onclick="openMedia('video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4', 'Showreel Highlight', 'Cinematografía de alto nivel')">
-                    <video autoplay loop muted playsinline src="video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4"></video>
+                    <video autoplay loop muted playsinline aria-label="Extracto de showreel cinematográfico por Guillermo Vera" src="video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4"></video>
                     <div class="bento-overlay">
                         <div>
                             <span class="text-xs tracking-[0.4em] uppercase text-brand-gold block mb-2">Director's Cut</span>
@@ -212,7 +225,7 @@
 
                 <!-- Item 2: Vertical Image -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg', 'Editorial Fashion', 'Estética editorial contemporánea')">
-                    <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Editorial Work">
+                    <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Modelo posando con vestuario de alta costura, fotografía editorial de estilo contemporáneo por Guillermo Vera">
                     <div class="bento-overlay">
                         <h3 class="text-2xl font-serif italic text-white">Vogue Aesthetics</h3>
                     </div>
@@ -220,7 +233,7 @@
 
                 <!-- Item 3: Square Image -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg', 'Urban Lifestyle', 'Narrativa urbana y texturas')">
-                    <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Lifestyle">
+                    <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Fotografía lifestyle con estilo urbano documentada por Guillermo Vera">
                     <div class="bento-overlay">
                         <h3 class="text-2xl font-serif italic text-white">Urban Motion</h3>
                     </div>
@@ -228,7 +241,7 @@
 
                 <!-- Item 4: Wide Image -->
                 <div class="md:col-span-1 bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Cinematic Wedding', 'Eternizando emociones con lente de cine')">
-                    <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Wedding">
+                    <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Novia elegante con velo en una boda cinematográfica producida por Guillermo Vera">
                     <div class="bento-overlay">
                         <h3 class="text-2xl font-serif italic text-white">Eterna Love</h3>
                     </div>
@@ -236,12 +249,12 @@
                 
                 <!-- Item 5: Small Square -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg', 'Studio Sessions', 'Retrato artístico en estudio')">
-                    <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" alt="Portrait">
+                    <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" alt="Retrato artístico en estudio fotográfico con iluminación dramática por Guillermo Vera">
                 </div>
 
                 <!-- Item 6: Small Square -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg', 'Golden Hour', 'Capturando la luz en su estado más puro')">
-                    <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Couple">
+                    <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Pareja iluminada al atardecer en fotografía estilo Golden Hour capturada por Guillermo Vera">
                 </div>
             </div>
         </div>
@@ -257,14 +270,14 @@
                 <a href="https://wa.me/593994028173" target="_blank" class="px-12 py-5 bg-brand-gold text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white transition duration-700">Cotizar Mi Boda</a>
             </div>
             <div class="md:w-1/2 w-full reveal">
-                <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Wedding" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000">
+                <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Producción de video cinematográfico para bodas de lujo en exteriores" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000">
             </div>
         </div>
     </section>
 
     <!-- Services Section -->
     <section id="servicios" class="py-32 px-8 bg-brand-black relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-40 outline-text text-[20vw] opacity-10 select-none">CREATIVE</div>
+        <div class="absolute top-0 right-0 p-40 outline-text text-[20vw] opacity-10 select-none pointer-events-none">CREATIVE</div>
         
         <div class="max-w-[1200px] mx-auto relative z-10">
             <h2 class="text-4xl md:text-7xl font-serif mb-20 reveal tracking-tighter italic">Servicios <br> <span class="text-brand-gold not-italic">Premium.</span></h2>
@@ -292,7 +305,7 @@
     <!-- About Section -->
     <section id="vision" class="py-40 px-8 flex flex-col items-center text-center">
         <div class="max-w-4xl reveal">
-            <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" alt="Guillermo Vera" class="w-32 h-32 rounded-full object-cover mx-auto mb-12 grayscale">
+            <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" alt="Retrato en blanco y negro del director visual Guillermo Vera" class="w-32 h-32 rounded-full object-cover mx-auto mb-12 grayscale">
             <h2 class="text-4xl md:text-6xl font-serif mb-12 leading-[1.1] tracking-tighter">
                 "Mi visión es transformar cada fotograma en una obra eterna, donde la <span class="italic text-brand-gold font-light">estética</span> no sea solo visual, sino una experiencia visceral."
             </h2>
@@ -308,33 +321,33 @@
             
             <!-- Logotipo GUILLERMO VERA GIGANTE -->
             <a href="#" class="inline-block hover:opacity-80 transition duration-1000 mb-60 reveal">
-                <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-64 md:h-[500px] invert object-contain mx-auto">
+                <img src="img/IMG_2645.png" alt="Logotipo tipográfico de Guillermo Vera para pie de página" class="h-64 md:h-[500px] invert object-contain mx-auto">
             </a>
             
             <div class="flex flex-col md:flex-row justify-between items-center py-12 border-t border-white/5 text-[10px] uppercase tracking-[0.4em] text-zinc-500 gap-8">
                 <div class="flex flex-wrap justify-center gap-12">
                     <a href="mailto:filmandres10@icloud.com" class="hover:text-white transition">filmandres10@icloud.com</a>
-                    <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="hover:text-brand-gold transition">
+                    <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="hover:text-brand-gold transition" aria-label="Visitar perfil de Instagram de Guillermo Vera">
                         <i class="fab fa-instagram mr-2"></i>Instagram
                     </a>
-                    <a href="https://wa.me/593994028173" target="_blank" class="hover:text-brand-gold transition">WhatsApp</a>
+                    <a href="https://wa.me/593994028173" target="_blank" class="hover:text-brand-gold transition" aria-label="Contactar a Guillermo Vera vía WhatsApp">WhatsApp</a>
                     <a href="#" class="hover:text-brand-gold transition">Vimeo</a>
                 </div>
                 <p>&copy; 2024 Guillermo Vera • Latam Based</p>
-                <a href="#loader" class="text-lg opacity-30 hover:opacity-100 transition"><i class="fa-solid fa-arrow-up"></i></a>
+                <a href="#loader" class="text-lg opacity-30 hover:opacity-100 transition" aria-label="Volver arriba"><i class="fa-solid fa-arrow-up"></i></a>
             </div>
         </div>
     </footer>
 
     <!-- WhatsApp Floating (Ajustado a la derecha) -->
-    <a href="https://wa.me/593994028173" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl shadow-2xl z-[100] transition transform hover:scale-110 active:scale-95">
+    <a href="https://wa.me/593994028173" target="_blank" aria-label="Abrir chat de WhatsApp para cotizaciones" class="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl shadow-2xl z-[100] transition transform hover:scale-110 active:scale-95">
         <i class="fab fa-whatsapp"></i>
     </a>
 
     <!-- Modal para Media -->
     <div id="modal" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-12">
         <div class="absolute inset-0 bg-black/95" onclick="closeMedia()"></div>
-        <button onclick="closeMedia()" class="absolute top-10 right-10 text-white text-4xl hover:text-brand-gold z-[1001] transition"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="closeMedia()" class="absolute top-10 right-10 text-white text-4xl hover:text-brand-gold z-[1001] transition" aria-label="Cerrar ventana"><i class="fa-solid fa-xmark"></i></button>
         
         <div class="bg-brand-zinc w-full max-w-7xl relative z-[1001] flex flex-col md:flex-row overflow-hidden rounded-sm shadow-2xl">
             <div id="modal-container" class="md:w-2/3 bg-black flex items-center justify-center aspect-video md:aspect-auto">
@@ -363,34 +376,75 @@
         const cursor = document.getElementById('custom-cursor');
         const ring = document.getElementById('cursor-ring');
         
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            
-            ring.animate({
-                left: `${e.clientX}px`,
-                top: `${e.clientY}px`
-            }, { duration: 500, fill: 'forwards' });
-        });
-
-        document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
-
-        // --- Intersection Observer ---
-        const observerOptions = { threshold: 0.1 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
+        // Verifica si no es un dispositivo táctil antes de animar el cursor
+        if (window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                
+                ring.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 500, fill: 'forwards' });
             });
-        }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+        }
 
-        // --- Modal Logic Restaurada ---
+        // --- Navbar Background Toggle on Scroll ---
+        const mainNav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                // Al scrollear: Fondo oscuro, blur activo y se desactiva mix-blend
+                mainNav.classList.remove('mix-blend-difference');
+                mainNav.classList.add('bg-black/80', 'backdrop-blur-md', 'py-4');
+                mainNav.classList.remove('py-8');
+            } else {
+                // Estado inicial en la cima
+                mainNav.classList.add('mix-blend-difference');
+                mainNav.classList.remove('bg-black/80', 'backdrop-blur-md', 'py-4');
+                mainNav.classList.add('py-8');
+            }
+        });
+
+        // --- GSAP Animations (Sustituye el Intersection Observer anterior) ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Efecto Parallax muy suave para el video Hero
+        gsap.to('.hero-bg', {
+            yPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "section.relative.h-screen",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // Animación de aparición (Fade Up cinematográfico) para todos los elementos '.reveal'
+        gsap.utils.toArray('.reveal').forEach(elem => {
+            gsap.fromTo(elem, 
+                { y: 60, opacity: 0, visibility: 'hidden' }, 
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    visibility: 'visible',
+                    duration: 1.2, 
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: "top 85%", // Comienza la animación cuando el elemento está al 85% de la pantalla
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        // --- Modal Logic ---
         const modal = document.getElementById('modal');
         const container = document.getElementById('modal-container');
         const mTitle = document.getElementById('modal-title');

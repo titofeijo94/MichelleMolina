@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guillermo Vera | Visual Director & Film Producer</title>
     
+    <!-- Tipografía de Élite -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Iconografía -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Framework & Plugins -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -120,19 +123,25 @@
     <div id="custom-cursor"></div>
     <div id="cursor-ring"></div>
 
+    <!-- Preloader (Cargando con combinación de logos) -->
     <div id="loader" class="fixed inset-0 bg-brand-black z-[10000] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="overflow-hidden mb-6 flex flex-col items-center">
-            <img src="img/IMG_2643.png" alt="G Logo" class="h-24 mb-6 invert animate-pulse opacity-90 object-contain">
-            <h2 class="font-serif text-4xl tracking-[0.5em] animate-pulse uppercase">G. VERA STUDIO</h2>
+        <div class="flex flex-col items-center gap-8 mb-4 animate-pulse">
+            <!-- Isotipo 'g' -->
+            <img src="img/IMG_2643.png" alt="G Logo" class="w-16 md:w-20 invert object-contain opacity-90">
+            <!-- Frase / Logo Guillermo Vera -->
+            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-6 md:h-10 invert object-contain opacity-90">
         </div>
-        <div class="w-32 h-[1px] bg-white/10 relative overflow-hidden">
+        <div class="w-48 h-[1px] bg-white/10 relative overflow-hidden mt-6">
             <div class="absolute inset-0 bg-brand-gold w-full -translate-x-full animate-[marquee_2s_infinite]"></div>
         </div>
     </div>
 
-    <nav class="fixed top-0 w-full z-50 px-8 py-10 flex justify-between items-center mix-blend-difference">
-        <a href="#" class="hover:opacity-70 transition duration-500">
-            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-8 md:h-10 invert object-contain">
+    <!-- Header / Nav -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-8 flex justify-between items-center mix-blend-difference">
+        <!-- Logo en Navbar -->
+        <a href="#" class="hover:opacity-70 transition duration-500 flex items-center gap-3">
+            <img src="img/IMG_2643.png" alt="G" class="h-8 md:h-10 invert object-contain">
+            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-4 md:h-5 invert object-contain hidden sm:block">
         </a>
         <div class="hidden md:flex items-center space-x-12">
             <a href="#proyectos" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Proyectos</a>
@@ -146,10 +155,12 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Hero Video Background (Video Anterior Restaurado) -->
         <div class="absolute inset-0 z-0">
             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60">
-                <source src="video/WhatsApp%20Video%202026-04-14%20at%2009.02.50.mp4" type="video/mp4">
+                <source src="video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4" type="video/mp4">
             </video>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/20 to-brand-black"></div>
         </div>
@@ -165,11 +176,13 @@
             </div>
         </div>
 
+        <!-- Floating Scroll Indicator -->
         <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
             <div class="w-[1px] h-16 bg-white"></div>
         </div>
     </section>
 
+    <!-- Infinite Marquee -->
     <div class="bg-brand-zinc py-10 border-y border-white/5 overflow-hidden">
         <div class="flex animate-marquee whitespace-nowrap space-x-20">
             <span class="text-4xl md:text-5xl font-serif italic outline-text">Editorial Cinema</span>
@@ -180,6 +193,7 @@
             <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
             <span class="text-4xl md:text-5xl font-serif italic outline-text">Brand Identity</span>
             <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
+            <!-- Repetir para el loop -->
             <span class="text-4xl md:text-5xl font-serif italic outline-text">Editorial Cinema</span>
             <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
             <span class="text-4xl md:text-5xl font-serif italic outline-text">High Fashion</span>
@@ -189,6 +203,7 @@
         </div>
     </div>
 
+    <!-- Portfolio Section -->
     <section id="proyectos" class="py-32 px-8 md:px-20 relative bg-brand-black">
         <div class="max-w-[1400px] mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
@@ -201,8 +216,10 @@
                 </div>
             </div>
 
+            <!-- Bento Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px] md:auto-rows-[450px]">
                 
+                <!-- Item 1: Large Video Highlight -->
                 <div class="md:col-span-2 md:row-span-2 bento-item reveal group cursor-pointer" onclick="openMedia('video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4', 'Showreel Highlight', 'Cinematografía de alto nivel')">
                     <video autoplay loop muted playsinline src="video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4"></video>
                     <div class="bento-overlay">
@@ -216,6 +233,7 @@
                     </div>
                 </div>
 
+                <!-- Item 2: Vertical Image -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg', 'Editorial Fashion', 'Estética editorial contemporánea')">
                     <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Editorial Work">
                     <div class="bento-overlay">
@@ -223,6 +241,7 @@
                     </div>
                 </div>
 
+                <!-- Item 3: Square Image -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg', 'Urban Lifestyle', 'Narrativa urbana y texturas')">
                     <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Lifestyle">
                     <div class="bento-overlay">
@@ -230,6 +249,7 @@
                     </div>
                 </div>
 
+                <!-- Item 4: Wide Image -->
                 <div class="md:col-span-1 bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Cinematic Wedding', 'Eternizando emociones con lente de cine')">
                     <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Wedding">
                     <div class="bento-overlay">
@@ -237,10 +257,12 @@
                     </div>
                 </div>
                 
+                <!-- Item 5: Small Square -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg', 'Studio Sessions', 'Retrato artístico en estudio')">
                     <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" alt="Portrait">
                 </div>
 
+                <!-- Item 6: Small Square -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg', 'Golden Hour', 'Capturando la luz en su estado más puro')">
                     <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Couple">
                 </div>
@@ -248,6 +270,7 @@
         </div>
     </section>
 
+    <!-- Services Section -->
     <section id="servicios" class="py-32 px-8 bg-brand-zinc relative overflow-hidden">
         <div class="absolute top-0 right-0 p-40 outline-text text-[20vw] opacity-10 select-none">CREATIVE</div>
         
@@ -274,6 +297,7 @@
         </div>
     </section>
 
+    <!-- About Section -->
     <section id="vision" class="py-40 px-8 flex flex-col items-center text-center">
         <div class="max-w-4xl reveal">
             <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" alt="Guillermo Vera" class="w-32 h-32 rounded-full object-cover mx-auto mb-12 grayscale">
@@ -286,6 +310,7 @@
         </div>
     </section>
 
+    <!-- Footer / Contact -->
     <footer id="contacto" class="pt-40 pb-20 px-8 bg-brand-black border-t border-white/5">
         <div class="max-w-[1400px] mx-auto text-center">
             <span class="text-brand-gold text-[10px] uppercase tracking-[1em] mb-12 block reveal">Start a Conversation</span>
@@ -297,23 +322,26 @@
                     <a href="https://wa.me/593994028173" target="_blank" class="hover:text-brand-gold transition">WhatsApp</a>
                     <a href="#" class="hover:text-brand-gold transition">Vimeo</a>
                 </div>
-                <p>&copy; 2024 Guillermo Vera Studio • Latam Based</p>
+                <p>&copy; 2024 Guillermo Vera • Latam Based</p>
                 <a href="#loader" class="text-lg opacity-30 hover:opacity-100 transition"><i class="fa-solid fa-arrow-up"></i></a>
             </div>
         </div>
     </footer>
 
+    <!-- WhatsApp Floating -->
     <a href="https://wa.me/593994028173" target="_blank" class="fixed bottom-12 right-12 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-2xl z-[100] transition transform hover:scale-110 active:scale-95">
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <!-- Modal para Media -->
     <div id="modal" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-12">
         <div class="absolute inset-0 bg-black/95" onclick="closeMedia()"></div>
         <button onclick="closeMedia()" class="absolute top-10 right-10 text-white text-4xl hover:text-brand-gold z-[1001] transition"><i class="fa-solid fa-xmark"></i></button>
         
         <div class="bg-brand-zinc w-full max-w-7xl relative z-[1001] flex flex-col md:flex-row overflow-hidden rounded-sm shadow-2xl">
             <div id="modal-container" class="md:w-2/3 bg-black flex items-center justify-center aspect-video md:aspect-auto">
-                </div>
+                <!-- Se inyecta video o imagen aquí -->
+            </div>
             <div class="md:w-1/3 p-12 flex flex-col justify-center">
                 <span id="modal-cat" class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block font-bold">Category</span>
                 <h3 id="modal-title" class="text-4xl font-serif italic mb-8">Project Title</h3>
@@ -324,13 +352,14 @@
     </div>
 
     <script>
-        // --- Preloader Logic ---
+        // --- Preloader Logic (Cargando 3 segundos) ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
+            // Retraso de 2.5s antes de empezar a desaparecer (+ 1s de transición = ~3.5s total)
             setTimeout(() => {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 1000);
-            }, 1500);
+            }, 2500);
         });
 
         // --- Custom Cursor ---

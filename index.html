@@ -125,26 +125,27 @@
 
     <!-- Preloader (Cargando con combinación de logos) -->
     <div id="loader" class="fixed inset-0 bg-brand-black z-[10000] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="flex flex-col items-center gap-8 mb-4 animate-pulse">
-            <!-- Isotipo 'g' -->
-            <img src="img/IMG_2643.png" alt="G Logo" class="w-16 md:w-20 invert object-contain opacity-90">
-            <!-- Frase / Logo Guillermo Vera -->
-            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-6 md:h-10 invert object-contain opacity-90">
+        <div class="flex flex-col items-center gap-10 mb-8 animate-pulse">
+            <!-- Isotipo 'g' (Tamaño ampliado) -->
+            <img src="img/IMG_2643.png" alt="G Logo" class="w-32 md:w-48 invert object-contain opacity-90">
+            <!-- Frase / Logo Guillermo Vera (Tamaño ampliado) -->
+            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-10 md:h-16 invert object-contain opacity-90">
         </div>
-        <div class="w-48 h-[1px] bg-white/10 relative overflow-hidden mt-6">
+        <div class="w-64 h-[1px] bg-white/10 relative overflow-hidden mt-6">
             <div class="absolute inset-0 bg-brand-gold w-full -translate-x-full animate-[marquee_2s_infinite]"></div>
         </div>
     </div>
 
     <!-- Header / Nav -->
     <nav class="fixed top-0 w-full z-50 px-6 py-8 flex justify-between items-center mix-blend-difference">
-        <!-- Logo en Navbar -->
-        <a href="#" class="hover:opacity-70 transition duration-500 flex items-center gap-3">
-            <img src="img/IMG_2643.png" alt="G" class="h-8 md:h-10 invert object-contain">
-            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-4 md:h-5 invert object-contain hidden sm:block">
+        <!-- Logo en Navbar (Tamaño ampliado) -->
+        <a href="#" class="hover:opacity-70 transition duration-500 flex items-center gap-4">
+            <img src="img/IMG_2643.png" alt="G" class="h-12 md:h-16 invert object-contain">
+            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-6 md:h-8 invert object-contain hidden sm:block">
         </a>
         <div class="hidden md:flex items-center space-x-12">
             <a href="#proyectos" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Proyectos</a>
+            <a href="#bodas" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Bodas</a>
             <a href="#vision" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Visión</a>
             <a href="#servicios" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Servicios</a>
             <a href="#contacto" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Contacto</a>
@@ -182,8 +183,8 @@
         </div>
     </section>
 
-    <!-- Infinite Marquee -->
-    <div class="bg-brand-zinc py-10 border-y border-white/5 overflow-hidden">
+    <!-- Infinite Marquee (Fondo oscuro eliminado) -->
+    <div class="py-10 border-y border-white/5 overflow-hidden">
         <div class="flex animate-marquee whitespace-nowrap space-x-20">
             <span class="text-4xl md:text-5xl font-serif italic outline-text">Editorial Cinema</span>
             <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
@@ -270,8 +271,35 @@
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="servicios" class="py-32 px-8 bg-brand-zinc relative overflow-hidden">
+    <!-- Sección de Bodas (Nuevo Producto Principal) -->
+    <section id="bodas" class="py-32 px-8 md:px-20 relative bg-brand-zinc border-t border-white/5 overflow-hidden">
+        <div class="absolute top-0 left-0 p-40 outline-text text-[20vw] opacity-5 select-none pointer-events-none">WEDDINGS</div>
+        
+        <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
+            <div class="md:w-1/2 reveal">
+                <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Especialidad</span>
+                <h2 class="text-5xl md:text-7xl font-serif leading-none tracking-tighter mb-8">Bodas <br> <span class="italic font-light">Cinematográficas.</span></h2>
+                <p class="text-zinc-500 font-light leading-relaxed mb-10 text-lg">
+                    El día más importante de tu vida documentado con la misma calidad visual, textura y narrativa de una película. No hacemos videos convencionales; capturamos cada detalle, emoción y la pura esencia de tu historia de amor con una auténtica estética de cine.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <a href="https://wa.me/593994028173?text=Hola,%20me%20gustaría%20información%20sobre%20cobertura%20de%20Bodas." target="_blank" class="px-10 py-4 bg-brand-gold text-black text-center text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white transition duration-700">Cotizar Boda</a>
+                    <a href="#proyectos" class="px-10 py-4 border border-white/20 text-center text-[10px] uppercase tracking-[0.3em] hover:bg-white hover:text-black transition duration-700">Ver Ejemplos</a>
+                </div>
+            </div>
+            <div class="md:w-1/2 w-full reveal">
+                <div class="relative aspect-[4/5] overflow-hidden rounded-sm group cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Cinematic Wedding', 'Eternizando emociones con lente de cine.')">
+                    <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Cinematic Wedding" class="w-full h-full object-cover filter grayscale(1) brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition duration-1000 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-700 flex items-end p-10">
+                         <h3 class="text-3xl font-serif italic text-white">The Wedding Experience</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section (Ajuste de fondo para resaltar sobre Bodas) -->
+    <section id="servicios" class="py-32 px-8 bg-brand-black relative overflow-hidden">
         <div class="absolute top-0 right-0 p-40 outline-text text-[20vw] opacity-10 select-none">CREATIVE</div>
         
         <div class="max-w-[1200px] mx-auto relative z-10">
@@ -314,10 +342,16 @@
     <footer id="contacto" class="pt-40 pb-20 px-8 bg-brand-black border-t border-white/5">
         <div class="max-w-[1400px] mx-auto text-center">
             <span class="text-brand-gold text-[10px] uppercase tracking-[1em] mb-12 block reveal">Start a Conversation</span>
-            <a href="mailto:hola@guillermovera.com" class="text-4xl md:text-[8vw] font-serif tracking-tighter hover:text-brand-gold transition duration-1000 block mb-24 reveal">hola@guillermovera.com</a>
+            
+            <!-- Logo reemplazando el correo grande -->
+            <a href="#" class="inline-block hover:opacity-70 transition duration-1000 mb-24 reveal">
+                <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-16 md:h-28 invert object-contain mx-auto">
+            </a>
             
             <div class="flex flex-col md:flex-row justify-between items-center py-12 border-t border-white/5 text-[10px] uppercase tracking-[0.4em] text-zinc-500 gap-8">
-                <div class="flex space-x-12">
+                <div class="flex flex-wrap justify-center gap-x-12 gap-y-6">
+                    <!-- Correo electrónico actualizado -->
+                    <a href="mailto:filmandres10@icloud.com" class="hover:text-brand-gold transition text-white/80">filmandres10@icloud.com</a>
                     <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="hover:text-brand-gold transition">Instagram</a>
                     <a href="https://wa.me/593994028173" target="_blank" class="hover:text-brand-gold transition">WhatsApp</a>
                     <a href="#" class="hover:text-brand-gold transition">Vimeo</a>

@@ -123,26 +123,26 @@
     <div id="custom-cursor"></div>
     <div id="cursor-ring"></div>
 
-    <!-- Preloader (Cargando con combinación de logos) -->
+    <!-- Preloader (Logos Masivos) -->
     <div id="loader" class="fixed inset-0 bg-brand-black z-[10000] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="flex flex-col items-center gap-10 mb-8 animate-pulse">
-            <!-- Isotipo 'g' (Tamaño ampliado) -->
-            <img src="img/IMG_2643.png" alt="G Logo" class="w-32 md:w-48 invert object-contain opacity-90">
-            <!-- Frase / Logo Guillermo Vera (Tamaño ampliado) -->
-            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-10 md:h-16 invert object-contain opacity-90">
+        <div class="flex flex-col items-center gap-16 mb-8 animate-pulse">
+            <!-- Isotipo 'g' MASIVO -->
+            <img src="img/IMG_2643.png" alt="G Logo" class="w-80 md:w-[500px] invert object-contain opacity-100">
+            <!-- Frase / Logo Guillermo Vera MASIVO -->
+            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-20 md:h-32 invert object-contain opacity-100">
         </div>
-        <div class="w-64 h-[1px] bg-white/10 relative overflow-hidden mt-6">
+        <div class="w-96 h-[1px] bg-white/10 relative overflow-hidden mt-12">
             <div class="absolute inset-0 bg-brand-gold w-full -translate-x-full animate-[marquee_2s_infinite]"></div>
         </div>
     </div>
 
-    <!-- Header / Nav -->
-    <nav class="fixed top-0 w-full z-50 px-6 py-8 flex justify-between items-center mix-blend-difference">
-        <!-- Logo en Navbar (Tamaño ampliado) -->
-        <a href="#" class="hover:opacity-70 transition duration-500 flex items-center gap-4">
-            <img src="img/IMG_2643.png" alt="G" class="h-12 md:h-16 invert object-contain">
-            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-6 md:h-8 invert object-contain hidden sm:block">
+    <!-- Header / Nav (Solo Logo en Esquina Izquierda) -->
+    <nav class="fixed top-0 w-full z-50 px-8 py-10 flex justify-between items-center mix-blend-difference">
+        <!-- Logo en Esquina Izquierda (Solo Isotipo g) -->
+        <a href="#" class="hover:opacity-70 transition duration-500">
+            <img src="img/IMG_2643.png" alt="G" class="h-16 md:h-24 invert object-contain">
         </a>
+
         <div class="hidden md:flex items-center space-x-12">
             <a href="#proyectos" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Proyectos</a>
             <a href="#bodas" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Bodas</a>
@@ -150,15 +150,10 @@
             <a href="#servicios" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Servicios</a>
             <a href="#contacto" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Contacto</a>
         </div>
-        <div class="flex items-center space-x-6">
-            <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="text-xl hover:text-brand-gold transition"><i class="fab fa-instagram"></i></a>
-            <button class="md:hidden text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
-        </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- Hero Video Background (Video Anterior Restaurado) -->
         <div class="absolute inset-0 z-0">
             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60">
                 <source src="video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4" type="video/mp4">
@@ -177,14 +172,13 @@
             </div>
         </div>
 
-        <!-- Floating Scroll Indicator -->
         <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
             <div class="w-[1px] h-16 bg-white"></div>
         </div>
     </section>
 
-    <!-- Infinite Marquee (Fondo oscuro eliminado) -->
-    <div class="py-10 border-y border-white/5 overflow-hidden">
+    <!-- Infinite Marquee (Sin barra oscura) -->
+    <div class="py-16 border-y border-white/5 overflow-hidden">
         <div class="flex animate-marquee whitespace-nowrap space-x-20">
             <span class="text-4xl md:text-5xl font-serif italic outline-text">Editorial Cinema</span>
             <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
@@ -193,13 +187,6 @@
             <span class="text-4xl md:text-5xl font-serif italic outline-text">Documentary Art</span>
             <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
             <span class="text-4xl md:text-5xl font-serif italic outline-text">Brand Identity</span>
-            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
-            <!-- Repetir para el loop -->
-            <span class="text-4xl md:text-5xl font-serif italic outline-text">Editorial Cinema</span>
-            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
-            <span class="text-4xl md:text-5xl font-serif italic outline-text">High Fashion</span>
-            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
-            <span class="text-4xl md:text-5xl font-serif italic outline-text">Documentary Art</span>
             <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
         </div>
     </div>
@@ -219,8 +206,6 @@
 
             <!-- Bento Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px] md:auto-rows-[450px]">
-                
-                <!-- Item 1: Large Video Highlight -->
                 <div class="md:col-span-2 md:row-span-2 bento-item reveal group cursor-pointer" onclick="openMedia('video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4', 'Showreel Highlight', 'Cinematografía de alto nivel')">
                     <video autoplay loop muted playsinline src="video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4"></video>
                     <div class="bento-overlay">
@@ -229,132 +214,79 @@
                             <h3 class="text-4xl font-serif italic">The Golden Narrative</h3>
                         </div>
                     </div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-white/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-700 scale-75 group-hover:scale-100">
-                        <i class="fa-solid fa-play"></i>
-                    </div>
                 </div>
 
-                <!-- Item 2: Vertical Image -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg', 'Editorial Fashion', 'Estética editorial contemporánea')">
                     <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Editorial Work">
-                    <div class="bento-overlay">
-                        <h3 class="text-2xl font-serif italic">Vogue Aesthetics</h3>
-                    </div>
                 </div>
 
-                <!-- Item 3: Square Image -->
                 <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg', 'Urban Lifestyle', 'Narrativa urbana y texturas')">
                     <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Lifestyle">
-                    <div class="bento-overlay">
-                        <h3 class="text-2xl font-serif italic">Urban Motion</h3>
-                    </div>
-                </div>
-
-                <!-- Item 4: Wide Image -->
-                <div class="md:col-span-1 bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Cinematic Wedding', 'Eternizando emociones con lente de cine')">
-                    <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Wedding">
-                    <div class="bento-overlay">
-                        <h3 class="text-2xl font-serif italic">Eterna Love</h3>
-                    </div>
-                </div>
-                
-                <!-- Item 5: Small Square -->
-                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg', 'Studio Sessions', 'Retrato artístico en estudio')">
-                    <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" alt="Portrait">
-                </div>
-
-                <!-- Item 6: Small Square -->
-                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg', 'Golden Hour', 'Capturando la luz en su estado más puro')">
-                    <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Couple">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Sección de Bodas (Nuevo Producto Principal) -->
-    <section id="bodas" class="py-32 px-8 md:px-20 relative bg-brand-zinc border-t border-white/5 overflow-hidden">
+    <!-- Bodas Section (Producto Principal) -->
+    <section id="bodas" class="py-40 px-8 md:px-20 relative bg-brand-zinc border-t border-white/5 overflow-hidden">
         <div class="absolute top-0 left-0 p-40 outline-text text-[20vw] opacity-5 select-none pointer-events-none">WEDDINGS</div>
         
         <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
             <div class="md:w-1/2 reveal">
-                <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Especialidad</span>
-                <h2 class="text-5xl md:text-7xl font-serif leading-none tracking-tighter mb-8">Bodas <br> <span class="italic font-light">Cinematográficas.</span></h2>
-                <p class="text-zinc-500 font-light leading-relaxed mb-10 text-lg">
-                    El día más importante de tu vida documentado con la misma calidad visual, textura y narrativa de una película. No hacemos videos convencionales; capturamos cada detalle, emoción y la pura esencia de tu historia de amor con una auténtica estética de cine.
+                <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Especialidad Principal</span>
+                <h2 class="text-5xl md:text-8xl font-serif leading-none tracking-tighter mb-8">Bodas <br> <span class="italic font-light">Eternas.</span></h2>
+                <p class="text-zinc-500 font-light leading-relaxed mb-10 text-xl">
+                    No hacemos videos de bodas; creamos piezas cinematográficas donde tú eres el protagonista. Calidad de 35mm para el día más importante de tu vida.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-6">
-                    <a href="https://wa.me/593994028173?text=Hola,%20me%20gustaría%20información%20sobre%20cobertura%20de%20Bodas." target="_blank" class="px-10 py-4 bg-brand-gold text-black text-center text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white transition duration-700">Cotizar Boda</a>
-                    <a href="#proyectos" class="px-10 py-4 border border-white/20 text-center text-[10px] uppercase tracking-[0.3em] hover:bg-white hover:text-black transition duration-700">Ver Ejemplos</a>
+                    <a href="https://wa.me/593994028173" target="_blank" class="px-12 py-5 bg-brand-gold text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white transition duration-700">Cotizar Boda Cinematográfica</a>
                 </div>
             </div>
             <div class="md:w-1/2 w-full reveal">
-                <div class="relative aspect-[4/5] overflow-hidden rounded-sm group cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Cinematic Wedding', 'Eternizando emociones con lente de cine.')">
-                    <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Cinematic Wedding" class="w-full h-full object-cover filter grayscale(1) brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition duration-1000 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-700 flex items-end p-10">
-                         <h3 class="text-3xl font-serif italic text-white">The Wedding Experience</h3>
-                    </div>
+                <div class="relative aspect-[4/5] overflow-hidden rounded-sm group cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Wedding Film', 'Estética de cine para bodas.')">
+                    <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Wedding Film" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-1000">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section (Ajuste de fondo para resaltar sobre Bodas) -->
+    <!-- Services Section -->
     <section id="servicios" class="py-32 px-8 bg-brand-black relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-40 outline-text text-[20vw] opacity-10 select-none">CREATIVE</div>
-        
         <div class="max-w-[1200px] mx-auto relative z-10">
             <h2 class="text-4xl md:text-7xl font-serif mb-20 reveal tracking-tighter italic">Servicios <br> <span class="text-brand-gold not-italic">Premium.</span></h2>
-            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 border border-white/5">
                 <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
-                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">01</span>
+                    <span class="text-xs tracking-[0.5em] mb-8 block">01</span>
                     <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Fotografía Editorial</h3>
-                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Producciones de moda, retratos corporativos de alto nivel y contenido para revistas con un enfoque artístico único.</p>
+                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm">Producciones de moda y retratos corporativos de alto nivel.</p>
                 </div>
                 <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
-                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">02</span>
+                    <span class="text-xs tracking-[0.5em] mb-8 block">02</span>
                     <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Producción de Cine</h3>
-                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Dirección y producción de cortometrajes, videos musicales y comerciales con estética cinematográfica de 35mm.</p>
+                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm">Videos musicales y comerciales con estética de cine.</p>
                 </div>
                 <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
-                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">03</span>
-                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Brand Storytelling</h3>
-                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Elevamos el valor de marca a través de narrativas visuales potentes que conectan emocionalmente con la audiencia.</p>
+                    <span class="text-xs tracking-[0.5em] mb-8 block">03</span>
+                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Brand Identity</h3>
+                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm">Elevamos marcas a través de narrativas visuales potentes.</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="vision" class="py-40 px-8 flex flex-col items-center text-center">
-        <div class="max-w-4xl reveal">
-            <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" alt="Guillermo Vera" class="w-32 h-32 rounded-full object-cover mx-auto mb-12 grayscale">
-            <h2 class="text-4xl md:text-6xl font-serif mb-12 leading-[1.1] tracking-tighter">
-                "Mi visión es transformar cada fotograma en una obra eterna, donde la <span class="italic text-brand-gold font-light">estética</span> no sea solo visual, sino una experiencia visceral."
-            </h2>
-            <p class="text-zinc-500 font-light text-xl max-w-2xl mx-auto italic">
-                — Guillermo Vera
-            </p>
         </div>
     </section>
 
     <!-- Footer / Contact -->
-    <footer id="contacto" class="pt-40 pb-20 px-8 bg-brand-black border-t border-white/5">
+    <footer id="contacto" class="pt-60 pb-20 px-8 bg-brand-black border-t border-white/5 overflow-hidden">
         <div class="max-w-[1400px] mx-auto text-center">
-            <span class="text-brand-gold text-[10px] uppercase tracking-[1em] mb-12 block reveal">Start a Conversation</span>
-            
-            <!-- Logo reemplazando el correo grande -->
-            <a href="#" class="inline-block hover:opacity-70 transition duration-1000 mb-24 reveal">
-                <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-16 md:h-28 invert object-contain mx-auto">
+            <!-- Logotipo GUILLERMO VERA GIGANTE -->
+            <a href="#" class="inline-block hover:opacity-80 transition duration-1000 mb-60 reveal">
+                <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-64 md:h-[500px] invert object-contain mx-auto">
             </a>
             
             <div class="flex flex-col md:flex-row justify-between items-center py-12 border-t border-white/5 text-[10px] uppercase tracking-[0.4em] text-zinc-500 gap-8">
-                <div class="flex flex-wrap justify-center gap-x-12 gap-y-6">
-                    <!-- Correo electrónico actualizado -->
-                    <a href="mailto:filmandres10@icloud.com" class="hover:text-brand-gold transition text-white/80">filmandres10@icloud.com</a>
+                <div class="flex flex-wrap justify-center gap-12">
+                    <a href="mailto:filmandres10@icloud.com" class="hover:text-white transition">filmandres10@icloud.com</a>
                     <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="hover:text-brand-gold transition">Instagram</a>
                     <a href="https://wa.me/593994028173" target="_blank" class="hover:text-brand-gold transition">WhatsApp</a>
-                    <a href="#" class="hover:text-brand-gold transition">Vimeo</a>
                 </div>
                 <p>&copy; 2024 Guillermo Vera • Latam Based</p>
                 <a href="#loader" class="text-lg opacity-30 hover:opacity-100 transition"><i class="fa-solid fa-arrow-up"></i></a>
@@ -370,96 +302,51 @@
     <!-- Modal para Media -->
     <div id="modal" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-12">
         <div class="absolute inset-0 bg-black/95" onclick="closeMedia()"></div>
-        <button onclick="closeMedia()" class="absolute top-10 right-10 text-white text-4xl hover:text-brand-gold z-[1001] transition"><i class="fa-solid fa-xmark"></i></button>
-        
-        <div class="bg-brand-zinc w-full max-w-7xl relative z-[1001] flex flex-col md:flex-row overflow-hidden rounded-sm shadow-2xl">
-            <div id="modal-container" class="md:w-2/3 bg-black flex items-center justify-center aspect-video md:aspect-auto">
-                <!-- Se inyecta video o imagen aquí -->
-            </div>
-            <div class="md:w-1/3 p-12 flex flex-col justify-center">
-                <span id="modal-cat" class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block font-bold">Category</span>
-                <h3 id="modal-title" class="text-4xl font-serif italic mb-8">Project Title</h3>
-                <p id="modal-desc" class="text-zinc-500 font-light text-sm leading-relaxed mb-12">Descripción del proyecto detallada.</p>
-                <a href="https://wa.me/593994028173" target="_blank" class="text-center py-5 bg-white text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand-gold hover:text-white transition duration-500">Inquire this style</a>
-            </div>
-        </div>
+        <button onclick="closeMedia()" class="absolute top-10 right-10 text-white text-4xl z-[1001]"><i class="fa-solid fa-xmark"></i></button>
+        <div id="modal-container" class="w-full max-w-7xl h-full relative z-[1001] flex items-center justify-center"></div>
     </div>
 
     <script>
-        // --- Preloader Logic (Cargando 3 segundos) ---
+        // Preloader Logic
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            // Retraso de 2.5s antes de empezar a desaparecer (+ 1s de transición = ~3.5s total)
             setTimeout(() => {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 1000);
-            }, 2500);
+            }, 3000); // 3 segundos exactos
         });
 
-        // --- Custom Cursor ---
+        // Custom Cursor
         const cursor = document.getElementById('custom-cursor');
         const ring = document.getElementById('cursor-ring');
-        
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-            
-            // Suavizado para el anillo
-            ring.animate({
-                left: `${e.clientX}px`,
-                top: `${e.clientY}px`
-            }, { duration: 500, fill: 'forwards' });
+            ring.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: 'forwards' });
         });
 
-        document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
-
-        // --- Intersection Observer for Reveals ---
-        const observerOptions = { threshold: 0.1 };
+        // Intersection Observer
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- Modal Logic ---
+        // Modal Media
         const modal = document.getElementById('modal');
         const container = document.getElementById('modal-container');
-        const mTitle = document.getElementById('modal-title');
-        const mDesc = document.getElementById('modal-desc');
-        const mCat = document.getElementById('modal-cat');
-
         function openMedia(src, title, desc) {
-            mTitle.innerText = title;
-            mDesc.innerText = desc;
-            
             const isVideo = src.endsWith('.mp4');
-            if(isVideo) {
-                container.innerHTML = `<video controls autoplay loop class="w-full h-full object-contain"><source src="${src}" type="video/mp4"></video>`;
-            } else {
-                container.innerHTML = `<img src="${src}" class="w-full h-full object-contain">`;
-            }
-            
+            container.innerHTML = isVideo 
+                ? `<video controls autoplay loop class="w-full max-h-full"><source src="${src}" type="video/mp4"></video>`
+                : `<img src="${src}" class="w-full max-h-full object-contain">`;
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-
         function closeMedia() {
             modal.classList.remove('active');
             container.innerHTML = '';
             document.body.style.overflow = 'auto';
         }
-
-        // Escape para cerrar modal
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') closeMedia();
-        });
     </script>
 </body>
 </html>

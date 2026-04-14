@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guillermo Vera | Visual Director & Film Producer</title>
-    <meta name="description" content="Dirección visual y producción cinematográfica de alto nivel para marcas de lujo y proyectos editoriales.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,12 +25,12 @@
                             black: '#0a0a0a',
                             gold: '#c5a358', /* Oro Mate */
                             silver: '#e5e5e5',
-                            zinc: '#111111'
+                            zinc: '#1a1a1a'
                         }
                     },
                     animation: {
                         'slow-spin': 'spin 12s linear infinite',
-                        'marquee': 'marquee 30s linear infinite',
+                        'marquee': 'marquee 40s linear infinite',
                         'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
@@ -50,319 +49,282 @@
     </script>
 
     <style>
-        :root { --accent: #c5a358; }
-        body { background-color: #050505; color: #f5f5f5; cursor: none; overflow-x: hidden; }
+        :root {
+            --accent: #c5a358;
+        }
+        
+        body {
+            background-color: #050505;
+            color: #f5f5f5;
+            cursor: none;
+            overflow-x: hidden;
+        }
 
-        /* Estética de Grano de Cine */
+        /* --- Estética de Grano de Cine --- */
         .grain-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.04; pointer-events: none; z-index: 9999;
+            opacity: 0.05; pointer-events: none; z-index: 9999;
         }
 
-        /* Cursor Customizado (Deshabilitado en dispositivos táctiles para mejor UX) */
-        @media (hover: hover) {
-            #custom-cursor {
-                position: fixed; width: 8px; height: 8px; background: white; border-radius: 50%;
-                pointer-events: none; z-index: 10000; mix-blend-mode: difference;
-            }
-            #cursor-ring {
-                position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3);
-                border-radius: 50%; pointer-events: none; z-index: 9999;
-                transition: all 0.15s ease-out; transform: translate(-50%, -50%);
-            }
-            .cursor-hover #cursor-ring { width: 70px; height: 70px; background: rgba(197, 163, 88, 0.1); border-color: var(--accent); }
+        /* --- Cursor Customizado --- */
+        #custom-cursor {
+            position: fixed; width: 8px; height: 8px; background: white; border-radius: 50%;
+            pointer-events: none; z-index: 10000; transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+        #cursor-ring {
+            position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            transition: all 0.15s ease-out; transform: translate(-50%, -50%);
+        }
+        .cursor-hover #cursor-ring {
+            width: 70px; height: 70px; background: rgba(197, 163, 88, 0.1); border-color: var(--accent);
         }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
+        /* --- Animaciones de Revelado --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        .bento-item { overflow: hidden; position: relative; background: #0f0f0f; border-radius: 2px; }
+        /* --- Bento Grid & Hover FX --- */
+        .bento-item { overflow: hidden; position: relative; background: #111; border-radius: 4px; }
         .bento-item img, .bento-item video { 
             width: 100%; height: 100%; object-fit: cover; 
-            filter: grayscale(0.8) brightness(0.7); transition: all 0.9s ease; 
+            filter: grayscale(1) brightness(0.6); transition: all 0.8s ease; 
         }
-        .bento-item:hover img, .bento-item:hover video { filter: grayscale(0) brightness(1); transform: scale(1.03); }
-        
+        .bento-item:hover img, .bento-item:hover video { 
+            filter: grayscale(0) brightness(1); transform: scale(1.05); 
+        }
         .bento-overlay {
-            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             opacity: 0; transition: opacity 0.5s ease; display: flex; align-items: flex-end; padding: 2rem;
         }
         .bento-item:hover .bento-overlay { opacity: 1; }
 
-        .outline-text { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.08); font-family: 'Cormorant Garamond', serif; }
+        /* --- Tipografía Gigante de Fondo --- */
+        .outline-text {
+            color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.05); font-family: 'Cormorant Garamond', serif;
+        }
 
-        #modal { backdrop-filter: blur(25px); opacity: 0; pointer-events: none; transition: 0.5s ease; }
+        /* --- Estilo de Modal --- */
+        #modal { backdrop-filter: blur(20px); opacity: 0; pointer-events: none; transition: 0.6s ease; }
         #modal.active { opacity: 1; pointer-events: all; }
 
-        /* Scrollbar Minimalista */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); }
+        /* --- Scroll Snap (Opcional) --- */
+        .snap-section { scroll-snap-align: start; }
     </style>
 </head>
 <body class="selection:bg-brand-gold selection:text-black">
 
     <div class="grain-overlay"></div>
-    <div id="custom-cursor" class="hidden md:block"></div>
-    <div id="cursor-ring" class="hidden md:block"></div>
+    <div id="custom-cursor"></div>
+    <div id="cursor-ring"></div>
 
     <div id="loader" class="fixed inset-0 bg-brand-black z-[10000] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="overflow-hidden mb-6 text-center">
-            <h2 class="font-serif text-3xl md:text-5xl tracking-[0.4em] animate-pulse uppercase">Guillermo Vera</h2>
-            <p class="text-[8px] tracking-[1em] text-brand-gold mt-2 uppercase">Directing Visual Legacies</p>
+        <div class="overflow-hidden mb-6 flex flex-col items-center">
+            <img src="img/IMG_2643.png" alt="G Logo" class="h-24 mb-6 invert animate-pulse opacity-90 object-contain">
+            <h2 class="font-serif text-4xl tracking-[0.5em] animate-pulse uppercase">G. VERA STUDIO</h2>
         </div>
-        <div class="w-48 h-[1px] bg-white/5 relative overflow-hidden">
-            <div class="absolute inset-0 bg-brand-gold w-full -translate-x-full animate-[marquee_1.5s_infinite]"></div>
+        <div class="w-32 h-[1px] bg-white/10 relative overflow-hidden">
+            <div class="absolute inset-0 bg-brand-gold w-full -translate-x-full animate-[marquee_2s_infinite]"></div>
         </div>
     </div>
 
-    <nav class="fixed top-0 w-full z-50 px-6 md:px-12 py-8 flex justify-between items-center mix-blend-difference">
-        <a href="#" class="text-xl md:text-2xl font-serif tracking-tighter uppercase font-bold hover:text-brand-gold transition duration-500">G. Vera</a>
-        <div class="hidden md:flex items-center space-x-10">
-            <a href="#proyectos" class="text-[9px] uppercase tracking-[0.4em] hover:text-brand-gold transition">Proyectos</a>
-            <a href="#servicios" class="text-[9px] uppercase tracking-[0.4em] hover:text-brand-gold transition">Expertise</a>
-            <a href="#vision" class="text-[9px] uppercase tracking-[0.4em] hover:text-brand-gold transition">Visión</a>
-            <a href="#contacto" class="text-[9px] uppercase tracking-[0.4em] font-bold text-brand-gold transition">Inquiry</a>
+    <nav class="fixed top-0 w-full z-50 px-8 py-10 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="hover:opacity-70 transition duration-500">
+            <img src="img/IMG_2645.png" alt="Guillermo Vera" class="h-8 md:h-10 invert object-contain">
+        </a>
+        <div class="hidden md:flex items-center space-x-12">
+            <a href="#proyectos" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Proyectos</a>
+            <a href="#vision" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Visión</a>
+            <a href="#servicios" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Servicios</a>
+            <a href="#contacto" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Contacto</a>
         </div>
         <div class="flex items-center space-x-6">
-            <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="text-lg hover:text-brand-gold transition"><i class="fab fa-instagram"></i></a>
-            <button class="md:hidden text-xl"><i class="fa-solid fa-bars-staggered"></i></button>
+            <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="text-xl hover:text-brand-gold transition"><i class="fab fa-instagram"></i></a>
+            <button class="md:hidden text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
         </div>
     </nav>
 
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 scale-105">
-                <source src="video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4" type="video/mp4">
+            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60">
+                <source src="video/WhatsApp%20Video%202026-04-14%20at%2009.02.50.mp4" type="video/mp4">
             </video>
-            <div class="absolute inset-0 bg-gradient-to-b from-brand-black via-transparent to-brand-black"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/20 to-brand-black"></div>
         </div>
 
-        <div class="relative z-10 text-center px-6 max-w-6xl">
-            <span class="text-[10px] md:text-xs uppercase tracking-[1em] mb-6 block reveal opacity-70">Visual Director • LATAM Based • Global Reach</span>
-            <h1 class="font-serif text-5xl md:text-[8vw] leading-[1] tracking-tighter mb-10 reveal">
-                Elevating Narratives <br> Through <span class="italic font-light text-brand-gold">Cinematic Art.</span>
+        <div class="relative z-10 text-center px-4">
+            <span class="text-xs md:text-[10px] uppercase tracking-[1em] mb-8 block reveal opacity-80">Visual Director & Producer</span>
+            <h1 class="font-serif text-6xl md:text-[10vw] leading-[0.9] tracking-tighter mb-12 reveal">
+                Storytelling <br> <span class="italic font-light text-brand-gold">Redefined.</span>
             </h1>
-            <p class="reveal text-zinc-400 text-sm md:text-lg font-light max-w-2xl mx-auto mb-12 leading-relaxed">
-                Transformo conceptos comerciales en experiencias visuales inmersivas. Especializado en cinematografía de alto impacto para marcas que exigen distinción.
-            </p>
-            <div class="reveal flex flex-col md:flex-row items-center justify-center gap-6">
-                <a href="#proyectos" class="w-full md:w-auto px-10 py-5 bg-white text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand-gold hover:text-white transition duration-500">Ver Portfolio</a>
-                <a href="https://wa.me/593994028173" target="_blank" class="w-full md:w-auto px-10 py-5 border border-white/20 text-[10px] uppercase tracking-[0.3em] backdrop-blur-md hover:bg-white hover:text-black transition duration-500">Agendar Consultoría</a>
+            <div class="reveal flex flex-col md:flex-row items-center justify-center gap-8">
+                <a href="#proyectos" class="px-12 py-5 bg-white text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand-gold hover:text-white transition duration-700">Explorar Portfolio</a>
+                <a href="https://wa.me/593994028173" target="_blank" class="px-12 py-5 border border-white/20 text-[10px] uppercase tracking-[0.3em] backdrop-blur-sm hover:bg-white hover:text-black transition duration-700">Direct Inquiry</a>
             </div>
         </div>
 
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-20">
-            <div class="w-[1px] h-12 bg-white"></div>
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
+            <div class="w-[1px] h-16 bg-white"></div>
         </div>
     </section>
 
-    <div class="bg-brand-zinc py-12 border-y border-white/5 overflow-hidden">
-        <div class="flex animate-marquee whitespace-nowrap space-x-16 items-center opacity-40">
-            <span class="text-2xl md:text-3xl font-serif italic outline-text">Editorial Cinema</span>
-            <span class="text-xl">✦</span>
-            <span class="text-2xl md:text-3xl font-serif italic outline-text">Luxury Brands</span>
-            <span class="text-xl">✦</span>
-            <span class="text-2xl md:text-3xl font-serif italic outline-text">High Fashion</span>
-            <span class="text-xl">✦</span>
-            <span class="text-2xl md:text-3xl font-serif italic outline-text">Music Films</span>
-            <span class="text-xl">✦</span>
-            <span class="text-2xl md:text-3xl font-serif italic outline-text">Documentary Art</span>
-            <span class="text-xl">✦</span>
-            <span class="text-2xl md:text-3xl font-serif italic outline-text">Corporate Excellence</span>
-            <span class="text-xl">✦</span>
+    <div class="bg-brand-zinc py-10 border-y border-white/5 overflow-hidden">
+        <div class="flex animate-marquee whitespace-nowrap space-x-20">
+            <span class="text-4xl md:text-5xl font-serif italic outline-text">Editorial Cinema</span>
+            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
+            <span class="text-4xl md:text-5xl font-serif italic outline-text">High Fashion</span>
+            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
+            <span class="text-4xl md:text-5xl font-serif italic outline-text">Documentary Art</span>
+            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
+            <span class="text-4xl md:text-5xl font-serif italic outline-text">Brand Identity</span>
+            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
+            <span class="text-4xl md:text-5xl font-serif italic outline-text">Editorial Cinema</span>
+            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
+            <span class="text-4xl md:text-5xl font-serif italic outline-text">High Fashion</span>
+            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
+            <span class="text-4xl md:text-5xl font-serif italic outline-text">Documentary Art</span>
+            <span class="text-4xl md:text-5xl font-serif italic text-white/20">✦</span>
         </div>
     </div>
 
-    <section id="proyectos" class="py-32 px-6 md:px-20 relative bg-brand-black">
-        <div class="max-w-[1440px] mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 reveal">
-                <div class="max-w-2xl">
-                    <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Selected Archive</span>
-                    <h2 class="text-5xl md:text-8xl font-serif leading-none tracking-tighter">Proyectos <br> Destacados.</h2>
+    <section id="proyectos" class="py-32 px-8 md:px-20 relative bg-brand-black">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
+                <div>
+                    <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Selected Works</span>
+                    <h2 class="text-5xl md:text-8xl font-serif leading-none tracking-tighter">Archivo <br> Visual.</h2>
                 </div>
-                <p class="mt-8 md:mt-0 max-w-xs text-zinc-500 text-sm font-light leading-relaxed">
-                    Una selección de obras donde la técnica cinematográfica se une a la estrategia de marca para crear un impacto duradero.
-                </p>
+                <div class="mt-8 md:mt-0 max-w-sm text-zinc-500 text-sm font-light leading-relaxed">
+                    Curaduría de proyectos que desafían lo convencional. Desde piezas comerciales de alto impacto hasta exploraciones artísticas íntimas.
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[350px] md:auto-rows-[400px]">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px] md:auto-rows-[450px]">
                 
-                <div class="md:col-span-8 md:row-span-2 bento-item reveal group cursor-pointer" 
-                     onclick="openMedia('video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4', 'Director\'s Showreel 2024', 'Una amalgama de texturas, emociones y narrativa técnica. Este reel resume mi filosofía visual: cada frame debe contar una historia.', 'Film Direction')">
+                <div class="md:col-span-2 md:row-span-2 bento-item reveal group cursor-pointer" onclick="openMedia('video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4', 'Showreel Highlight', 'Cinematografía de alto nivel')">
                     <video autoplay loop muted playsinline src="video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4"></video>
                     <div class="bento-overlay">
-                        <div class="w-full">
-                            <span class="text-[9px] tracking-[0.4em] uppercase text-brand-gold block mb-2">Main Feature</span>
-                            <h3 class="text-3xl md:text-5xl font-serif italic leading-none">The Visionary Reel</h3>
+                        <div>
+                            <span class="text-xs tracking-[0.4em] uppercase text-brand-gold block mb-2">Director's Cut</span>
+                            <h3 class="text-4xl font-serif italic">The Golden Narrative</h3>
                         </div>
                     </div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-white/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-700 scale-75 group-hover:scale-100">
+                        <i class="fa-solid fa-play"></i>
+                    </div>
                 </div>
 
-                <div class="md:col-span-4 bento-item reveal cursor-pointer" 
-                     onclick="openMedia('img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg', 'Haute Couture Editorial', 'Enfoque en la iluminación dramática y la composición simétrica para resaltar la textura de los materiales.', 'Fashion Photography')">
+                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg', 'Editorial Fashion', 'Estética editorial contemporánea')">
                     <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Editorial Work">
                     <div class="bento-overlay">
-                        <h3 class="text-xl font-serif italic">Vogue Aesthetics</h3>
+                        <h3 class="text-2xl font-serif italic">Vogue Aesthetics</h3>
                     </div>
                 </div>
 
-                <div class="md:col-span-4 bento-item reveal cursor-pointer" 
-                     onclick="openMedia('img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg', 'Urban Motion', 'Captura de la esencia rítmica de la ciudad. Uso de grano cinematográfico para una sensación orgánica.', 'Cinematography')">
+                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg', 'Urban Lifestyle', 'Narrativa urbana y texturas')">
                     <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Lifestyle">
                     <div class="bento-overlay">
-                        <h3 class="text-xl font-serif italic">City Pulse</h3>
+                        <h3 class="text-2xl font-serif italic">Urban Motion</h3>
                     </div>
                 </div>
 
-                <div class="md:col-span-6 bento-item reveal cursor-pointer" 
-                     onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Eterna Love Story', 'Documentación cinematográfica de eventos exclusivos. Más que un video, una herencia visual.', 'Luxury Events')">
+                <div class="md:col-span-1 bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Cinematic Wedding', 'Eternizando emociones con lente de cine')">
                     <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Wedding">
                     <div class="bento-overlay">
-                        <h3 class="text-xl font-serif italic">Eterna Heritage</h3>
+                        <h3 class="text-2xl font-serif italic">Eterna Love</h3>
                     </div>
                 </div>
                 
-                <div class="md:col-span-3 bento-item reveal cursor-pointer" 
-                     onclick="openMedia('img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg', 'Minimalist Studio', 'Exploración de la forma humana y la sombra.', 'Studio Portrait')">
+                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg', 'Studio Sessions', 'Retrato artístico en estudio')">
                     <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" alt="Portrait">
                 </div>
 
-                <div class="md:col-span-3 bento-item reveal cursor-pointer" 
-                     onclick="openMedia('img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg', 'Light Theory', 'Estudio de la luz natural en su estado más puro.', 'Artistic Exploration')">
+                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg', 'Golden Hour', 'Capturando la luz en su estado más puro')">
                     <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Couple">
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="servicios" class="py-32 px-6 bg-brand-zinc relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-20 outline-text text-[25vw] opacity-5 select-none pointer-events-none">DIRECTOR</div>
+    <section id="servicios" class="py-32 px-8 bg-brand-zinc relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-40 outline-text text-[20vw] opacity-10 select-none">CREATIVE</div>
         
         <div class="max-w-[1200px] mx-auto relative z-10">
-            <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block reveal">Expertise & Solutions</span>
-            <h2 class="text-4xl md:text-7xl font-serif mb-20 reveal tracking-tighter">Cómo Elevamos <br> su <span class="text-brand-gold italic">Marca.</span></h2>
+            <h2 class="text-4xl md:text-7xl font-serif mb-20 reveal tracking-tighter italic">Servicios <br> <span class="text-brand-gold not-italic">Premium.</span></h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div class="reveal group">
-                    <div class="w-12 h-[1px] bg-brand-gold mb-8 group-hover:w-full transition-all duration-700"></div>
-                    <h3 class="text-2xl font-serif mb-4 uppercase tracking-widest">Brand Films</h3>
-                    <p class="text-zinc-500 text-sm leading-relaxed mb-6">Producción integral de campañas comerciales con narrativa de cine. Ideal para lanzamientos de productos de lujo y posicionamiento de identidad corporativa.</p>
-                    <ul class="text-[10px] text-zinc-400 space-y-2 uppercase tracking-widest">
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Dirección Creativa</li>
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Cinematografía 4K/6K</li>
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Color Grading Premium</li>
-                    </ul>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 border border-white/5">
+                <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
+                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">01</span>
+                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Fotografía Editorial</h3>
+                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Producciones de moda, retratos corporativos de alto nivel y contenido para revistas con un enfoque artístico único.</p>
                 </div>
-                <div class="reveal group">
-                    <div class="w-12 h-[1px] bg-brand-gold mb-8 group-hover:w-full transition-all duration-700"></div>
-                    <h3 class="text-2xl font-serif mb-4 uppercase tracking-widest">Editorial & Fashion</h3>
-                    <p class="text-zinc-500 text-sm leading-relaxed mb-6">Fotografía y video de moda con estética de alta costura. Capturo la esencia del diseño a través de una lente artística y disruptiva.</p>
-                    <ul class="text-[10px] text-zinc-400 space-y-2 uppercase tracking-widest">
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Fotografía Editorial</li>
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Fashion Films</li>
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Cobertura de Eventos Elite</li>
-                    </ul>
+                <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
+                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">02</span>
+                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Producción de Cine</h3>
+                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Dirección y producción de cortometrajes, videos musicales y comerciales con estética cinematográfica de 35mm.</p>
                 </div>
-                <div class="reveal group">
-                    <div class="w-12 h-[1px] bg-brand-gold mb-8 group-hover:w-full transition-all duration-700"></div>
-                    <h3 class="text-2xl font-serif mb-4 uppercase tracking-widest">Visual Strategy</h3>
-                    <p class="text-zinc-500 text-sm leading-relaxed mb-6">Consultoría estética para directores y marcas. Definimos el ADN visual para asegurar que cada pieza de contenido sea coherente y poderosa.</p>
-                    <ul class="text-[10px] text-zinc-400 space-y-2 uppercase tracking-widest">
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Concept Development</li>
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Art Direction</li>
-                        <li><i class="fa-solid fa-check text-brand-gold mr-2"></i> Social Media Curation</li>
-                    </ul>
+                <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
+                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">03</span>
+                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Brand Storytelling</h3>
+                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Elevamos el valor de marca a través de narrativas visuales potentes que conectan emocionalmente con la audiencia.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-32 px-6 bg-brand-black border-y border-white/5">
-        <div class="max-w-4xl mx-auto text-center reveal">
-            <i class="fa-solid fa-quote-left text-brand-gold text-4xl mb-8 opacity-50"></i>
-            <h3 class="text-2xl md:text-4xl font-serif italic leading-relaxed mb-12">
-                "Guillermo no solo captura imágenes; captura la atmósfera del éxito. Su capacidad para traducir la elegancia en fotogramas es inigualable."
-            </h3>
-            <p class="text-[10px] uppercase tracking-[0.5em] text-zinc-500">— Director Creativo, Cliente Internacional</p>
-        </div>
-    </section>
-
-    <section id="vision" class="py-40 px-6 flex flex-col items-center text-center">
+    <section id="vision" class="py-40 px-8 flex flex-col items-center text-center">
         <div class="max-w-4xl reveal">
-            <div class="relative inline-block mb-12">
-                <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" alt="Guillermo Vera" class="w-40 h-40 rounded-full object-cover grayscale border border-white/10 p-2">
-                <div class="absolute inset-0 rounded-full border border-brand-gold animate-slow-spin m-[-8px]"></div>
-            </div>
-            <h2 class="text-3xl md:text-5xl font-serif mb-12 leading-[1.2] tracking-tighter">
-                Obsesionado con la <span class="italic text-brand-gold font-light">perfección estética</span> y la narrativa que trasciende el tiempo.
+            <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" alt="Guillermo Vera" class="w-32 h-32 rounded-full object-cover mx-auto mb-12 grayscale">
+            <h2 class="text-4xl md:text-6xl font-serif mb-12 leading-[1.1] tracking-tighter">
+                "Mi visión es transformar cada fotograma en una obra eterna, donde la <span class="italic text-brand-gold font-light">estética</span> no sea solo visual, sino una experiencia visceral."
             </h2>
-            <p class="text-zinc-500 font-light text-lg max-w-2xl mx-auto leading-relaxed">
-                Con base en Latinoamérica y visión global, mi trabajo se centra en la intersección del arte cinematográfico y la comunicación estratégica. He dedicado mi carrera a perfeccionar un estilo visual que es, a la vez, visceral y sofisticado.
+            <p class="text-zinc-500 font-light text-xl max-w-2xl mx-auto italic">
+                — Guillermo Vera
             </p>
         </div>
     </section>
 
-    <footer id="contacto" class="pt-32 pb-12 px-6 bg-brand-black border-t border-white/5">
-        <div class="max-w-[1400px] mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-20 mb-32 items-center">
-                <div class="reveal">
-                    <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Ready for the next level?</span>
-                    <h2 class="text-5xl md:text-7xl font-serif tracking-tighter mb-8 italic">Construyamos algo <br> <span class="not-italic text-brand-gold">Eterno.</span></h2>
-                    <p class="text-zinc-500 max-w-sm mb-12">Actualmente aceptando proyectos selectos para el segundo semestre de 2024.</p>
-                    <a href="mailto:hola@guillermovera.com" class="text-2xl md:text-4xl font-serif border-b border-brand-gold pb-2 hover:text-brand-gold transition duration-500">hola@guillermovera.com</a>
-                </div>
-                <div class="reveal bg-brand-zinc p-10 border border-white/5 rounded-sm">
-                    <h4 class="text-xs uppercase tracking-[0.4em] mb-8 font-bold">Quick Contact</h4>
-                    <div class="space-y-6">
-                        <a href="https://wa.me/593994028173" target="_blank" class="flex justify-between items-center group">
-                            <span class="text-sm font-light text-zinc-400 group-hover:text-white transition">WhatsApp Direct</span>
-                            <i class="fa-solid fa-arrow-right-long text-brand-gold transform group-hover:translate-x-2 transition"></i>
-                        </a>
-                        <div class="h-[1px] bg-white/5 w-full"></div>
-                        <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="flex justify-between items-center group">
-                            <span class="text-sm font-light text-zinc-400 group-hover:text-white transition">Instagram Portfolio</span>
-                            <i class="fa-solid fa-arrow-right-long text-brand-gold transform group-hover:translate-x-2 transition"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <footer id="contacto" class="pt-40 pb-20 px-8 bg-brand-black border-t border-white/5">
+        <div class="max-w-[1400px] mx-auto text-center">
+            <span class="text-brand-gold text-[10px] uppercase tracking-[1em] mb-12 block reveal">Start a Conversation</span>
+            <a href="mailto:hola@guillermovera.com" class="text-4xl md:text-[8vw] font-serif tracking-tighter hover:text-brand-gold transition duration-1000 block mb-24 reveal">hola@guillermovera.com</a>
             
-            <div class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-white/5 text-[9px] uppercase tracking-[0.4em] text-zinc-600 gap-8">
-                <p>&copy; 2024 Guillermo Vera Studio • Visual Excellence</p>
-                <div class="flex space-x-10">
+            <div class="flex flex-col md:flex-row justify-between items-center py-12 border-t border-white/5 text-[10px] uppercase tracking-[0.4em] text-zinc-500 gap-8">
+                <div class="flex space-x-12">
+                    <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="hover:text-brand-gold transition">Instagram</a>
+                    <a href="https://wa.me/593994028173" target="_blank" class="hover:text-brand-gold transition">WhatsApp</a>
                     <a href="#" class="hover:text-brand-gold transition">Vimeo</a>
-                    <a href="#" class="hover:text-brand-gold transition">LinkedIn</a>
-                    <a href="#" class="hover:text-brand-gold transition">Behance</a>
                 </div>
-                <a href="#loader" class="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center hover:bg-brand-gold hover:text-black transition"><i class="fa-solid fa-arrow-up"></i></a>
+                <p>&copy; 2024 Guillermo Vera Studio • Latam Based</p>
+                <a href="#loader" class="text-lg opacity-30 hover:opacity-100 transition"><i class="fa-solid fa-arrow-up"></i></a>
             </div>
         </div>
     </footer>
 
-    <a href="https://wa.me/593994028173" target="_blank" class="fixed bottom-8 right-8 w-14 h-14 bg-brand-gold text-black rounded-full flex items-center justify-center text-2xl shadow-[0_0_30px_rgba(197,163,88,0.3)] z-[100] transition transform hover:scale-110 active:scale-95">
+    <a href="https://wa.me/593994028173" target="_blank" class="fixed bottom-12 right-12 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-2xl z-[100] transition transform hover:scale-110 active:scale-95">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <div id="modal" class="fixed inset-0 z-[1000] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/98" onclick="closeMedia()"></div>
-        <button onclick="closeMedia()" class="absolute top-8 right-8 text-white text-3xl hover:text-brand-gold z-[1001] transition"><i class="fa-solid fa-xmark"></i></button>
+    <div id="modal" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-12">
+        <div class="absolute inset-0 bg-black/95" onclick="closeMedia()"></div>
+        <button onclick="closeMedia()" class="absolute top-10 right-10 text-white text-4xl hover:text-brand-gold z-[1001] transition"><i class="fa-solid fa-xmark"></i></button>
         
-        <div class="bg-brand-zinc w-full max-w-6xl relative z-[1001] flex flex-col md:flex-row overflow-hidden rounded-sm shadow-2xl border border-white/5">
-            <div id="modal-container" class="md:w-3/5 bg-black flex items-center justify-center aspect-video md:aspect-auto min-h-[300px]">
+        <div class="bg-brand-zinc w-full max-w-7xl relative z-[1001] flex flex-col md:flex-row overflow-hidden rounded-sm shadow-2xl">
+            <div id="modal-container" class="md:w-2/3 bg-black flex items-center justify-center aspect-video md:aspect-auto">
                 </div>
-            <div class="md:w-2/5 p-10 md:p-14 flex flex-col justify-center">
-                <span id="modal-cat" class="text-brand-gold text-[9px] uppercase tracking-[0.5em] mb-4 block font-bold">Category</span>
-                <h3 id="modal-title" class="text-3xl font-serif italic mb-6">Project Title</h3>
-                <p id="modal-desc" class="text-zinc-500 font-light text-sm leading-relaxed mb-10">Descripción del proyecto detallada.</p>
-                <a href="https://wa.me/593994028173" target="_blank" class="inline-block text-center py-5 bg-white text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand-gold hover:text-white transition duration-500">Solicitar Cotización</a>
+            <div class="md:w-1/3 p-12 flex flex-col justify-center">
+                <span id="modal-cat" class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block font-bold">Category</span>
+                <h3 id="modal-title" class="text-4xl font-serif italic mb-8">Project Title</h3>
+                <p id="modal-desc" class="text-zinc-500 font-light text-sm leading-relaxed mb-12">Descripción del proyecto detallada.</p>
+                <a href="https://wa.me/593994028173" target="_blank" class="text-center py-5 bg-white text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand-gold hover:text-white transition duration-500">Inquire this style</a>
             </div>
         </div>
     </div>
 
     <script>
-        // Preloader
+        // --- Preloader Logic ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
             setTimeout(() => {
@@ -371,51 +333,55 @@
             }, 1500);
         });
 
-        // Custom Cursor Logic
+        // --- Custom Cursor ---
         const cursor = document.getElementById('custom-cursor');
         const ring = document.getElementById('cursor-ring');
         
-        if (cursor && ring) {
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                ring.animate({
-                    left: `${e.clientX}px`,
-                    top: `${e.clientY}px`
-                }, { duration: 400, fill: 'forwards' });
-            });
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Suavizado para el anillo
+            ring.animate({
+                left: `${e.clientX}px`,
+                top: `${e.clientY}px`
+            }, { duration: 500, fill: 'forwards' });
+        });
 
-            document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-            });
-        }
+        document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
 
-        // Observer for Reveals
+        // --- Intersection Observer for Reveals ---
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
             });
-        }, { threshold: 0.1 });
+        }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Modal Logic
+        // --- Modal Logic ---
         const modal = document.getElementById('modal');
         const container = document.getElementById('modal-container');
         const mTitle = document.getElementById('modal-title');
         const mDesc = document.getElementById('modal-desc');
         const mCat = document.getElementById('modal-cat');
 
-        function openMedia(src, title, desc, cat = "Featured") {
+        function openMedia(src, title, desc) {
             mTitle.innerText = title;
             mDesc.innerText = desc;
-            mCat.innerText = cat;
             
             const isVideo = src.endsWith('.mp4');
-            container.innerHTML = isVideo 
-                ? `<video controls autoplay loop class="w-full h-full object-contain"><source src="${src}" type="video/mp4"></video>`
-                : `<img src="${src}" class="w-full h-full object-contain">`;
+            if(isVideo) {
+                container.innerHTML = `<video controls autoplay loop class="w-full h-full object-contain"><source src="${src}" type="video/mp4"></video>`;
+            } else {
+                container.innerHTML = `<img src="${src}" class="w-full h-full object-contain">`;
+            }
             
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -427,7 +393,10 @@
             document.body.style.overflow = 'auto';
         }
 
-        document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMedia(); });
+        // Escape para cerrar modal
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') closeMedia();
+        });
     </script>
 </body>
 </html>

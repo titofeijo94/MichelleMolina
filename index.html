@@ -1,480 +1,797 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es" class="h-full bg-[#f8fafc] text-slate-800 antialiased selection:bg-blue-200 selection:text-blue-900">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoLookup Pro - Santo Domingo & Manta</title>
     
-    <!-- SEO y Metadatos Open Graph -->
-    <title>Guillermo Vera | Visual Director & Film Producer</title>
-    <meta name="description" content="Portafolio oficial de Guillermo Vera. Director visual y productor cinematográfico especializado en bodas, editorial y brand storytelling.">
-    <meta property="og:title" content="Guillermo Vera | Visual Director & Cinematic Weddings">
-    <meta property="og:description" content="Explora el archivo visual de Guillermo Vera. Cinematografía de alto nivel, fotografía editorial y producción audiovisual premium.">
-    <meta property="og:image" content="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg">
-    <meta property="og:url" content="https://www.guillermovera.com/">
-    <meta property="og:type" content="website">
-    
-    <!-- Tipografía de Élite -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Iconografía -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Framework & Plugins -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- PapaParse CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
-                        brand: {
-                            black: '#0a0a0a',
-                            gold: '#c5a358', /* Oro Mate */
-                            silver: '#e5e5e5',
-                            zinc: '#1a1a1a'
-                        }
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' },
+                        sd: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669', 900: '#064e3b' },
+                        manta: { 50: '#f0f9ff', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' }
                     },
                     animation: {
-                        'slow-spin': 'spin 12s linear infinite',
-                        'marquee': 'marquee 40s linear infinite',
-                        'float': 'float 6s ease-in-out infinite',
+                        'modal-pop': 'popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-in': 'fadeIn 0.2s ease-out forwards',
                     },
                     keyframes: {
-                        marquee: {
-                            '0%': { transform: 'translateX(0)' },
-                            '100%': { transform: 'translateX(-50%)' }
+                        popIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9) translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
                         },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' }
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
                         }
                     }
                 }
             }
         }
     </script>
-
     <style>
-        :root {
-            --accent: #c5a358;
-        }
-        
+        /* Ambient Background */
         body {
-            background-color: #050505;
-            color: #f5f5f5;
-            cursor: none;
-            overflow-x: hidden;
+            background-color: #f8fafc;
+            background-image: radial-gradient(at 0% 0%, hsla(210, 100%, 97%, 1) 0px, transparent 50%),
+                              radial-gradient(at 100% 0%, hsla(220, 100%, 97%, 1) 0px, transparent 50%);
+            background-attachment: fixed;
         }
 
-        /* --- Accesibilidad para pantallas táctiles --- */
-        @media (pointer: coarse) {
-            body { cursor: auto !important; }
-            #custom-cursor, #cursor-ring { display: none !important; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Premium Inputs */
+        .pro-input {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+        .pro-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            outline: none;
         }
 
-        /* --- Estética de Grano de Cine --- */
-        .grain-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.05; pointer-events: none; z-index: 9999;
+        /* Glass Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 0 3px rgba(15, 23, 42, 0.02);
         }
-
-        /* --- Cursor Customizado --- */
-        #custom-cursor {
-            position: fixed; width: 8px; height: 8px; background: white; border-radius: 50%;
-            pointer-events: none; z-index: 10000; transition: transform 0.1s ease;
-            mix-blend-mode: difference;
-        }
-        #cursor-ring {
-            position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            transition: all 0.15s ease-out; transform: translate(-50%, -50%);
-        }
-        .cursor-hover #cursor-ring {
-            width: 70px; height: 70px; background: rgba(197, 163, 88, 0.1); border-color: var(--accent);
-        }
-
-        /* --- Animaciones base para GSAP --- */
-        .reveal { opacity: 0; visibility: hidden; }
-
-        /* --- Bento Grid & Micro-interacciones Premium --- */
-        .bento-item { overflow: hidden; position: relative; background: #111; border-radius: 4px; }
-        .bento-item img, .bento-item video { 
-            width: 100%; height: 100%; object-fit: cover; 
-            filter: grayscale(1) brightness(0.6); 
-            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), filter 0.8s ease; 
-        }
-        .bento-item:hover img, .bento-item:hover video { 
-            filter: grayscale(0) brightness(1.05) contrast(1.05); 
-            transform: scale(1.08); 
-        }
-        .bento-overlay {
-            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            opacity: 0; transition: opacity 0.5s ease; display: flex; align-items: flex-end; padding: 2rem;
-        }
-        .bento-item:hover .bento-overlay { opacity: 1; }
-
-        /* --- Tipografía Gigante de Fondo --- */
-        .outline-text {
-            color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.05); font-family: 'Cormorant Garamond', serif;
-        }
-
-        /* --- Estilo de Modal --- */
-        #modal { backdrop-filter: blur(20px); opacity: 0; pointer-events: none; transition: 0.6s ease; z-index: 1000;}
-        #modal.active { opacity: 1; pointer-events: all; }
     </style>
 </head>
-<body class="selection:bg-brand-gold selection:text-black">
+<body class="h-full flex flex-col min-h-screen text-slate-800">
 
-    <div class="grain-overlay"></div>
-    <div id="custom-cursor"></div>
-    <div id="cursor-ring"></div>
+    <!-- LOGIN MODAL (PREMIUM) -->
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-md transition-opacity">
+        <div class="w-full max-w-sm bg-white rounded-3xl p-8 relative overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] animate-modal-pop border border-slate-100">
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100/50 text-blue-600 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">GeoLookup Pro</h2>
+                <p class="text-sm text-slate-500 mt-2 font-medium">Ingresa tus credenciales para continuar</p>
+            </div>
 
-    <!-- Preloader -->
-    <div id="loader" class="fixed inset-0 bg-brand-black z-[10000] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="flex flex-col items-center gap-12 mb-8 animate-pulse">
-            <img src="img/IMG_2643.png" alt="Isotipo animado de carga Guillermo Vera" class="w-48 md:w-64 invert object-contain opacity-100">
-            <img src="img/IMG_2645.png" alt="Logotipo principal Guillermo Vera Studio" class="h-24 md:h-48 invert object-contain opacity-100">
-        </div>
-        <div class="w-96 h-[1px] bg-white/10 relative overflow-hidden mt-12">
-            <div class="absolute inset-0 bg-brand-gold w-full -translate-x-full animate-[marquee_2s_infinite]"></div>
+            <form onsubmit="handleAuthLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Usuario</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" id="login-username" required placeholder="Tu usuario" class="w-full pl-11 pr-4 py-3.5 pro-input rounded-xl text-sm font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Contraseña</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-11 pr-4 py-3.5 pro-input rounded-xl text-sm font-medium">
+                    </div>
+                </div>
+
+                <div id="login-error-msg" class="hidden text-xs text-red-600 bg-red-50 border border-red-100 p-3 rounded-xl flex items-center space-x-2 font-medium">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>Credenciales incorrectas.</span>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-lg shadow-slate-900/20 transition-all active:scale-[0.98]">
+                    Acceder al Sistema
+                </button>
+            </form>
         </div>
     </div>
 
-    <!-- Header / Nav -->
-    <nav id="main-nav" class="fixed top-0 w-full z-50 px-8 py-8 flex justify-between items-center mix-blend-difference transition-all duration-500">
-        <a href="#" class="hover:opacity-70 transition duration-500">
-            <img src="img/IMG_2643.png" alt="Isotipo minimalista Guillermo Vera" class="h-16 md:h-24 invert object-contain">
-        </a>
-        <div class="hidden md:flex items-center space-x-12">
-            <a href="#proyectos" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Proyectos</a>
-            <a href="#bodas" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Bodas</a>
-            <a href="#vision" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Visión</a>
-            <a href="#servicios" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Servicios</a>
-            <a href="#contacto" class="text-[10px] uppercase tracking-[0.5em] hover:text-brand-gold transition">Contacto</a>
-        </div>
-        <div class="flex items-center space-x-6">
-            <button class="md:hidden text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- Hero Video Background (GSAP Parallax Wrapper) -->
-        <div class="hero-bg absolute inset-0 z-0 h-[120%] -top-[10%]">
-            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-60" aria-label="Video de fondo reel cinematográfico">
-                <source src="video/SaveClip.App_AQOurXEE2VwNIg_yihzDL3qQy-JAyOi-FmeWLMnZmmFB_Ivi2oGtG9szfHNyCrgHaAlUKF0ucXEAHE-EAMkmz-V4mIzy3NOLlbnYhZY.mp4" type="video/mp4">
-            </video>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/20 to-brand-black"></div>
-        </div>
-
-        <div class="relative z-10 text-center px-4">
-            <span class="text-xs md:text-[10px] uppercase tracking-[1em] mb-8 block reveal opacity-80">Visual Director & Producer</span>
-            <h1 class="font-serif text-6xl md:text-[10vw] leading-[0.9] tracking-tighter mb-12 reveal">
-                Storytelling <br> <span class="italic font-light text-brand-gold">Redefined.</span>
-            </h1>
-            <div class="reveal flex flex-col md:flex-row items-center justify-center gap-8">
-                <a href="#proyectos" class="px-12 py-5 bg-white text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand-gold hover:text-white transition duration-700">Explorar Portfolio</a>
-                <a href="https://wa.me/593994028173" target="_blank" class="px-12 py-5 border border-white/20 text-[10px] uppercase tracking-[0.3em] backdrop-blur-sm hover:bg-white hover:text-black transition duration-700">Direct Inquiry</a>
-            </div>
-        </div>
-
-        <!-- Floating Scroll Indicator -->
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
-            <div class="w-[1px] h-16 bg-white"></div>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="proyectos" class="py-32 px-8 md:px-20 relative bg-brand-black">
-        <div class="max-w-[1400px] mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
-                <div>
-                    <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Selected Works</span>
-                    <h2 class="text-5xl md:text-8xl font-serif leading-none tracking-tighter">Archivo <br> Visual.</h2>
-                </div>
-                <div class="mt-8 md:mt-0 max-w-sm text-zinc-500 text-sm font-light leading-relaxed">
-                    Curaduría de proyectos que desafían lo convencional. Desde piezas comerciales de alto impacto hasta exploraciones artísticas íntimas.
-                </div>
-            </div>
-
-            <!-- Bento Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px] md:auto-rows-[450px]">
+    <!-- MAIN HEADER (MINIMALIST) -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- Hamburger -->
+                <button onclick="toggleMobileDrawer()" class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors">
+                    <i class="fa-solid fa-bars-staggered text-lg"></i>
+                </button>
                 
-                <!-- Item 1: Large Video Highlight -->
-                <div class="md:col-span-2 md:row-span-2 bento-item reveal group cursor-pointer" onclick="openMedia('video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4', 'Showreel Highlight', 'Cinematografía de alto nivel')">
-                    <video autoplay loop muted playsinline aria-label="Extracto de showreel cinematográfico por Guillermo Vera" src="video/SaveClip.App_AQPTqCbMrM2NiILjvTpEa-UsdxDAznRar185I3jLPp3oMh5HJMBuQP7_JFhgTHNCTXP7ADzhecioRZaxhXUTkQqfho-nBlYoi_AwOqY.mp4"></video>
-                    <div class="bento-overlay">
-                        <div>
-                            <span class="text-xs tracking-[0.4em] uppercase text-brand-gold block mb-2">Director's Cut</span>
-                            <h3 class="text-4xl font-serif italic text-white">The Golden Narrative</h3>
+                <!-- Logo Area -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center shadow-md shadow-brand-500/30">
+                        <i class="fa-solid fa-location-arrow text-sm"></i>
+                    </div>
+                    <span class="font-bold text-slate-900 tracking-tight hidden sm:block">GeoLookup</span>
+                </div>
+            </div>
+
+            <!-- Profile Area -->
+            <div class="flex items-center space-x-3">
+                <div id="user-session-badge" class="hidden items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
+                    <span id="agent-display-name" class="text-xs font-bold text-slate-700">Agente</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDE DRAWER (MENU) -->
+    <div id="mobile-drawer" class="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm hidden transition-opacity opacity-0" onclick="if(event.target === this) toggleMobileDrawer()">
+        <div id="drawer-content" class="w-80 max-w-[85vw] h-full bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <h3 class="font-bold text-slate-900 text-lg">Menú Principal</h3>
+                <button onclick="toggleMobileDrawer()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="flex-grow p-4 space-y-2">
+                <button onclick="switchTab('tab-lookup')" class="w-full text-left p-3.5 rounded-2xl flex items-center space-x-4 hover:bg-slate-50 transition group">
+                    <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center group-hover:bg-brand-100 transition">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">Buscador</div>
+                        <div class="text-xs text-slate-500 font-medium">Verificar números</div>
+                    </div>
+                </button>
+
+                <button onclick="switchTab('tab-upload')" class="w-full text-left p-3.5 rounded-2xl flex items-center space-x-4 hover:bg-slate-50 transition group">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-100 transition">
+                        <i class="fa-solid fa-file-csv"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">Importar Leads</div>
+                        <div class="text-xs text-slate-500 font-medium">Subir archivos CSV</div>
+                    </div>
+                </button>
+
+                <button onclick="switchTab('tab-database')" class="w-full text-left p-3.5 rounded-2xl flex items-center space-x-4 hover:bg-slate-50 transition group">
+                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center group-hover:bg-teal-100 transition">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">Directorio</div>
+                        <div class="text-xs text-slate-500 font-medium">Ver registros almacenados</div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="p-6 border-t border-slate-100">
+                <button onclick="logoutUser()" class="w-full py-3 bg-slate-50 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl font-bold text-sm transition-colors flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP AREA -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8 sm:py-12 relative">
+        
+        <!-- =========================================
+             TAB 1: BUSCADOR (DISEÑO INCREÍBLE)
+        ========================================== -->
+        <section id="tab-lookup" class="tab-content animate-fade-in flex flex-col items-center justify-center min-h-[60vh]">
+            <div class="text-center mb-10 w-full max-w-2xl">
+                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm mb-6">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
+                    </span>
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Identificador Inteligente</span>
+                </div>
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 leading-tight">
+                    Encuentra la ciudad de <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-500">cualquier número.</span>
+                </h1>
+                <p class="text-slate-500 text-base sm:text-lg font-medium max-w-lg mx-auto">
+                    Pega un teléfono para saber instantáneamente si tu lead pertenece a Santo Domingo o Manta.
+                </p>
+            </div>
+
+            <!-- Big Search Bar -->
+            <div class="w-full max-w-2xl relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 to-indigo-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative bg-white rounded-2xl shadow-xl flex items-center p-2 pl-6">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-xl"></i>
+                    <input type="text" id="quick-search-input" 
+                        onkeyup="if(event.key==='Enter') executeQuickSearch()"
+                        placeholder="Ej: 0991234567, 022754321..." 
+                        class="w-full bg-transparent border-none focus:ring-0 text-xl sm:text-2xl font-bold font-mono text-slate-800 placeholder-slate-300 py-4 px-4 outline-none">
+                    <button onclick="executeQuickSearch()" class="bg-slate-900 hover:bg-brand-600 text-white rounded-xl px-6 py-4 font-bold transition-colors whitespace-nowrap hidden sm:block">
+                        Buscar
+                    </button>
+                    <!-- Mobile Search Icon -->
+                    <button onclick="executeQuickSearch()" class="bg-slate-900 hover:bg-brand-600 text-white rounded-xl w-12 h-12 flex items-center justify-center font-bold transition-colors sm:hidden">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================
+             TAB 2: SUBIR CSV (DISEÑO LIMPIO)
+        ========================================== -->
+        <section id="tab-upload" class="tab-content hidden animate-fade-in max-w-2xl mx-auto">
+            <div class="glass-card rounded-3xl p-8 sm:p-10">
+                <div class="mb-8 text-center sm:text-left">
+                    <h2 class="text-2xl font-extrabold text-slate-900">Importar Campaña CSV</h2>
+                    <p class="text-slate-500 mt-2 font-medium">Sincroniza tus bases de datos directamente a Supabase.</p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Step 1 -->
+                    <div>
+                        <label class="flex items-center space-x-3 text-sm font-bold text-slate-900 mb-3">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">1</span>
+                            <span>Nombre de la Campaña</span>
+                        </label>
+                        <input type="text" id="campaign-tag-input" placeholder="Ej: Leads Facebook SD" class="w-full px-5 py-4 pro-input rounded-2xl text-slate-700 font-semibold text-base">
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div>
+                        <label class="flex items-center space-x-3 text-sm font-bold text-slate-900 mb-3">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">2</span>
+                            <span>Asignar Ciudad</span>
+                        </label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Radio SD -->
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="city-choice" value="Santo Domingo" checked class="peer sr-only">
+                                <div class="p-5 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/30 transition-all flex flex-col items-center text-center">
+                                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3">
+                                        <i class="fa-solid fa-tree-city text-lg"></i>
+                                    </div>
+                                    <span class="font-bold text-slate-900 group-hover:text-emerald-700 peer-checked:text-emerald-700">Santo Domingo</span>
+                                </div>
+                                <div class="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
+
+                            <!-- Radio Manta -->
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="city-choice" value="Manta" class="peer sr-only">
+                                <div class="p-5 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-sky-500 peer-checked:bg-sky-50/30 transition-all flex flex-col items-center text-center">
+                                    <div class="w-10 h-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center mb-3">
+                                        <i class="fa-solid fa-water text-lg"></i>
+                                    </div>
+                                    <span class="font-bold text-slate-900 group-hover:text-sky-700 peer-checked:text-sky-700">Manta</span>
+                                </div>
+                                <div class="absolute top-3 right-3 w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </label>
                         </div>
                     </div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-white/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-700 scale-75 group-hover:scale-100">
-                        <i class="fa-solid fa-play text-white"></i>
-                    </div>
-                </div>
 
-                <!-- Item 2: Vertical Image -->
-                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg', 'Editorial Fashion', 'Estética editorial contemporánea')">
-                    <img src="img/SaveClip.App_619273378_18374644645087632_7341260580900929932_n.jpg" alt="Modelo posando con vestuario de alta costura, fotografía editorial de estilo contemporáneo por Guillermo Vera">
-                    <div class="bento-overlay">
-                        <h3 class="text-2xl font-serif italic text-white">Vogue Aesthetics</h3>
+                    <!-- Step 3 -->
+                    <div>
+                        <label class="flex items-center space-x-3 text-sm font-bold text-slate-900 mb-3">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">3</span>
+                            <span>Archivo CSV</span>
+                        </label>
+                        <div class="relative border-2 border-dashed border-slate-300 hover:border-brand-400 rounded-2xl p-8 text-center bg-white transition-colors">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 mb-4"></i>
+                            <p class="text-sm text-slate-600 font-medium mb-4">Arrastra tu archivo aquí o haz clic para buscar</p>
+                            <input type="file" id="csv-file-input" accept=".csv" onchange="handleFileSelect(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <div id="file-name-display" class="hidden inline-flex items-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg text-sm font-bold text-slate-700">
+                                <i class="fa-solid fa-file-csv text-brand-500"></i>
+                                <span>archivo_seleccionado.csv</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Item 3: Square Image -->
-                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg', 'Urban Lifestyle', 'Narrativa urbana y texturas')">
-                    <img src="img/SaveClip.App_619366529_18374644657087632_7948631927250922136_n.jpg" alt="Fotografía lifestyle con estilo urbano documentada por Guillermo Vera">
-                    <div class="bento-overlay">
-                        <h3 class="text-2xl font-serif italic text-white">Urban Motion</h3>
-                    </div>
-                </div>
-
-                <!-- Item 4: Wide Image -->
-                <div class="md:col-span-1 bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg', 'Cinematic Wedding', 'Eternizando emociones con lente de cine')">
-                    <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Novia elegante con velo en una boda cinematográfica producida por Guillermo Vera">
-                    <div class="bento-overlay">
-                        <h3 class="text-2xl font-serif italic text-white">Eterna Love</h3>
-                    </div>
-                </div>
-                
-                <!-- Item 5: Small Square -->
-                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg', 'Studio Sessions', 'Retrato artístico en estudio')">
-                    <img src="img/SaveClip.App_475102374_18490811344016823_6790417390967251423_n.jpg" alt="Retrato artístico en estudio fotográfico con iluminación dramática por Guillermo Vera">
-                </div>
-
-                <!-- Item 6: Small Square -->
-                <div class="bento-item reveal cursor-pointer" onclick="openMedia('img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg', 'Golden Hour', 'Capturando la luz en su estado más puro')">
-                    <img src="img/SaveClip.App_619556249_18560710231016823_8492088431908819906_n.jpg" alt="Pareja iluminada al atardecer en fotografía estilo Golden Hour capturada por Guillermo Vera">
+                    <button onclick="confirmAndProcessCsvSimple()" class="w-full py-4 bg-slate-900 hover:bg-brand-600 text-white font-bold text-base rounded-2xl shadow-lg shadow-slate-900/20 transition-all active:scale-[0.98] flex items-center justify-center space-x-2">
+                        <span>Procesar y Guardar en Supabase</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Sección de Bodas (Producto Principal) -->
-    <section id="bodas" class="py-40 px-8 md:px-20 relative bg-brand-zinc border-t border-white/5">
-        <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center gap-16">
-            <div class="md:w-1/2 reveal">
-                <span class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block">Especialidad</span>
-                <h2 class="text-5xl md:text-8xl font-serif leading-none tracking-tighter mb-8">Bodas <br> <span class="italic font-light">Cinematográficas.</span></h2>
-                <p class="text-zinc-500 font-light leading-relaxed mb-10 text-xl">Documentamos tu historia de amor con la textura visual, la narrativa y la calidad de una película de 35mm. No hacemos videos convencionales; creamos cine.</p>
-                <a href="https://wa.me/593994028173" target="_blank" class="px-12 py-5 bg-brand-gold text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white transition duration-700">Cotizar Mi Boda</a>
-            </div>
-            <div class="md:w-1/2 w-full reveal">
-                <img src="img/SaveClip.App_620424124_18560710288016823_3732992344485869062_n.jpg" alt="Producción de video cinematográfico para bodas de lujo en exteriores" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000">
-            </div>
-        </div>
-    </section>
+        <!-- =========================================
+             TAB 3: DIRECTORIO
+        ========================================== -->
+        <section id="tab-database" class="tab-content hidden animate-fade-in">
+            <div class="glass-card rounded-3xl p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900">Directorio de Leads</h2>
+                        <p class="text-slate-500 mt-1 font-medium">Base de datos central sincronizada.</p>
+                    </div>
 
-    <!-- Services Section -->
-    <section id="servicios" class="py-32 px-8 bg-brand-black relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-40 outline-text text-[20vw] opacity-10 select-none pointer-events-none">CREATIVE</div>
-        
-        <div class="max-w-[1200px] mx-auto relative z-10">
-            <h2 class="text-4xl md:text-7xl font-serif mb-20 reveal tracking-tighter italic">Servicios <br> <span class="text-brand-gold not-italic">Premium.</span></h2>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <select id="filter-city" onchange="renderDirectoryTable()" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-brand-500 outline-none shadow-sm cursor-pointer">
+                            <option value="ALL">Todas las Ciudades</option>
+                            <option value="Santo Domingo">Santo Domingo</option>
+                            <option value="Manta">Manta</option>
+                        </select>
+                        <button onclick="exportFilteredCsv()" class="px-5 py-2.5 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-bold shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-download text-slate-400"></i>
+                            <span>Exportar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm bg-white">
+                    <table class="min-w-full divide-y divide-slate-100 text-sm">
+                        <thead class="bg-slate-50/50">
+                            <tr>
+                                <th class="px-6 py-4 text-left font-bold text-slate-500 uppercase tracking-wider text-xs">Teléfono</th>
+                                <th class="px-6 py-4 text-left font-bold text-slate-500 uppercase tracking-wider text-xs">Nombre</th>
+                                <th class="px-6 py-4 text-left font-bold text-slate-500 uppercase tracking-wider text-xs">Campaña</th>
+                                <th class="px-6 py-4 text-center font-bold text-slate-500 uppercase tracking-wider text-xs">Ciudad</th>
+                                <th class="px-6 py-4 text-center font-bold text-slate-500 uppercase tracking-wider text-xs">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="directory-table-body" class="divide-y divide-slate-100 font-medium">
+                            <!-- Dynamic Content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =========================================
+         EMERGENT MODAL: RESULTADO DE BÚSQUEDA
+    ========================================== -->
+    <div id="result-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-md transition-opacity duration-300 opacity-0">
+        <div id="result-modal-content" class="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.2)] transform scale-95 transition-transform duration-300 relative border border-white/50">
+            <!-- Close Btn -->
+            <button onclick="closeResultModal()" class="absolute top-4 right-4 w-8 h-8 bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 border border-white/5">
-                <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
-                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">01</span>
-                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Fotografía Editorial</h3>
-                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Producciones de moda, retratos corporativos de alto nivel y contenido para revistas con un enfoque artístico único.</p>
-                </div>
-                <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
-                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">02</span>
-                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Producción de Cine</h3>
-                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Dirección y producción de cortometrajes, videos musicales y comerciales con estética cinematográfica de 35mm.</p>
-                </div>
-                <div class="p-12 bg-brand-zinc group hover:bg-brand-gold transition duration-700 reveal">
-                    <span class="text-xs tracking-[0.5em] text-zinc-600 group-hover:text-black transition mb-8 block">03</span>
-                    <h3 class="text-3xl font-serif mb-6 group-hover:text-black transition">Brand Storytelling</h3>
-                    <p class="text-zinc-500 group-hover:text-black/70 transition text-sm leading-relaxed">Elevamos el valor de marca a través de narrativas visuales potentes que conectan emocionalmente con la audiencia.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="vision" class="py-40 px-8 flex flex-col items-center text-center">
-        <div class="max-w-4xl reveal">
-            <img src="img/SaveClip.App_620406389_18560710258016823_4725972610135586526_n.jpg" alt="Retrato en blanco y negro del director visual Guillermo Vera" class="w-32 h-32 rounded-full object-cover mx-auto mb-12 grayscale">
-            <h2 class="text-4xl md:text-6xl font-serif mb-12 leading-[1.1] tracking-tighter">
-                "Mi visión es transformar cada fotograma en una obra eterna, donde la <span class="italic text-brand-gold font-light">estética</span> no sea solo visual, sino una experiencia visceral."
-            </h2>
-            <p class="text-zinc-500 font-light text-xl max-w-2xl mx-auto italic">
-                — Guillermo Vera
-            </p>
-        </div>
-    </section>
-
-    <!-- Footer / Contact -->
-    <footer id="contacto" class="pt-60 pb-20 px-8 bg-brand-black border-t border-white/5 overflow-hidden">
-        <div class="max-w-[1400px] mx-auto text-center">
-            
-            <!-- Logotipo GUILLERMO VERA GIGANTE -->
-            <a href="#" class="inline-block hover:opacity-80 transition duration-1000 mb-60 reveal">
-                <img src="img/IMG_2645.png" alt="Logotipo tipográfico de Guillermo Vera para pie de página" class="h-64 md:h-[500px] invert object-contain mx-auto">
-            </a>
-            
-            <div class="flex flex-col md:flex-row justify-between items-center py-12 border-t border-white/5 text-[10px] uppercase tracking-[0.4em] text-zinc-500 gap-8">
-                <div class="flex flex-wrap justify-center gap-12">
-                    <a href="mailto:filmandres10@icloud.com" class="hover:text-white transition">filmandres10@icloud.com</a>
-                    <a href="https://www.instagram.com/guillermoveraec" target="_blank" class="hover:text-brand-gold transition" aria-label="Visitar perfil de Instagram de Guillermo Vera">
-                        <i class="fab fa-instagram mr-2"></i>Instagram
-                    </a>
-                    <a href="https://wa.me/593994028173" target="_blank" class="hover:text-brand-gold transition" aria-label="Contactar a Guillermo Vera vía WhatsApp">WhatsApp</a>
-                    <a href="#" class="hover:text-brand-gold transition">Vimeo</a>
-                </div>
-                <p>&copy; 2024 Guillermo Vera • Latam Based</p>
-                <a href="#loader" class="text-lg opacity-30 hover:opacity-100 transition" aria-label="Volver arriba"><i class="fa-solid fa-arrow-up"></i></a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- WhatsApp Floating (Ajustado a la derecha) -->
-    <a href="https://wa.me/593994028173" target="_blank" aria-label="Abrir chat de WhatsApp para cotizaciones" class="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl shadow-2xl z-[100] transition transform hover:scale-110 active:scale-95">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <!-- Modal para Media -->
-    <div id="modal" class="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-12">
-        <div class="absolute inset-0 bg-black/95" onclick="closeMedia()"></div>
-        <button onclick="closeMedia()" class="absolute top-10 right-10 text-white text-4xl hover:text-brand-gold z-[1001] transition" aria-label="Cerrar ventana"><i class="fa-solid fa-xmark"></i></button>
-        
-        <div class="bg-brand-zinc w-full max-w-7xl relative z-[1001] flex flex-col md:flex-row overflow-hidden rounded-sm shadow-2xl">
-            <div id="modal-container" class="md:w-2/3 bg-black flex items-center justify-center aspect-video md:aspect-auto">
-                <!-- Se inyecta video o imagen aquí -->
-            </div>
-            <div class="md:w-1/3 p-12 flex flex-col justify-center">
-                <span id="modal-cat" class="text-brand-gold text-[10px] uppercase tracking-[0.5em] mb-4 block font-bold">Project</span>
-                <h3 id="modal-title" class="text-4xl font-serif italic mb-8">Project Title</h3>
-                <p id="modal-desc" class="text-zinc-500 font-light text-sm leading-relaxed mb-12">Descripción del proyecto detallada.</p>
-                <a href="https://wa.me/593994028173" target="_blank" class="text-center py-5 bg-white text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand-gold hover:text-white transition duration-500">Inquire this style</a>
+            <div id="result-modal-body" class="text-center mt-2">
+                <!-- Injected via JS -->
             </div>
         </div>
     </div>
 
+    <!-- TOASTS -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3 pointer-events-none flex flex-col items-end"></div>
+
     <script>
-        // --- Preloader Logic (3 Segundos) ---
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 1000);
-            }, 3000);
-        });
+        const SUPABASE_DEFAULT_URL = 'https://hjlsudhspfbwoualdkea.supabase.co';
+        const SUPABASE_DEFAULT_KEY = 'sb_publishable_8jqhwZkSvDjk3GT9ln7CWw_frhhM7xo';
 
-        // --- Custom Cursor ---
-        const cursor = document.getElementById('custom-cursor');
-        const ring = document.getElementById('cursor-ring');
-        
-        // Verifica si no es un dispositivo táctil antes de animar el cursor
-        if (window.matchMedia("(pointer: fine)").matches) {
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                
-                ring.animate({
-                    left: `${e.clientX}px`,
-                    top: `${e.clientY}px`
-                }, { duration: 500, fill: 'forwards' });
-            });
+        let appState = {
+            contacts: [],
+            supabaseClient: null,
+            currentUser: null,
+            pendingCsvRows: []
+        };
 
-            document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-            });
-        }
-
-        // --- Navbar Background Toggle on Scroll ---
-        const mainNav = document.getElementById('main-nav');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                // Al scrollear: Fondo oscuro, blur activo y se desactiva mix-blend
-                mainNav.classList.remove('mix-blend-difference');
-                mainNav.classList.add('bg-black/80', 'backdrop-blur-md', 'py-4');
-                mainNav.classList.remove('py-8');
-            } else {
-                // Estado inicial en la cima
-                mainNav.classList.add('mix-blend-difference');
-                mainNav.classList.remove('bg-black/80', 'backdrop-blur-md', 'py-4');
-                mainNav.classList.add('py-8');
-            }
-        });
-
-        // --- GSAP Animations (Sustituye el Intersection Observer anterior) ---
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Efecto Parallax muy suave para el video Hero
-        gsap.to('.hero-bg', {
-            yPercent: 20,
-            ease: "none",
-            scrollTrigger: {
-                trigger: "section.relative.h-screen",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            }
-        });
-
-        // Animación de aparición (Fade Up cinematográfico) para todos los elementos '.reveal'
-        gsap.utils.toArray('.reveal').forEach(elem => {
-            gsap.fromTo(elem, 
-                { y: 60, opacity: 0, visibility: 'hidden' }, 
-                { 
-                    y: 0, 
-                    opacity: 1, 
-                    visibility: 'visible',
-                    duration: 1.2, 
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: elem,
-                        start: "top 85%", // Comienza la animación cuando el elemento está al 85% de la pantalla
-                        toggleActions: "play none none none"
-                    }
+        window.onload = function() {
+            if (window.supabase) {
+                try {
+                    appState.supabaseClient = window.supabase.createClient(SUPABASE_DEFAULT_URL, SUPABASE_DEFAULT_KEY);
+                    fetchContactsFromSupabase();
+                } catch(e) {
+                    console.warn("Error iniciando Supabase", e);
                 }
-            );
-        });
-
-        // --- Modal Logic ---
-        const modal = document.getElementById('modal');
-        const container = document.getElementById('modal-container');
-        const mTitle = document.getElementById('modal-title');
-        const mDesc = document.getElementById('modal-desc');
-
-        function openMedia(src, title, desc) {
-            mTitle.innerText = title;
-            mDesc.innerText = desc;
-            
-            const isVideo = src.endsWith('.mp4');
-            if(isVideo) {
-                container.innerHTML = `<video controls autoplay loop class="w-full h-full object-contain"><source src="${src}" type="video/mp4"></video>`;
-            } else {
-                container.innerHTML = `<img src="${src}" class="w-full h-full object-contain">`;
             }
+            checkUserSession();
+            loadLocalContacts();
+            renderDirectoryTable();
+        };
+
+        // --- UI Interactions ---
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobile-drawer');
+            const content = document.getElementById('drawer-content');
             
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                // Allow display block to apply before animating opacity/transform
+                setTimeout(() => {
+                    drawer.classList.remove('opacity-0');
+                    content.classList.remove('-translate-x-full');
+                }, 10);
+            } else {
+                drawer.classList.add('opacity-0');
+                content.classList.add('-translate-x-full');
+                setTimeout(() => drawer.classList.add('hidden'), 300);
+            }
         }
 
-        function closeMedia() {
-            modal.classList.remove('active');
-            container.innerHTML = '';
-            document.body.style.overflow = 'auto';
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            if (!document.getElementById('mobile-drawer').classList.contains('hidden')) {
+                toggleMobileDrawer();
+            }
         }
 
-        // Escape key to close modal
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') closeMedia();
-        });
+        function checkUserSession() {
+            const saved = localStorage.getItem('geolookup_active_user');
+            if (saved) {
+                appState.currentUser = JSON.parse(saved);
+                applyUserSessionUI();
+            } else {
+                showLoginModal(true);
+            }
+        }
+
+        function handleAuthLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value.trim().toLowerCase();
+            const p = document.getElementById('login-password').value.trim();
+
+            if ((u === 'santo domingo' || u === 'santodomingo') && p === '123456') {
+                loginSuccess('Santo Domingo', 'Santo Domingo');
+            } else if (u === 'manta' && p === '654321') {
+                loginSuccess('Manta', 'Manta');
+            } else {
+                document.getElementById('login-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function loginSuccess(u, role) {
+            appState.currentUser = { username: u, role: role };
+            localStorage.setItem('geolookup_active_user', JSON.stringify(appState.currentUser));
+            showLoginModal(false);
+            applyUserSessionUI();
+            showToast(`Bienvenido(a), Agente de ${role}`, 'success');
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('geolookup_active_user');
+            appState.currentUser = null;
+            if(!document.getElementById('mobile-drawer').classList.contains('hidden')) toggleMobileDrawer();
+            showLoginModal(true);
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        function showLoginModal(visible) {
+            const m = document.getElementById('login-modal');
+            if (visible) {
+                m.classList.remove('hidden');
+                setTimeout(() => m.classList.remove('opacity-0'), 10);
+            } else {
+                m.classList.add('opacity-0');
+                setTimeout(() => m.classList.add('hidden'), 300);
+            }
+        }
+
+        function applyUserSessionUI() {
+            if (!appState.currentUser) return;
+            const badge = document.getElementById('user-session-badge');
+            const nameSpan = document.getElementById('agent-display-name');
+            if (nameSpan) nameSpan.innerText = `${appState.currentUser.role}`;
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
+        }
+
+        function cleanNumber(num) {
+            return num ? num.toString().replace(/\D/g, '') : '';
+        }
+
+        function formatWaUrl(phoneStr) {
+            let clean = cleanNumber(phoneStr);
+            if (!clean) return '#';
+            if (clean.startsWith('09') && clean.length === 10) clean = '593' + clean.substring(1);
+            else if (clean.startsWith('02') || clean.startsWith('05')) clean = '593' + clean.substring(1);
+            else if (!clean.startsWith('593') && clean.length >= 8) clean = '593' + clean;
+            return `https://wa.me/${clean}`;
+        }
+
+        function classifyLocation(phoneStr) {
+            const clean = cleanNumber(phoneStr);
+            if (clean.startsWith('02') || clean.startsWith('5932') || clean.startsWith('27') || clean.startsWith('23')) return 'Santo Domingo';
+            if (clean.startsWith('05') || clean.startsWith('5935') || clean.startsWith('26') || clean.startsWith('29')) return 'Manta';
+            return null; // Ahora devuelve null en lugar de Santo Domingo por defecto
+        }
+
+        function executeQuickSearch() {
+            const input = document.getElementById('quick-search-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            const cleaned = cleanNumber(query);
+            const found = appState.contacts.find(c => {
+                const cClean = cleanNumber(c.phone);
+                return cClean && (cClean === cleaned || (cleaned.length >= 7 && cClean.endsWith(cleaned)));
+            });
+
+            const guessedCity = classifyLocation(query);
+            const city = found ? (found.label || found.city) : (guessedCity || 'No existe');
+            
+            openResultModal(query, city, found);
+            input.value = ''; // clear after search
+        }
+
+        function openResultModal(query, city, record) {
+            const modal = document.getElementById('result-modal');
+            const content = document.getElementById('result-modal-content');
+            const body = document.getElementById('result-modal-body');
+
+            const isSD = city === 'Santo Domingo';
+            const isManta = city === 'Manta';
+            const isUnknown = !isSD && !isManta;
+
+            const colorCode = isSD ? 'emerald' : (isManta ? 'sky' : 'red');
+            const icon = isSD ? 'tree-city' : (isManta ? 'water' : 'xmark');
+            const waLink = formatWaUrl(query);
+
+            let infoBox = '';
+            if (record) {
+                infoBox = `<div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100 text-left">
+                         <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Contacto Registrado</div>
+                         <div class="font-bold text-slate-800 text-sm">${record.name}</div>
+                         <div class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-tag text-slate-400 mr-1"></i>${record.campaign}</div>
+                       </div>`;
+            } else if (!isUnknown) {
+                infoBox = `<div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100">
+                         <div class="text-xs font-bold text-slate-500">
+                            <i class="fa-solid fa-robot mr-1"></i> Identificado por prefijo de zona
+                         </div>
+                       </div>`;
+            } else {
+                infoBox = `<div class="bg-red-50 rounded-2xl p-4 mb-6 border border-red-100">
+                         <div class="text-sm font-bold text-red-600">
+                            <i class="fa-solid fa-circle-exclamation mr-1"></i> Número no registrado en tu base
+                         </div>
+                       </div>`;
+            }
+
+            body.innerHTML = `
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-${colorCode}-50 text-${colorCode}-500 mb-5 shadow-inner">
+                    <i class="fa-solid fa-${icon} text-4xl"></i>
+                </div>
+                <h3 class="text-3xl font-extrabold text-slate-900 mb-1">${isUnknown ? 'No Existe' : city}</h3>
+                <p class="text-slate-500 font-mono text-lg font-bold mb-6">${query}</p>
+                
+                ${infoBox}
+
+                <a href="${waLink}" target="_blank" class="w-full py-4 bg-[#25D366] hover:bg-[#1fb155] text-white font-bold text-base rounded-2xl shadow-lg shadow-[#25D366]/30 transition-all active:scale-[0.98] flex items-center justify-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>Contactar en WhatsApp</span>
+                </a>
+            `;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeResultModal() {
+            const modal = document.getElementById('result-modal');
+            const content = document.getElementById('result-modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const display = document.getElementById('file-name-display');
+            display.classList.remove('hidden');
+            display.querySelector('span').innerText = file.name;
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    appState.pendingCsvRows = results.data;
+                    showToast(`Archivo leído: ${results.data.length} filas`, 'success');
+                }
+            });
+        }
+
+        async function confirmAndProcessCsvSimple() {
+            const campaignName = document.getElementById('campaign-tag-input').value.trim();
+            const cityChoice = document.querySelector('input[name="city-choice"]:checked')?.value || 'Santo Domingo';
+
+            if (!campaignName) { showToast('Falta el nombre de la campaña', 'error'); return; }
+            if (!appState.pendingCsvRows || appState.pendingCsvRows.length === 0) { showToast('Selecciona un archivo CSV', 'error'); return; }
+
+            const newContacts = appState.pendingCsvRows.map(row => {
+                const keys = Object.keys(row);
+                const phoneKey = keys.find(k => k.toLowerCase().includes('telef') || k.toLowerCase().includes('cel') || k.toLowerCase().includes('num')) || keys[0];
+                const nameKey = keys.find(k => k.toLowerCase().includes('nom') || k.toLowerCase().includes('client')) || keys[1];
+
+                return {
+                    id: crypto.randomUUID(),
+                    phone: row[phoneKey] || '',
+                    name: row[nameKey] || 'Contacto',
+                    city: cityChoice,
+                    label: cityChoice,
+                    campaign: campaignName
+                };
+            }).filter(c => c.phone.trim() !== '');
+
+            appState.contacts = [...appState.contacts, ...newContacts];
+            saveLocalContacts();
+
+            if (appState.supabaseClient) {
+                try {
+                    await appState.supabaseClient.from('campanias_contactos').insert(newContacts.map(c => ({
+                        telefono: c.phone,
+                        nombre: c.name,
+                        ciudad: c.city,
+                        clasificacion: c.label,
+                        campania_nombre: c.campaign
+                    })));
+                } catch(e) {}
+            }
+
+            showToast(`¡Campaña guardada con éxito!`, 'success');
+            
+            // Reset form
+            document.getElementById('campaign-tag-input').value = '';
+            document.getElementById('file-name-display').classList.add('hidden');
+            appState.pendingCsvRows = [];
+            
+            renderDirectoryTable();
+            switchTab('tab-database');
+        }
+
+        async function fetchContactsFromSupabase() {
+            if (!appState.supabaseClient) return;
+            try {
+                const { data, error } = await appState.supabaseClient.from('campanias_contactos').select('*');
+                if (data && data.length > 0) {
+                    appState.contacts = data.map(i => ({
+                        id: i.id || crypto.randomUUID(),
+                        phone: i.telefono || '',
+                        name: i.nombre || 'Sin Nombre',
+                        city: i.ciudad || i.clasificacion,
+                        label: i.clasificacion || 'Santo Domingo',
+                        campaign: i.campania_nombre || 'General'
+                    }));
+                    saveLocalContacts();
+                    renderDirectoryTable();
+                }
+            } catch(e) {}
+        }
+
+        function saveLocalContacts() {
+            localStorage.setItem('geolookup_campaign_contacts', JSON.stringify(appState.contacts));
+        }
+
+        function loadLocalContacts() {
+            const saved = localStorage.getItem('geolookup_campaign_contacts');
+            if (saved) {
+                try {
+                    appState.contacts = JSON.parse(saved);
+                } catch(e) {}
+            }
+        }
+
+        function renderDirectoryTable() {
+            const tbody = document.getElementById('directory-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const cityFilter = document.getElementById('filter-city')?.value || 'ALL';
+            const filtered = appState.contacts.filter(c => cityFilter === 'ALL' || c.label === cityFilter);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-slate-400 text-sm font-medium">No hay registros para mostrar.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors group";
+                const isSD = c.label === 'Santo Domingo';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-mono font-bold text-slate-900">${c.phone}</td>
+                    <td class="px-6 py-4 text-slate-700 font-bold">${c.name}</td>
+                    <td class="px-6 py-4 text-slate-500 text-xs font-bold"><span class="bg-slate-100 px-2.5 py-1 rounded-md">${c.campaign}</span></td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-extrabold ${isSD ? 'bg-emerald-50 text-emerald-700' : 'bg-sky-50 text-sky-700'}">
+                            <span class="w-1.5 h-1.5 rounded-full ${isSD ? 'bg-emerald-500' : 'bg-sky-500'}"></span>
+                            <span>${c.label}</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="${formatWaUrl(c.phone)}" target="_blank" class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto hover:bg-[#25D366] hover:text-white transition-colors shadow-sm group-hover:shadow">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function exportFilteredCsv() {
+            if (appState.contacts.length === 0) {
+                showToast('No hay datos para exportar', 'error');
+                return;
+            }
+            const headers = "Telefono,Nombre,Ciudad,Campania\n";
+            const rows = appState.contacts.map(c => `"${c.phone}","${c.name}","${c.label}","${c.campaign}"`).join("\n");
+            const blob = new Blob([headers + rows], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `leads_geolookup.csv`;
+            a.click();
+        }
+
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let colors = type === 'success' 
+                ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' 
+                : (type === 'error' ? 'bg-red-600 text-white shadow-xl shadow-red-600/20' : 'bg-white text-slate-800 shadow-xl border border-slate-200');
+            
+            toast.className = `p-4 rounded-2xl text-sm font-bold transition-all transform translate-x-full ${colors} flex items-center space-x-3`;
+            toast.innerHTML = `
+                <i class="${type === 'success' ? 'fa-solid fa-circle-check text-emerald-400' : (type === 'error' ? 'fa-solid fa-circle-xmark text-white' : 'fa-solid fa-circle-info text-blue-500')} text-lg"></i>
+                <span>${msg}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+
+            // Animate out
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>

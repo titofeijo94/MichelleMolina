@@ -269,51 +269,14 @@
                             <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">1</span>
                             <span>Nombre de la Campaña</span>
                         </label>
-                        <input type="text" id="campaign-tag-input" placeholder="Ej: Leads Facebook SD" class="w-full px-5 py-4 pro-input rounded-2xl text-slate-700 font-semibold text-base">
+                        <input type="text" id="campaign-tag-input" placeholder="Ej: Leads Nacional Agosto" class="w-full px-5 py-4 pro-input rounded-2xl text-slate-700 font-semibold text-base">
                     </div>
 
                     <!-- Step 2 -->
                     <div>
                         <label class="flex items-center space-x-3 text-sm font-bold text-slate-900 mb-3">
                             <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">2</span>
-                            <span>Asignar Ciudad</span>
-                        </label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <!-- Radio SD -->
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="city-choice" value="Santo Domingo" checked class="peer sr-only">
-                                <div class="p-5 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/30 transition-all flex flex-col items-center text-center">
-                                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3">
-                                        <i class="fa-solid fa-tree-city text-lg"></i>
-                                    </div>
-                                    <span class="font-bold text-slate-900 group-hover:text-emerald-700 peer-checked:text-emerald-700">Santo Domingo</span>
-                                </div>
-                                <div class="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-
-                            <!-- Radio Manta -->
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="city-choice" value="Manta" class="peer sr-only">
-                                <div class="p-5 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-sky-500 peer-checked:bg-sky-50/30 transition-all flex flex-col items-center text-center">
-                                    <div class="w-10 h-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center mb-3">
-                                        <i class="fa-solid fa-water text-lg"></i>
-                                    </div>
-                                    <span class="font-bold text-slate-900 group-hover:text-sky-700 peer-checked:text-sky-700">Manta</span>
-                                </div>
-                                <div class="absolute top-3 right-3 w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div>
-                        <label class="flex items-center space-x-3 text-sm font-bold text-slate-900 mb-3">
-                            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">3</span>
-                            <span>Archivo CSV</span>
+                            <span>Archivo CSV (Detectará la ciudad automáticamente)</span>
                         </label>
                         <div class="relative border-2 border-dashed border-slate-300 hover:border-brand-400 rounded-2xl p-8 text-center bg-white transition-colors">
                             <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 mb-4"></i>
@@ -323,6 +286,13 @@
                                 <i class="fa-solid fa-file-csv text-brand-500"></i>
                                 <span>archivo_seleccionado.csv</span>
                             </div>
+                        </div>
+                        
+                        <div class="mt-4 text-right">
+                            <button type="button" onclick="downloadTemplateCsv()" class="text-xs font-bold text-brand-600 hover:text-brand-800 transition-colors inline-flex items-center space-x-1.5 cursor-pointer">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <span>Descargar plantilla de ejemplo (CSV)</span>
+                            </button>
                         </div>
                     </div>
 
@@ -348,8 +318,7 @@
                     <div class="flex flex-wrap items-center gap-3">
                         <select id="filter-city" onchange="renderDirectoryTable()" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-brand-500 outline-none shadow-sm cursor-pointer">
                             <option value="ALL">Todas las Ciudades</option>
-                            <option value="Santo Domingo">Santo Domingo</option>
-                            <option value="Manta">Manta</option>
+                            <!-- Se llena dinámicamente con JS -->
                         </select>
                         <button onclick="exportFilteredCsv()" class="px-5 py-2.5 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-bold shadow-sm transition flex items-center space-x-2">
                             <i class="fa-solid fa-download text-slate-400"></i>
@@ -510,24 +479,22 @@
             badge.classList.add('flex');
         }
 
-        function cleanNumber(num) {
-            return num ? num.toString().replace(/\D/g, '') : '';
+        function normalizeEcuadorPhone(num) {
+            let clean = num ? num.toString().replace(/\D/g, '') : '';
+            if (!clean) return '';
+            
+            // Estandarizar cualquier formato de celular a 5939...
+            if (clean.startsWith('09') && clean.length === 10) return '593' + clean.substring(1);
+            if (clean.startsWith('9') && clean.length === 9) return '593' + clean;
+            if (clean.startsWith('593')) return clean;
+            
+            // Por defecto, asumir que es celular Ecuador y agregar 593
+            return '593' + clean;
         }
 
         function formatWaUrl(phoneStr) {
-            let clean = cleanNumber(phoneStr);
-            if (!clean) return '#';
-            if (clean.startsWith('09') && clean.length === 10) clean = '593' + clean.substring(1);
-            else if (clean.startsWith('02') || clean.startsWith('05')) clean = '593' + clean.substring(1);
-            else if (!clean.startsWith('593') && clean.length >= 8) clean = '593' + clean;
-            return `https://wa.me/${clean}`;
-        }
-
-        function classifyLocation(phoneStr) {
-            const clean = cleanNumber(phoneStr);
-            if (clean.startsWith('02') || clean.startsWith('5932') || clean.startsWith('27') || clean.startsWith('23')) return 'Santo Domingo';
-            if (clean.startsWith('05') || clean.startsWith('5935') || clean.startsWith('26') || clean.startsWith('29')) return 'Manta';
-            return null; // Ahora devuelve null en lugar de Santo Domingo por defecto
+            const clean = normalizeEcuadorPhone(phoneStr);
+            return clean ? `https://wa.me/${clean}` : '#';
         }
 
         function executeQuickSearch() {
@@ -535,14 +502,16 @@
             const query = input.value.trim();
             if (!query) return;
 
-            const cleaned = cleanNumber(query);
+            const normalizedQuery = normalizeEcuadorPhone(query);
+            
             const found = appState.contacts.find(c => {
-                const cClean = cleanNumber(c.phone);
-                return cClean && (cClean === cleaned || (cleaned.length >= 7 && cClean.endsWith(cleaned)));
+                const cNormalized = normalizeEcuadorPhone(c.phone);
+                // Compara el número exacto, sin importar si lo escribieron con o sin 593
+                return cNormalized === normalizedQuery;
             });
 
-            const guessedCity = classifyLocation(query);
-            const city = found ? (found.label || found.city) : (guessedCity || 'No existe');
+            // Al ser solo celulares, la ciudad depende 100% del CSV subido.
+            const city = found ? (found.label || found.city) : 'No existe';
             
             openResultModal(query, city, found);
             input.value = ''; // clear after search
@@ -553,12 +522,18 @@
             const content = document.getElementById('result-modal-content');
             const body = document.getElementById('result-modal-body');
 
-            const isSD = city === 'Santo Domingo';
-            const isManta = city === 'Manta';
-            const isUnknown = !isSD && !isManta;
+            const isSD = city && city.toLowerCase().includes('santo domingo');
+            const isManta = city && city.toLowerCase().includes('manta');
+            const isUnknown = !record; // Si es celular y no está en la base, no existe
+            
+            // Asignación de colores dinámicos
+            let colorCode = 'indigo'; // Por defecto para ciudades nuevas
+            let icon = 'map-location-dot';
+            
+            if (isSD) { colorCode = 'emerald'; icon = 'tree-city'; }
+            else if (isManta) { colorCode = 'sky'; icon = 'water'; }
+            else if (isUnknown) { colorCode = 'red'; icon = 'xmark'; }
 
-            const colorCode = isSD ? 'emerald' : (isManta ? 'sky' : 'red');
-            const icon = isSD ? 'tree-city' : (isManta ? 'water' : 'xmark');
             const waLink = formatWaUrl(query);
 
             let infoBox = '';
@@ -568,16 +543,10 @@
                          <div class="font-bold text-slate-800 text-sm">${record.name}</div>
                          <div class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-tag text-slate-400 mr-1"></i>${record.campaign}</div>
                        </div>`;
-            } else if (!isUnknown) {
-                infoBox = `<div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100">
-                         <div class="text-xs font-bold text-slate-500">
-                            <i class="fa-solid fa-robot mr-1"></i> Identificado por prefijo de zona
-                         </div>
-                       </div>`;
             } else {
                 infoBox = `<div class="bg-red-50 rounded-2xl p-4 mb-6 border border-red-100">
                          <div class="text-sm font-bold text-red-600">
-                            <i class="fa-solid fa-circle-exclamation mr-1"></i> Número no registrado en tu base
+                            <i class="fa-solid fa-circle-exclamation mr-1"></i> Número celular no registrado
                          </div>
                        </div>`;
             }
@@ -635,7 +604,6 @@
 
         async function confirmAndProcessCsvSimple() {
             const campaignName = document.getElementById('campaign-tag-input').value.trim();
-            const cityChoice = document.querySelector('input[name="city-choice"]:checked')?.value || 'Santo Domingo';
 
             if (!campaignName) { showToast('Falta el nombre de la campaña', 'error'); return; }
             if (!appState.pendingCsvRows || appState.pendingCsvRows.length === 0) { showToast('Selecciona un archivo CSV', 'error'); return; }
@@ -644,19 +612,26 @@
                 const keys = Object.keys(row);
                 const phoneKey = keys.find(k => k.toLowerCase().includes('telef') || k.toLowerCase().includes('cel') || k.toLowerCase().includes('num')) || keys[0];
                 const nameKey = keys.find(k => k.toLowerCase().includes('nom') || k.toLowerCase().includes('client')) || keys[1];
+                const cityKey = keys.find(k => k.toLowerCase().includes('ciudad') || k.toLowerCase().includes('provincia') || k.toLowerCase().includes('ubicacion'));
+
+                const phoneValue = normalizeEcuadorPhone(row[phoneKey] || '');
+                // Tomar la ciudad directamente de la columna del CSV
+                let cityValue = cityKey ? row[cityKey] : null;
+                if (!cityValue || cityValue.trim() === '') cityValue = 'Desconocida';
 
                 return {
                     id: crypto.randomUUID(),
-                    phone: row[phoneKey] || '',
+                    phone: phoneValue,
                     name: row[nameKey] || 'Contacto',
-                    city: cityChoice,
-                    label: cityChoice,
+                    city: cityValue,
+                    label: cityValue,
                     campaign: campaignName
                 };
             }).filter(c => c.phone.trim() !== '');
 
             appState.contacts = [...appState.contacts, ...newContacts];
             saveLocalContacts();
+            updateCityFilterOptions(); // Actualizar el dropdown de ciudades
 
             if (appState.supabaseClient) {
                 try {
@@ -711,6 +686,24 @@
                     appState.contacts = JSON.parse(saved);
                 } catch(e) {}
             }
+            updateCityFilterOptions();
+        }
+
+        function updateCityFilterOptions() {
+            const select = document.getElementById('filter-city');
+            if (!select) return;
+            
+            // Obtener ciudades únicas
+            const uniqueCities = [...new Set(appState.contacts.map(c => c.label))].filter(Boolean);
+            
+            // Reconstruir opciones
+            select.innerHTML = '<option value="ALL">Todas las Ciudades</option>';
+            uniqueCities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                select.appendChild(option);
+            });
         }
 
         function renderDirectoryTable() {
@@ -729,14 +722,22 @@
             filtered.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/50 transition-colors group";
-                const isSD = c.label === 'Santo Domingo';
+                const isSD = c.label && c.label.toLowerCase().includes('santo domingo');
+                const isManta = c.label && c.label.toLowerCase().includes('manta');
+                
+                let badgeClass = 'bg-indigo-50 text-indigo-700';
+                let dotClass = 'bg-indigo-500';
+                
+                if (isSD) { badgeClass = 'bg-emerald-50 text-emerald-700'; dotClass = 'bg-emerald-500'; }
+                else if (isManta) { badgeClass = 'bg-sky-50 text-sky-700'; dotClass = 'bg-sky-500'; }
+
                 tr.innerHTML = `
                     <td class="px-6 py-4 font-mono font-bold text-slate-900">${c.phone}</td>
                     <td class="px-6 py-4 text-slate-700 font-bold">${c.name}</td>
                     <td class="px-6 py-4 text-slate-500 text-xs font-bold"><span class="bg-slate-100 px-2.5 py-1 rounded-md">${c.campaign}</span></td>
                     <td class="px-6 py-4 text-center">
-                        <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-extrabold ${isSD ? 'bg-emerald-50 text-emerald-700' : 'bg-sky-50 text-sky-700'}">
-                            <span class="w-1.5 h-1.5 rounded-full ${isSD ? 'bg-emerald-500' : 'bg-sky-500'}"></span>
+                        <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-extrabold ${badgeClass}">
+                            <span class="w-1.5 h-1.5 rounded-full ${dotClass}"></span>
                             <span>${c.label}</span>
                         </span>
                     </td>
@@ -762,6 +763,24 @@
             a.href = URL.createObjectURL(blob);
             a.download = `leads_geolookup.csv`;
             a.click();
+        }
+
+        function downloadTemplateCsv() {
+            // El BOM (\uFEFF) ayuda a que Excel abra el archivo directamente reconociendo tildes o caracteres UTF-8
+            const bom = "\uFEFF"; 
+            const headers = "Telefono,Nombre,Ciudad\n";
+            const rows = "0991234567,Juan Perez,Santo Domingo\n0987654321,Maria Lopez,Manta\n0961112233,Carlos Zambrano,Portoviejo";
+            
+            const blob = new Blob([bom + headers + rows], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "plantilla_importacion_leads.csv";
+            
+            document.body.appendChild(a); // Requerido para Firefox
+            a.click();
+            document.body.removeChild(a);
+            
+            showToast('Plantilla descargada con éxito', 'success');
         }
 
         function showToast(msg, type = 'info') {

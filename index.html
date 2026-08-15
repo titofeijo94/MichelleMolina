@@ -1,815 +1,954 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-[#f8fafc] text-slate-800 antialiased selection:bg-blue-200 selection:text-blue-900">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoLookup Pro - Santo Domingo & Manta</title>
-    
+    <title>Buscador y Gestor de Campañas Pro</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- PapaParse CSV -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SheetJS (Para leer archivos .xlsx nativamente) -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' },
-                        sd: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669', 900: '#064e3b' },
-                        manta: { 50: '#f0f9ff', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' }
-                    },
-                    animation: {
-                        'modal-pop': 'popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'fade-in': 'fadeIn 0.2s ease-out forwards',
-                    },
-                    keyframes: {
-                        popIn: {
-                            '0%': { opacity: '0', transform: 'scale(0.9) translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        /* Ambient Background */
-        body {
-            background-color: #f8fafc;
-            background-image: radial-gradient(at 0% 0%, hsla(210, 100%, 97%, 1) 0px, transparent 50%),
-                              radial-gradient(at 100% 0%, hsla(220, 100%, 97%, 1) 0px, transparent 50%);
-            background-attachment: fixed;
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.98); 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); 
+        }
+        .menu-drawer { 
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .modal-overlay { 
+            transition: opacity 0.2s ease-out; 
+            backdrop-filter: blur(5px); 
+        }
+        .modal-content { 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+        /* Custom scrollbar para los detalles extra */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 5px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Premium Inputs */
-        .pro-input {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-            transition: all 0.2s ease;
-        }
-        .pro-input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            outline: none;
-        }
-
-        /* Glass Cards */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 0 3px rgba(15, 23, 42, 0.02);
-        }
+        
+        .toast-enter { animation: toastIn 0.3s ease-out forwards; }
+        @keyframes toastIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
-<body class="h-full flex flex-col min-h-screen text-slate-800">
+<body class="h-screen flex flex-col overflow-hidden relative selection:bg-blue-200">
 
-    <!-- LOGIN MODAL (PREMIUM) -->
-    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-md transition-opacity">
-        <div class="w-full max-w-sm bg-white rounded-3xl p-8 relative overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] animate-modal-pop border border-slate-100">
+    <!-- LOGIN VIEW -->
+    <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-50">
+        <div class="w-full max-w-md glass-card rounded-2xl p-8 shadow-xl">
             <div class="text-center mb-8">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100/50 text-blue-600 flex items-center justify-center mx-auto mb-4 shadow-sm">
-                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg shadow-blue-200">
+                    <i class="fa-solid fa-layer-group"></i>
                 </div>
-                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">GeoLookup Pro</h2>
-                <p class="text-sm text-slate-500 mt-2 font-medium">Ingresa tus credenciales para continuar</p>
+                <h1 class="text-2xl font-bold text-slate-800">Acceso al Sistema</h1>
+                <p class="text-slate-500 text-sm mt-1">Ingresa tus credenciales para continuar</p>
             </div>
-
-            <form onsubmit="handleAuthLogin(event)" class="space-y-5">
+            
+            <form id="login-form" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Usuario</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
-                            <i class="fa-regular fa-user"></i>
-                        </span>
-                        <input type="text" id="login-username" required placeholder="Tu usuario" class="w-full pl-11 pr-4 py-3.5 pro-input rounded-xl text-sm font-medium">
-                    </div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Usuario</label>
+                    <input type="text" id="login-user" class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all" placeholder="Ej. santo domingo">
                 </div>
-
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Contraseña</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
-                            <i class="fa-solid fa-key"></i>
-                        </span>
-                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-11 pr-4 py-3.5 pro-input rounded-xl text-sm font-medium">
-                    </div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Contraseña</label>
+                    <input type="password" id="login-pass" class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all" placeholder="••••••">
                 </div>
-
-                <div id="login-error-msg" class="hidden text-xs text-red-600 bg-red-50 border border-red-100 p-3 rounded-xl flex items-center space-x-2 font-medium">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <span>Credenciales incorrectas.</span>
-                </div>
-
-                <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-lg shadow-slate-900/20 transition-all active:scale-[0.98]">
-                    Acceder al Sistema
+                
+                <div id="login-error" class="hidden text-red-500 text-sm text-center font-medium bg-red-50 p-2 rounded-lg">Credenciales incorrectas</div>
+                
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-95 mt-2">
+                    Iniciar Sesión
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- MAIN HEADER (MINIMALIST) -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <!-- Hamburger -->
-                <button onclick="toggleMobileDrawer()" class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors">
-                    <i class="fa-solid fa-bars-staggered text-lg"></i>
+    <!-- APP VIEW -->
+    <div id="app-view" class="hidden flex-1 flex flex-col h-full w-full">
+        
+        <!-- HEADER -->
+        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 lg:px-8 z-20 shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="hamburger-btn" class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                    <i class="fa-solid fa-bars text-xl"></i>
                 </button>
-                
-                <!-- Logo Area -->
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center shadow-md shadow-brand-500/30">
-                        <i class="fa-solid fa-location-arrow text-sm"></i>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-layer-group text-sm"></i>
                     </div>
-                    <span class="font-bold text-slate-900 tracking-tight hidden sm:block">GeoLookup</span>
+                    <span class="font-bold text-lg text-slate-800 tracking-tight hidden sm:block">Gestor Pro</span>
                 </div>
             </div>
-
-            <!-- Profile Area -->
-            <div class="flex items-center space-x-3">
-                <div id="user-session-badge" class="hidden items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
-                    <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
-                    <span id="agent-display-name" class="text-xs font-bold text-slate-700">Agente</span>
+            
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <div id="user-badge-name" class="text-sm font-bold text-slate-800 capitalize">Usuario</div>
+                    <div class="text-xs text-slate-500">Sesión Activa</div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- SIDE DRAWER (MENU) -->
-    <div id="mobile-drawer" class="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm hidden transition-opacity opacity-0" onclick="if(event.target === this) toggleMobileDrawer()">
-        <div id="drawer-content" class="w-80 max-w-[85vw] h-full bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col">
-            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-                <h3 class="font-bold text-slate-900 text-lg">Menú Principal</h3>
-                <button onclick="toggleMobileDrawer()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition">
-                    <i class="fa-solid fa-xmark"></i>
+        <!-- SIDEBAR DRAWER -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/20 z-30 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+        <div id="sidebar-menu" class="menu-drawer fixed top-0 left-0 bottom-0 w-72 bg-white z-40 border-r border-slate-200 shadow-2xl transform -translate-x-full flex flex-col">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <span class="font-bold text-xl text-slate-800">Menú</span>
+                </div>
+                <button id="close-menu-btn" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
             
-            <div class="flex-grow p-4 space-y-2">
-                <button onclick="switchTab('tab-lookup')" class="w-full text-left p-3.5 rounded-2xl flex items-center space-x-4 hover:bg-slate-50 transition group">
-                    <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center group-hover:bg-brand-100 transition">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                    <div>
-                        <div class="font-bold text-slate-900 text-sm">Buscador</div>
-                        <div class="text-xs text-slate-500 font-medium">Verificar números</div>
-                    </div>
+            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                <button data-target="view-search" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl text-blue-700 bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-magnifying-glass w-5 text-center"></i> Buscador
                 </button>
-
-                <button onclick="switchTab('tab-upload')" class="w-full text-left p-3.5 rounded-2xl flex items-center space-x-4 hover:bg-slate-50 transition group">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-100 transition">
-                        <i class="fa-solid fa-file-csv"></i>
-                    </div>
-                    <div>
-                        <div class="font-bold text-slate-900 text-sm">Importar Leads</div>
-                        <div class="text-xs text-slate-500 font-medium">Subir archivos CSV</div>
-                    </div>
+                <button data-target="view-import" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                    <i class="fa-solid fa-file-import w-5 text-center"></i> Importar Datos
                 </button>
-
-                <button onclick="switchTab('tab-database')" class="w-full text-left p-3.5 rounded-2xl flex items-center space-x-4 hover:bg-slate-50 transition group">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center group-hover:bg-teal-100 transition">
-                        <i class="fa-solid fa-database"></i>
-                    </div>
-                    <div>
-                        <div class="font-bold text-slate-900 text-sm">Directorio</div>
-                        <div class="text-xs text-slate-500 font-medium">Ver registros almacenados</div>
-                    </div>
+                <button data-target="view-directory" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                    <i class="fa-solid fa-address-book w-5 text-center"></i> Directorio
                 </button>
-            </div>
-
-            <div class="p-6 border-t border-slate-100">
-                <button onclick="logoutUser()" class="w-full py-3 bg-slate-50 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl font-bold text-sm transition-colors flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Cerrar Sesión</span>
+                <div class="my-4 border-t border-slate-100"></div>
+                <button data-target="view-sql" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                    <i class="fa-solid fa-database w-5 text-center"></i> Código Supabase SQL
+                </button>
+            </nav>
+            
+            <div class="p-4 border-t border-slate-100">
+                <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold rounded-xl text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
                 </button>
             </div>
         </div>
-    </div>
 
-    <!-- MAIN APP AREA -->
-    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8 sm:py-12 relative">
-        
-        <!-- =========================================
-             TAB 1: BUSCADOR (DISEÑO INCREÍBLE)
-        ========================================== -->
-        <section id="tab-lookup" class="tab-content animate-fade-in flex flex-col items-center justify-center min-h-[60vh]">
-            <div class="text-center mb-10 w-full max-w-2xl">
-                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm mb-6">
-                    <span class="relative flex h-2.5 w-2.5">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
-                    </span>
-                    <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Identificador Inteligente</span>
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 overflow-y-auto p-4 lg:p-8 bg-slate-50/50">
+            
+            <!-- VISTA: BUSCADOR -->
+            <div id="view-search" class="app-section h-full max-w-3xl mx-auto flex flex-col justify-center pb-20">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-sm border border-slate-200 text-blue-600 text-2xl mb-4">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Buscador Universal</h2>
+                    <p class="text-slate-500">Pega un número para verificar si existe en la base de datos.</p>
                 </div>
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 leading-tight">
-                    Encuentra la ciudad de <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-500">cualquier número.</span>
-                </h1>
-                <p class="text-slate-500 text-base sm:text-lg font-medium max-w-lg mx-auto">
-                    Pega un teléfono para saber instantáneamente si tu lead pertenece a Santo Domingo o Manta.
-                </p>
-            </div>
 
-            <!-- Big Search Bar -->
-            <div class="w-full max-w-2xl relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 to-indigo-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                <div class="relative bg-white rounded-2xl shadow-xl flex items-center p-2 pl-6">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-xl"></i>
-                    <input type="text" id="quick-search-input" 
-                        onkeyup="if(event.key==='Enter') executeQuickSearch()"
-                        placeholder="Ej: 0991234567, 022754321..." 
-                        class="w-full bg-transparent border-none focus:ring-0 text-xl sm:text-2xl font-bold font-mono text-slate-800 placeholder-slate-300 py-4 px-4 outline-none">
-                    <button onclick="executeQuickSearch()" class="bg-slate-900 hover:bg-brand-600 text-white rounded-xl px-6 py-4 font-bold transition-colors whitespace-nowrap hidden sm:block">
+                <div class="glass-card rounded-2xl p-2 flex items-center shadow-lg relative group transition-all focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+                    <div class="pl-4 pr-2 text-slate-400">
+                        <i class="fa-solid fa-phone text-lg"></i>
+                    </div>
+                    <input type="text" id="search-input" class="flex-1 bg-transparent border-none text-slate-800 px-2 py-4 text-xl font-medium focus:outline-none placeholder-slate-300" placeholder="Ej. 0991234567 o 59399..." autocomplete="off">
+                    <button id="search-btn" class="bg-slate-900 hover:bg-black text-white px-8 py-4 rounded-xl font-bold transition-colors shadow-md active:scale-95">
                         Buscar
                     </button>
-                    <!-- Mobile Search Icon -->
-                    <button onclick="executeQuickSearch()" class="bg-slate-900 hover:bg-brand-600 text-white rounded-xl w-12 h-12 flex items-center justify-center font-bold transition-colors sm:hidden">
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
                 </div>
             </div>
-        </section>
 
-        <!-- =========================================
-             TAB 2: SUBIR CSV (DISEÑO LIMPIO)
-        ========================================== -->
-        <section id="tab-upload" class="tab-content hidden animate-fade-in max-w-2xl mx-auto">
-            <div class="glass-card rounded-3xl p-8 sm:p-10">
-                <div class="mb-8 text-center sm:text-left">
-                    <h2 class="text-2xl font-extrabold text-slate-900">Importar Campaña CSV</h2>
-                    <p class="text-slate-500 mt-2 font-medium">Sincroniza tus bases de datos directamente a Supabase.</p>
+            <!-- VISTA: IMPORTAR -->
+            <div id="view-import" class="app-section hidden max-w-4xl mx-auto">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-slate-800">Importar Campaña</h2>
+                    <p class="text-slate-500 text-sm mt-1">Sube archivos Excel (.xlsx) o CSV. El sistema identificará Teléfono, Ciudad, Código y Nombre automáticamente.</p>
                 </div>
-
-                <div class="space-y-8">
-                    <!-- Step 1 -->
-                    <div>
-                        <label class="flex items-center space-x-3 text-sm font-bold text-slate-900 mb-3">
-                            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">1</span>
-                            <span>Nombre de la Campaña</span>
-                        </label>
-                        <input type="text" id="campaign-tag-input" placeholder="Ej: Leads Nacional Agosto" class="w-full px-5 py-4 pro-input rounded-2xl text-slate-700 font-semibold text-base">
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div>
-                        <label class="flex items-center space-x-3 text-sm font-bold text-slate-900 mb-3">
-                            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs">2</span>
-                            <span>Archivo CSV (Detectará la ciudad automáticamente)</span>
-                        </label>
-                        <div class="relative border-2 border-dashed border-slate-300 hover:border-brand-400 rounded-2xl p-8 text-center bg-white transition-colors">
-                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-300 mb-4"></i>
-                            <p class="text-sm text-slate-600 font-medium mb-4">Arrastra tu archivo aquí o haz clic para buscar</p>
-                            <input type="file" id="csv-file-input" accept=".csv" onchange="handleFileSelect(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <div id="file-name-display" class="hidden inline-flex items-center space-x-2 px-4 py-2 bg-slate-100 rounded-lg text-sm font-bold text-slate-700">
-                                <i class="fa-solid fa-file-csv text-brand-500"></i>
-                                <span>archivo_seleccionado.csv</span>
-                            </div>
+                
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">1. Nombre de la Campaña</label>
+                            <input type="text" id="campaign-name-input" class="w-full bg-slate-50 border border-slate-200 text-slate-800 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" placeholder="Ej. Leads Facebook Agosto">
                         </div>
                         
-                        <div class="mt-4 text-right">
-                            <button type="button" onclick="downloadTemplateCsv()" class="text-xs font-bold text-brand-600 hover:text-brand-800 transition-colors inline-flex items-center space-x-1.5 cursor-pointer">
-                                <i class="fa-solid fa-file-excel"></i>
-                                <span>Descargar plantilla de ejemplo (CSV)</span>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">2. Ciudad de esta base (Opcional)</label>
+                            <select id="default-city-input" class="w-full bg-slate-50 border border-slate-200 text-slate-800 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                                <option value="auto">Autodetectar desde columna del Excel</option>
+                                <option value="Santo Domingo">Forzar a: Santo Domingo</option>
+                                <option value="Manta">Forzar a: Manta</option>
+                                <option value="Portoviejo">Forzar a: Portoviejo</option>
+                                <option value="La Concordia">Forzar a: La Concordia</option>
+                                <option value="General">Forzar a: Otra (General)</option>
+                            </select>
+                            <p class="text-xs text-slate-500 mt-1">Deja esto en 'Autodetectar' para que tome la ciudad directamente desde la 2da columna de tu archivo.</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">3. Archivo de Base de Datos</label>
+                            
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs text-slate-500">Soportado: .xlsx, .csv</span>
+                                <a href="#" id="download-template" class="text-xs text-blue-600 hover:underline font-medium"><i class="fa-solid fa-download mr-1"></i>Descargar formato Excel de ejemplo</a>
+                            </div>
+
+                            <div id="drop-zone" class="border-2 border-dashed border-slate-300 rounded-2xl p-10 text-center hover:bg-slate-50 hover:border-blue-400 transition-colors cursor-pointer relative group">
+                                <input type="file" id="file-upload" accept=".csv, .xlsx, .xls" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                <div class="w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 shadow-sm group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                                </div>
+                                <p class="text-slate-700 font-semibold text-lg mb-1" id="file-name-display">Haz clic o arrastra tu archivo aquí</p>
+                                <p class="text-slate-500 text-sm">Compatible con el formato: [Número | Ciudad | Código | Nombre]</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 flex justify-end">
+                            <button id="process-btn" class="bg-slate-900 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 px-8 rounded-xl shadow-md transition-all active:scale-95" disabled>
+                                Procesar y Guardar
                             </button>
                         </div>
                     </div>
-
-                    <button onclick="confirmAndProcessCsvSimple()" class="w-full py-4 bg-slate-900 hover:bg-brand-600 text-white font-bold text-base rounded-2xl shadow-lg shadow-slate-900/20 transition-all active:scale-[0.98] flex items-center justify-center space-x-2">
-                        <span>Procesar y Guardar en Supabase</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
                 </div>
             </div>
-        </section>
 
-        <!-- =========================================
-             TAB 3: DIRECTORIO
-        ========================================== -->
-        <section id="tab-database" class="tab-content hidden animate-fade-in">
-            <div class="glass-card rounded-3xl p-6 sm:p-8">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+            <!-- VISTA: DIRECTORIO -->
+            <div id="view-directory" class="app-section hidden max-w-6xl mx-auto h-[calc(100vh-120px)] flex flex-col">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 shrink-0">
                     <div>
-                        <h2 class="text-2xl font-extrabold text-slate-900">Directorio de Leads</h2>
-                        <p class="text-slate-500 mt-1 font-medium">Base de datos central sincronizada.</p>
+                        <h2 class="text-2xl font-bold text-slate-800">Directorio General</h2>
+                        <p class="text-slate-500 text-sm mt-1">Todos los contactos sincronizados en la nube.</p>
                     </div>
-
-                    <div class="flex flex-wrap items-center gap-3">
-                        <select id="filter-city" onchange="renderDirectoryTable()" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-brand-500 outline-none shadow-sm cursor-pointer">
-                            <option value="ALL">Todas las Ciudades</option>
-                            <!-- Se llena dinámicamente con JS -->
+                    
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <select id="filter-campaign" class="bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-auto p-2.5 outline-none shadow-sm font-medium">
+                            <option value="all">Todas las Campañas</option>
                         </select>
-                        <button onclick="exportFilteredCsv()" class="px-5 py-2.5 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-bold shadow-sm transition flex items-center space-x-2">
-                            <i class="fa-solid fa-download text-slate-400"></i>
-                            <span>Exportar</span>
+                        <select id="filter-city" class="bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-auto p-2.5 outline-none shadow-sm font-medium">
+                            <option value="all">Todas las Ciudades</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl border border-slate-200 flex-1 overflow-hidden flex flex-col shadow-sm">
+                    <div class="overflow-x-auto flex-1">
+                        <table class="w-full text-sm text-left text-slate-600">
+                            <thead class="text-xs text-slate-500 uppercase bg-slate-50/80 sticky top-0 border-b border-slate-200 z-10 backdrop-blur-sm">
+                                <tr>
+                                    <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Teléfono</th>
+                                    <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Nombre / Detalles</th>
+                                    <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Código/Z4</th>
+                                    <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Ubicación</th>
+                                    <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Campaña</th>
+                                    <th scope="col" class="px-6 py-4 font-semibold tracking-wider text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="directory-tbody" class="divide-y divide-slate-100 bg-white">
+                                <!-- Filas dinámicas -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: SQL -->
+            <div id="view-sql" class="app-section hidden max-w-4xl mx-auto">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-slate-800">Configuración de Supabase</h2>
+                    <p class="text-slate-500 text-sm mt-1">Si es tu primera vez o necesitas actualizar la tabla, ejecuta este código en el SQL Editor de tu proyecto en Supabase.</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 border border-slate-200">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-bold text-slate-700"><i class="fa-solid fa-code text-blue-500 mr-2"></i>Script SQL (Con soporte para detalles extra JSONB)</span>
+                        <button onclick="copySql()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold transition-colors">
+                            <i class="fa-regular fa-copy mr-1"></i> Copiar Código
                         </button>
                     </div>
-                </div>
-
-                <div class="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm bg-white">
-                    <table class="min-w-full divide-y divide-slate-100 text-sm">
-                        <thead class="bg-slate-50/50">
-                            <tr>
-                                <th class="px-6 py-4 text-left font-bold text-slate-500 uppercase tracking-wider text-xs">Teléfono</th>
-                                <th class="px-6 py-4 text-left font-bold text-slate-500 uppercase tracking-wider text-xs">Nombre</th>
-                                <th class="px-6 py-4 text-left font-bold text-slate-500 uppercase tracking-wider text-xs">Campaña</th>
-                                <th class="px-6 py-4 text-center font-bold text-slate-500 uppercase tracking-wider text-xs">Ciudad</th>
-                                <th class="px-6 py-4 text-center font-bold text-slate-500 uppercase tracking-wider text-xs">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="directory-table-body" class="divide-y divide-slate-100 font-medium">
-                            <!-- Dynamic Content -->
-                        </tbody>
-                    </table>
+                    <textarea id="sql-code-area" readonly class="w-full h-64 bg-slate-900 text-emerald-400 font-mono text-sm p-4 rounded-xl border-none focus:outline-none resize-none leading-relaxed"></textarea>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <!-- =========================================
-         EMERGENT MODAL: RESULTADO DE BÚSQUEDA
-    ========================================== -->
-    <div id="result-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-md transition-opacity duration-300 opacity-0">
-        <div id="result-modal-content" class="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.2)] transform scale-95 transition-transform duration-300 relative border border-white/50">
-            <!-- Close Btn -->
-            <button onclick="closeResultModal()" class="absolute top-4 right-4 w-8 h-8 bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200 flex items-center justify-center transition">
+        </main>
+    </div>
+
+    <!-- MODAL DE RESULTADO (EXITOSO) -->
+    <div id="result-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 modal-overlay opacity-0 pointer-events-none hidden">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" id="result-modal-bg"></div>
+        <div class="bg-white rounded-3xl w-full max-w-sm shadow-2xl relative z-10 overflow-hidden flex flex-col modal-content scale-95 border border-slate-100">
+            
+            <button id="close-result-modal" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/50 text-slate-500 hover:bg-slate-100 transition-colors z-20">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            
-            <div id="result-modal-body" class="text-center mt-2">
-                <!-- Injected via JS -->
+
+            <!-- Cabecera Dinámica (Color según ciudad) -->
+            <div id="modal-header-color" class="pt-8 pb-6 px-6 text-center bg-slate-50 border-b border-slate-100 transition-colors">
+                <div id="modal-icon-container" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl mb-3 bg-white shadow-sm border border-slate-100">
+                    <i id="modal-icon" class="fa-solid fa-check text-emerald-500"></i>
+                </div>
+                <div class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-white shadow-sm mb-1" id="modal-city-badge">
+                    Ciudad
+                </div>
+                <h3 id="modal-phone" class="text-3xl font-bold text-slate-800 tracking-tight mt-1">099...</h3>
+            </div>
+
+            <!-- Cuerpo del Modal -->
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Nombre / Razón Social</div>
+                        <div id="modal-name" class="font-bold text-slate-800 text-lg leading-tight">Nombre del Cliente</div>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <div class="flex-1">
+                            <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Campaña</div>
+                            <div class="text-sm font-semibold text-slate-700 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100 truncate" id="modal-campaign">Campaña Nombre</div>
+                        </div>
+                        <div class="max-w-[120px]">
+                            <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Código/Z4</div>
+                            <div class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1.5 rounded-lg border border-blue-100 truncate" id="modal-code-text">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor para la información extra del Excel -->
+                    <div id="modal-extra-details" class="mt-4 pt-4 border-t border-slate-100 space-y-2 hidden max-h-40 overflow-y-auto pr-2">
+                        <!-- Detalles dinámicos insertados aquí -->
+                    </div>
+                </div>
+
+                <!-- Botón de Acción -->
+                <div class="mt-6">
+                    <a id="modal-wa-btn" href="#" target="_blank" class="w-full flex justify-center items-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-green-200/50 transition-all active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span>Iniciar Chat de WhatsApp</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- TOASTS -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-3 pointer-events-none flex flex-col items-end"></div>
+    <!-- MODAL DE NO ENCONTRADO -->
+    <div id="not-found-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 modal-overlay opacity-0 pointer-events-none hidden">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" id="not-found-modal-bg"></div>
+        <div class="bg-white rounded-3xl w-full max-w-sm shadow-2xl relative z-10 overflow-hidden flex flex-col modal-content scale-95 p-8 text-center">
+            <div class="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 border-4 border-white shadow-md">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">No Existe</h3>
+            <p class="text-slate-500 text-sm mb-6">Este número (<span id="not-found-phone" class="font-bold"></span>) no está registrado en tu base de datos ni posee un código de área provincial identificable.</p>
+            <button id="close-not-found" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-4 rounded-xl transition-colors">
+                Cerrar y buscar otro
+            </button>
+        </div>
+    </div>
 
-    <script>
-        const SUPABASE_DEFAULT_URL = 'https://hjlsudhspfbwoualdkea.supabase.co';
-        const SUPABASE_DEFAULT_KEY = 'sb_publishable_8jqhwZkSvDjk3GT9ln7CWw_frhhM7xo';
+    <!-- Contenedor de Notificaciones (Toasts) -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
-        let appState = {
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/+esm';
+
+        // 1. Configuración Fija de Supabase
+        const supabaseUrl = 'https://hjlsudhspfbwoualdkea.supabase.co';
+        const supabaseKey = 'sb_publishable_8jqhwZkSvDjk3GT9ln7CWw_frhhM7xo';
+        
+        const appState = {
+            userRole: null, // 'santo_domingo' o 'manta'
             contacts: [],
-            supabaseClient: null,
-            currentUser: null,
-            pendingCsvRows: []
+            pendingFileData: [],
+            supabaseClient: null
         };
 
-        window.onload = function() {
-            if (window.supabase) {
-                try {
-                    appState.supabaseClient = window.supabase.createClient(SUPABASE_DEFAULT_URL, SUPABASE_DEFAULT_KEY);
-                    fetchContactsFromSupabase();
-                } catch(e) {
-                    console.warn("Error iniciando Supabase", e);
-                }
-            }
-            checkUserSession();
-            loadLocalContacts();
-            renderDirectoryTable();
+        // Referencias del DOM
+        const els = {
+            loginView: document.getElementById('login-view'),
+            appView: document.getElementById('app-view'),
+            loginForm: document.getElementById('login-form'),
+            loginError: document.getElementById('login-error'),
+            userBadge: document.getElementById('user-badge-name'),
+            
+            // Navegación
+            hamburgerBtn: document.getElementById('hamburger-btn'),
+            closeMenuBtn: document.getElementById('close-menu-btn'),
+            sidebarMenu: document.getElementById('sidebar-menu'),
+            sidebarOverlay: document.getElementById('sidebar-overlay'),
+            navBtns: document.querySelectorAll('.nav-btn'),
+            sections: document.querySelectorAll('.app-section'),
+            logoutBtn: document.getElementById('logout-btn'),
+            
+            // Importar
+            fileUpload: document.getElementById('file-upload'),
+            fileNameDisplay: document.getElementById('file-name-display'),
+            processBtn: document.getElementById('process-btn'),
+            campaignName: document.getElementById('campaign-name-input'),
+            defaultCityInput: document.getElementById('default-city-input'),
+            downloadTemplate: document.getElementById('download-template'),
+            
+            // Buscador
+            searchInput: document.getElementById('search-input'),
+            searchBtn: document.getElementById('search-btn'),
+            
+            // Modales
+            resultModal: document.getElementById('result-modal'),
+            resultModalBg: document.getElementById('result-modal-bg'),
+            closeResultModal: document.getElementById('close-result-modal'),
+            notFoundModal: document.getElementById('not-found-modal'),
+            notFoundModalBg: document.getElementById('not-found-modal-bg'),
+            closeNotFound: document.getElementById('close-not-found'),
+            
+            // Directorio
+            directoryTbody: document.getElementById('directory-tbody'),
+            filterCampaign: document.getElementById('filter-campaign'),
+            filterCity: document.getElementById('filter-city'),
+            
+            // SQL
+            sqlCodeArea: document.getElementById('sql-code-area')
         };
 
-        // --- UI Interactions ---
-        function toggleMobileDrawer() {
-            const drawer = document.getElementById('mobile-drawer');
-            const content = document.getElementById('drawer-content');
+        // --- SISTEMA DE NOTIFICACIONES ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
             
-            if (drawer.classList.contains('hidden')) {
-                drawer.classList.remove('hidden');
-                // Allow display block to apply before animating opacity/transform
-                setTimeout(() => {
-                    drawer.classList.remove('opacity-0');
-                    content.classList.remove('-translate-x-full');
-                }, 10);
-            } else {
-                drawer.classList.add('opacity-0');
-                content.classList.add('-translate-x-full');
-                setTimeout(() => drawer.classList.add('hidden'), 300);
-            }
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tabId).classList.remove('hidden');
-            if (!document.getElementById('mobile-drawer').classList.contains('hidden')) {
-                toggleMobileDrawer();
-            }
-        }
-
-        function checkUserSession() {
-            const saved = localStorage.getItem('geolookup_active_user');
-            if (saved) {
-                appState.currentUser = JSON.parse(saved);
-                applyUserSessionUI();
-            } else {
-                showLoginModal(true);
-            }
-        }
-
-        function handleAuthLogin(e) {
-            e.preventDefault();
-            const u = document.getElementById('login-username').value.trim().toLowerCase();
-            const p = document.getElementById('login-password').value.trim();
-
-            if ((u === 'santo domingo' || u === 'santodomingo') && p === '123456') {
-                loginSuccess('Santo Domingo', 'Santo Domingo');
-            } else if (u === 'manta' && p === '654321') {
-                loginSuccess('Manta', 'Manta');
-            } else {
-                document.getElementById('login-error-msg').classList.remove('hidden');
-            }
-        }
-
-        function loginSuccess(u, role) {
-            appState.currentUser = { username: u, role: role };
-            localStorage.setItem('geolookup_active_user', JSON.stringify(appState.currentUser));
-            showLoginModal(false);
-            applyUserSessionUI();
-            showToast(`Bienvenido(a), Agente de ${role}`, 'success');
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('geolookup_active_user');
-            appState.currentUser = null;
-            if(!document.getElementById('mobile-drawer').classList.contains('hidden')) toggleMobileDrawer();
-            showLoginModal(true);
-            document.getElementById('login-username').value = '';
-            document.getElementById('login-password').value = '';
-        }
-
-        function showLoginModal(visible) {
-            const m = document.getElementById('login-modal');
-            if (visible) {
-                m.classList.remove('hidden');
-                setTimeout(() => m.classList.remove('opacity-0'), 10);
-            } else {
-                m.classList.add('opacity-0');
-                setTimeout(() => m.classList.add('hidden'), 300);
-            }
-        }
-
-        function applyUserSessionUI() {
-            if (!appState.currentUser) return;
-            const badge = document.getElementById('user-session-badge');
-            const nameSpan = document.getElementById('agent-display-name');
-            if (nameSpan) nameSpan.innerText = `${appState.currentUser.role}`;
-            badge.classList.remove('hidden');
-            badge.classList.add('flex');
-        }
-
-        function normalizeEcuadorPhone(num) {
-            let clean = num ? num.toString().replace(/\D/g, '') : '';
-            if (!clean) return '';
+            const isSuccess = type === 'success';
+            const icon = isSuccess ? 'fa-check-circle text-emerald-500' : 'fa-circle-exclamation text-red-500';
+            const bg = isSuccess ? 'bg-white' : 'bg-red-50';
+            const border = isSuccess ? 'border-emerald-100' : 'border-red-200';
             
-            // Estandarizar cualquier formato de celular a 5939...
-            if (clean.startsWith('09') && clean.length === 10) return '593' + clean.substring(1);
-            if (clean.startsWith('9') && clean.length === 9) return '593' + clean;
-            if (clean.startsWith('593')) return clean;
-            
-            // Por defecto, asumir que es celular Ecuador y agregar 593
-            return '593' + clean;
-        }
-
-        function formatWaUrl(phoneStr) {
-            const clean = normalizeEcuadorPhone(phoneStr);
-            return clean ? `https://wa.me/${clean}` : '#';
-        }
-
-        function executeQuickSearch() {
-            const input = document.getElementById('quick-search-input');
-            const query = input.value.trim();
-            if (!query) return;
-
-            const normalizedQuery = normalizeEcuadorPhone(query);
-            
-            const found = appState.contacts.find(c => {
-                const cNormalized = normalizeEcuadorPhone(c.phone);
-                // Compara el número exacto, sin importar si lo escribieron con o sin 593
-                return cNormalized === normalizedQuery;
-            });
-
-            // Al ser solo celulares, la ciudad depende 100% del CSV subido.
-            const city = found ? (found.label || found.city) : 'No existe';
-            
-            openResultModal(query, city, found);
-            input.value = ''; // clear after search
-        }
-
-        function openResultModal(query, city, record) {
-            const modal = document.getElementById('result-modal');
-            const content = document.getElementById('result-modal-content');
-            const body = document.getElementById('result-modal-body');
-
-            const isSD = city && city.toLowerCase().includes('santo domingo');
-            const isManta = city && city.toLowerCase().includes('manta');
-            const isUnknown = !record; // Si es celular y no está en la base, no existe
-            
-            // Asignación de colores dinámicos
-            let colorCode = 'indigo'; // Por defecto para ciudades nuevas
-            let icon = 'map-location-dot';
-            
-            if (isSD) { colorCode = 'emerald'; icon = 'tree-city'; }
-            else if (isManta) { colorCode = 'sky'; icon = 'water'; }
-            else if (isUnknown) { colorCode = 'red'; icon = 'xmark'; }
-
-            const waLink = formatWaUrl(query);
-
-            let infoBox = '';
-            if (record) {
-                infoBox = `<div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100 text-left">
-                         <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Contacto Registrado</div>
-                         <div class="font-bold text-slate-800 text-sm">${record.name}</div>
-                         <div class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-tag text-slate-400 mr-1"></i>${record.campaign}</div>
-                       </div>`;
-            } else {
-                infoBox = `<div class="bg-red-50 rounded-2xl p-4 mb-6 border border-red-100">
-                         <div class="text-sm font-bold text-red-600">
-                            <i class="fa-solid fa-circle-exclamation mr-1"></i> Número celular no registrado
-                         </div>
-                       </div>`;
-            }
-
-            body.innerHTML = `
-                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-${colorCode}-50 text-${colorCode}-500 mb-5 shadow-inner">
-                    <i class="fa-solid fa-${icon} text-4xl"></i>
-                </div>
-                <h3 class="text-3xl font-extrabold text-slate-900 mb-1">${isUnknown ? 'No Existe' : city}</h3>
-                <p class="text-slate-500 font-mono text-lg font-bold mb-6">${query}</p>
-                
-                ${infoBox}
-
-                <a href="${waLink}" target="_blank" class="w-full py-4 bg-[#25D366] hover:bg-[#1fb155] text-white font-bold text-base rounded-2xl shadow-lg shadow-[#25D366]/30 transition-all active:scale-[0.98] flex items-center justify-center space-x-2">
-                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                    <span>Contactar en WhatsApp</span>
-                </a>
+            toast.className = `toast-enter flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border ${border} ${bg} pointer-events-auto`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-lg"></i>
+                <span class="text-sm font-semibold text-slate-700">${message}</span>
             `;
-
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeResultModal() {
-            const modal = document.getElementById('result-modal');
-            const content = document.getElementById('result-modal-content');
             
-            modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            setTimeout(() => modal.classList.add('hidden'), 300);
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
         }
 
-        function handleFileSelect(e) {
+        // --- NORMALIZACIÓN DE TELÉFONOS ECUADOR ---
+        function normalizeTo593(phoneRaw) {
+            if (!phoneRaw) return '';
+            let str = String(phoneRaw).replace(/\D/g, ''); // Quita todo lo que no sea número
+            
+            if (str.startsWith('593')) return str;
+            if (str.startsWith('0')) return '593' + str.substring(1);
+            if (str.length === 9) return '593' + str; // Asumimos celular local o fijo sin cero inicial
+            
+            return str; // Fallback
+        }
+
+        // --- MANEJO DE VISTAS Y MENÚ ---
+        function switchView(targetId) {
+            els.sections.forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(targetId).classList.remove('hidden');
+            
+            // Estilos del menú
+            els.navBtns.forEach(btn => {
+                if(btn.dataset.target === targetId) {
+                    btn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                    btn.classList.add('text-blue-700', 'bg-blue-50');
+                } else {
+                    btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                    btn.classList.remove('text-blue-700', 'bg-blue-50');
+                }
+            });
+            closeMenu();
+        }
+
+        function openMenu() {
+            els.sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            els.sidebarMenu.classList.remove('-translate-x-full');
+        }
+
+        function closeMenu() {
+            els.sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
+            els.sidebarMenu.classList.add('-translate-x-full');
+        }
+
+        els.hamburgerBtn.addEventListener('click', openMenu);
+        els.closeMenuBtn.addEventListener('click', closeMenu);
+        els.sidebarOverlay.addEventListener('click', closeMenu);
+
+        els.navBtns.forEach(btn => {
+            btn.addEventListener('click', () => switchView(btn.dataset.target));
+        });
+
+        // --- INICIO DE SESIÓN ---
+        els.loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = document.getElementById('login-user').value.trim().toLowerCase();
+            const pass = document.getElementById('login-pass').value.trim();
+
+            if ((user === 'santo domingo' && pass === '123456') || 
+                (user === 'manta' && pass === '654321')) {
+                
+                appState.userRole = user.replace(' ', '_');
+                els.userBadge.textContent = user;
+                
+                els.loginView.classList.add('hidden');
+                els.appView.classList.remove('hidden');
+                
+                // Conectar silenciosamente a Supabase
+                appState.supabaseClient = createClient(supabaseUrl, supabaseKey);
+                await fetchDataFromSupabase();
+                
+                switchView('view-search'); // Forzar inicio en buscador
+            } else {
+                els.loginError.classList.remove('hidden');
+            }
+        });
+
+        els.logoutBtn.addEventListener('click', () => {
+            location.reload();
+        });
+
+        // --- SUPABASE: OBTENER DATOS ---
+        async function fetchDataFromSupabase() {
+            try {
+                const { data, error } = await appState.supabaseClient
+                    .from('campanias_contactos')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error("Error al cargar datos:", error);
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    // Normalizar y almacenar en memoria
+                    appState.contacts = data.map(i => ({
+                        id: i.id || crypto.randomUUID(),
+                        phone: normalizeTo593(i.telefono || ''),
+                        name: i.nombre || 'Sin Nombre',
+                        city: i.ciudad || i.clasificacion || 'General',
+                        campaign: i.campania_nombre || 'General',
+                        codigo: i.codigo || '',
+                        detalle: i.detalle || {}
+                    }));
+                    
+                    updateFilters();
+                    renderDirectory();
+                }
+            } catch (err) {
+                console.error("Error de conexión:", err);
+            }
+        }
+
+        // --- PROCESAMIENTO DE ARCHIVOS EXCEL/CSV CON SHEETJS ---
+        els.fileUpload.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
-            const display = document.getElementById('file-name-display');
-            display.classList.remove('hidden');
-            display.querySelector('span').innerText = file.name;
+            els.fileNameDisplay.textContent = `Analizando: ${file.name}...`;
+            els.processBtn.disabled = true;
 
-            Papa.parse(file, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    appState.pendingCsvRows = results.data;
-                    showToast(`Archivo leído: ${results.data.length} filas`, 'success');
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    // Convertir a JSON
+                    const json = XLSX.utils.sheet_to_json(worksheet, {defval: ''});
+                    
+                    if(json.length > 0) {
+                        appState.pendingFileData = json;
+                        els.fileNameDisplay.textContent = `${file.name} (${json.length} filas listas)`;
+                        els.fileNameDisplay.classList.replace('text-slate-700', 'text-emerald-600');
+                        els.processBtn.disabled = false;
+                    } else {
+                        els.fileNameDisplay.textContent = "El archivo está vacío.";
+                        els.fileNameDisplay.classList.add('text-red-500');
+                    }
+                } catch (error) {
+                    console.error("Error leyendo archivo:", error);
+                    els.fileNameDisplay.textContent = "Error al leer el archivo. Asegúrate que sea .xlsx o .csv válido.";
+                    els.fileNameDisplay.classList.add('text-red-500');
                 }
-            });
-        }
+            };
+            reader.readAsArrayBuffer(file);
+        });
 
-        async function confirmAndProcessCsvSimple() {
-            const campaignName = document.getElementById('campaign-tag-input').value.trim();
+        // --- GUARDADO EN SUPABASE (LECTURA BASADA EN POSICIÓN DE COLUMNA Y NOMBRES) ---
+        els.processBtn.addEventListener('click', async () => {
+            const campaignName = els.campaignName.value.trim() || 'Campaña General';
+            const defaultCity = els.defaultCityInput ? els.defaultCityInput.value : 'auto';
+            
+            els.processBtn.disabled = true;
+            els.processBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando...';
 
-            if (!campaignName) { showToast('Falta el nombre de la campaña', 'error'); return; }
-            if (!appState.pendingCsvRows || appState.pendingCsvRows.length === 0) { showToast('Selecciona un archivo CSV', 'error'); return; }
-
-            const newContacts = appState.pendingCsvRows.map(row => {
+            const newContacts = appState.pendingFileData.map(row => {
                 const keys = Object.keys(row);
-                const phoneKey = keys.find(k => k.toLowerCase().includes('telef') || k.toLowerCase().includes('cel') || k.toLowerCase().includes('num')) || keys[0];
-                const nameKey = keys.find(k => k.toLowerCase().includes('nom') || k.toLowerCase().includes('client')) || keys[1];
-                const cityKey = keys.find(k => k.toLowerCase().includes('ciudad') || k.toLowerCase().includes('provincia') || k.toLowerCase().includes('ubicacion'));
+                const normKey = (k) => k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-                const phoneValue = normalizeEcuadorPhone(row[phoneKey] || '');
-                // Tomar la ciudad directamente de la columna del CSV
-                let cityValue = cityKey ? row[cityKey] : null;
-                if (!cityValue || cityValue.trim() === '') cityValue = 'Desconocida';
+                // 1. Detección Inteligente de Nombre de Columna
+                let phoneKey = keys.find(k => { const nk = normKey(k); return nk.includes('telef') || nk.includes('cel') || nk.includes('num') || nk.includes('phone'); });
+                let cityKey = keys.find(k => { const nk = normKey(k); return nk === 'ciudad' || nk === 'canton' || nk === 'provincia' || nk.includes('ciudad') || nk.includes('ubi') || nk.includes('agencia') || nk.includes('lugar'); });
+                let codeKey = keys.find(k => { const nk = normKey(k); return nk.includes('cod') || nk.includes('z4') || nk.includes('zona'); });
+                let nameKey = keys.find(k => { const nk = normKey(k); return nk.includes('nom') || nk.includes('client') || nk.includes('razon'); });
+
+                // 2. Fallback Estricto por Posición de Columna para la estructura específica del Excel:
+                // [Columna 0 = Teléfono] [Columna 1 = Ciudad] [Columna 2 = Código] [Columna 3 = Nombre]
+                if (!phoneKey && keys.length > 0) phoneKey = keys[0];
+                if (!cityKey && keys.length > 1) cityKey = keys[1];
+                if (!codeKey && keys.length > 2) codeKey = keys[2];
+                if (!nameKey && keys.length > 3) nameKey = keys[3];
+
+                const phoneRaw = String(row[phoneKey] || '');
+                const phoneValue = normalizeTo593(phoneRaw);
+                
+                // Lógica de asignación de Ciudad
+                let cityValue = 'General';
+                if (defaultCity !== 'auto') {
+                    cityValue = defaultCity; // Prioridad 1: Forzar selección manual
+                } else if (cityKey && row[cityKey] !== undefined && String(row[cityKey]).trim() !== '') {
+                    cityValue = String(row[cityKey]).trim(); // Prioridad 2: Segunda columna del Excel
+                }
+
+                const codeValue = codeKey && row[codeKey] !== undefined ? String(row[codeKey]).trim() : '';
+                const nameValue = nameKey && row[nameKey] !== undefined ? String(row[nameKey]).trim() : (codeValue ? `Registro: ${codeValue}` : 'Contacto Importado');
+
+                // Capturar TODAS las columnas adicionales en un JSON
+                const detalleInfo = {};
+                keys.forEach((k, idx) => {
+                    if (row[k] !== undefined && row[k] !== '' && k !== phoneKey && k !== nameKey && k !== cityKey && k !== codeKey) {
+                        detalleInfo[k || `Columna_${idx+1}`] = row[k];
+                    }
+                });
 
                 return {
                     id: crypto.randomUUID(),
                     phone: phoneValue,
-                    name: row[nameKey] || 'Contacto',
+                    name: nameValue || 'Sin Nombre',
                     city: cityValue,
-                    label: cityValue,
-                    campaign: campaignName
+                    codigo: codeValue,
+                    campaign: campaignName,
+                    detalle: detalleInfo
                 };
             }).filter(c => c.phone.trim() !== '');
 
-            appState.contacts = [...appState.contacts, ...newContacts];
-            saveLocalContacts();
-            updateCityFilterOptions(); // Actualizar el dropdown de ciudades
-
-            if (appState.supabaseClient) {
-                try {
-                    await appState.supabaseClient.from('campanias_contactos').insert(newContacts.map(c => ({
-                        telefono: c.phone,
-                        nombre: c.name,
-                        ciudad: c.city,
-                        clasificacion: c.label,
-                        campania_nombre: c.campaign
-                    })));
-                } catch(e) {}
-            }
-
-            showToast(`¡Campaña guardada con éxito!`, 'success');
-            
-            // Reset form
-            document.getElementById('campaign-tag-input').value = '';
-            document.getElementById('file-name-display').classList.add('hidden');
-            appState.pendingCsvRows = [];
-            
-            renderDirectoryTable();
-            switchTab('tab-database');
-        }
-
-        async function fetchContactsFromSupabase() {
-            if (!appState.supabaseClient) return;
-            try {
-                const { data, error } = await appState.supabaseClient.from('campanias_contactos').select('*');
-                if (data && data.length > 0) {
-                    appState.contacts = data.map(i => ({
-                        id: i.id || crypto.randomUUID(),
-                        phone: i.telefono || '',
-                        name: i.nombre || 'Sin Nombre',
-                        city: i.ciudad || i.clasificacion,
-                        label: i.clasificacion || 'Santo Domingo',
-                        campaign: i.campania_nombre || 'General'
-                    }));
-                    saveLocalContacts();
-                    renderDirectoryTable();
-                }
-            } catch(e) {}
-        }
-
-        function saveLocalContacts() {
-            localStorage.setItem('geolookup_campaign_contacts', JSON.stringify(appState.contacts));
-        }
-
-        function loadLocalContacts() {
-            const saved = localStorage.getItem('geolookup_campaign_contacts');
-            if (saved) {
-                try {
-                    appState.contacts = JSON.parse(saved);
-                } catch(e) {}
-            }
-            updateCityFilterOptions();
-        }
-
-        function updateCityFilterOptions() {
-            const select = document.getElementById('filter-city');
-            if (!select) return;
-            
-            // Obtener ciudades únicas
-            const uniqueCities = [...new Set(appState.contacts.map(c => c.label))].filter(Boolean);
-            
-            // Reconstruir opciones
-            select.innerHTML = '<option value="ALL">Todas las Ciudades</option>';
-            uniqueCities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.textContent = city;
-                select.appendChild(option);
-            });
-        }
-
-        function renderDirectoryTable() {
-            const tbody = document.getElementById('directory-table-body');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            const cityFilter = document.getElementById('filter-city')?.value || 'ALL';
-            const filtered = appState.contacts.filter(c => cityFilter === 'ALL' || c.label === cityFilter);
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-slate-400 text-sm font-medium">No hay registros para mostrar.</td></tr>`;
+            if (newContacts.length === 0) {
+                showToast("No se encontraron números válidos.", 'error');
+                els.processBtn.innerHTML = 'Procesar y Guardar';
                 return;
             }
 
-            filtered.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/50 transition-colors group";
-                const isSD = c.label && c.label.toLowerCase().includes('santo domingo');
-                const isManta = c.label && c.label.toLowerCase().includes('manta');
+            try {
+                const payload = newContacts.map(c => ({
+                    telefono: c.phone,
+                    nombre: c.name,
+                    ciudad: c.city,
+                    clasificacion: c.city,
+                    campania_nombre: c.campaign,
+                    codigo: c.codigo || null,
+                    detalle: c.detalle || {}
+                }));
                 
-                let badgeClass = 'bg-indigo-50 text-indigo-700';
-                let dotClass = 'bg-indigo-500';
+                let { error } = await appState.supabaseClient.from('campanias_contactos').insert(payload);
                 
-                if (isSD) { badgeClass = 'bg-emerald-50 text-emerald-700'; dotClass = 'bg-emerald-500'; }
-                else if (isManta) { badgeClass = 'bg-sky-50 text-sky-700'; dotClass = 'bg-sky-500'; }
+                // Fallback si en Supabase faltan las columnas 'detalle' o 'codigo'
+                if (error && error.code === 'PGRST204') {
+                    console.warn("Faltan columnas nuevas en Supabase. Guardando en modo básico...");
+                    const fallbackPayload = newContacts.map(c => ({
+                        telefono: c.phone,
+                        nombre: c.name,
+                        ciudad: c.city,
+                        clasificacion: c.city,
+                        campania_nombre: c.campaign
+                    }));
+                    
+                    const fallbackResult = await appState.supabaseClient.from('campanias_contactos').insert(fallbackPayload);
+                    error = fallbackResult.error;
+                    
+                    if(!error) showToast('Guardado en modo básico (Revisa el código SQL en el menú)', 'success');
+                }
 
+                if (error) throw error;
+
+                // Éxito
+                showToast(`${newContacts.length} contactos guardados con éxito.`);
+                appState.contacts = [...newContacts, ...appState.contacts];
+                
+                updateFilters();
+                renderDirectory();
+                
+                // Limpiar formulario
+                els.campaignName.value = '';
+                els.fileUpload.value = '';
+                appState.pendingFileData = [];
+                els.fileNameDisplay.textContent = 'Haz clic o arrastra tu archivo aquí';
+                els.fileNameDisplay.classList.replace('text-emerald-600', 'text-slate-700');
+                
+                switchView('view-directory');
+
+            } catch (error) {
+                showToast("Error al guardar en Supabase", 'error');
+                console.error(error);
+            } finally {
+                els.processBtn.innerHTML = 'Procesar y Guardar';
+                els.processBtn.disabled = true;
+            }
+        });
+
+        // --- BUSCADOR INTELIGENTE Y MODALES ---
+        function formatWaUrl(phone) {
+            return `https://wa.me/${phone}`;
+        }
+
+        function showResultModal(record) {
+            const header = document.getElementById('modal-header-color');
+            const icon = document.getElementById('modal-icon');
+            const iconContainer = document.getElementById('modal-icon-container');
+            const cityBadge = document.getElementById('modal-city-badge');
+            const extraDetailsContainer = document.getElementById('modal-extra-details');
+
+            // Establecer valores principales
+            document.getElementById('modal-phone').textContent = record.phone;
+            document.getElementById('modal-name').textContent = record.name;
+            document.getElementById('modal-campaign').textContent = record.campaign;
+            document.getElementById('modal-code-text').textContent = record.codigo || 'N/A';
+            document.getElementById('modal-wa-btn').href = formatWaUrl(record.phone);
+            
+            const cityUpper = String(record.city).toUpperCase();
+            cityBadge.textContent = cityUpper;
+
+            // Limpiar clases de color
+            header.className = "pt-8 pb-6 px-6 text-center border-b border-slate-100 transition-colors";
+            iconContainer.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl mb-3 bg-white shadow-sm border border-slate-100";
+            cityBadge.className = "inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-white shadow-sm mb-1";
+
+            // Asignación de colores
+            if (cityUpper.includes('SANTO DOMINGO') || cityUpper.includes('SD')) {
+                header.classList.add('bg-emerald-50');
+                icon.className = "fa-solid fa-location-dot text-emerald-500";
+                cityBadge.classList.add('text-emerald-700');
+            } else if (cityUpper.includes('MANTA') || cityUpper.includes('MANABI')) {
+                header.classList.add('bg-cyan-50');
+                icon.className = "fa-solid fa-location-dot text-cyan-500";
+                cityBadge.classList.add('text-cyan-700');
+            } else {
+                header.classList.add('bg-blue-50');
+                icon.className = "fa-solid fa-location-dot text-blue-500";
+                cityBadge.classList.add('text-blue-700');
+            }
+
+            // Renderizar Detalles Extra Dinámicos
+            extraDetailsContainer.innerHTML = '';
+            if (record.detalle && Object.keys(record.detalle).length > 0) {
+                Object.entries(record.detalle).forEach(([key, value]) => {
+                    const div = document.createElement('div');
+                    div.className = "flex justify-between items-start text-xs border-b border-slate-100 last:border-0 py-1.5";
+                    div.innerHTML = `<span class="font-bold text-slate-500 mr-2 capitalize shrink-0">${key}:</span><span class="text-slate-800 text-right font-medium break-words">${value}</span>`;
+                    extraDetailsContainer.appendChild(div);
+                });
+                extraDetailsContainer.classList.remove('hidden');
+            } else {
+                extraDetailsContainer.classList.add('hidden');
+            }
+
+            // Mostrar Modal
+            els.resultModal.classList.remove('hidden');
+            setTimeout(() => {
+                els.resultModal.classList.remove('opacity-0', 'pointer-events-none');
+                els.resultModal.querySelector('.modal-content').classList.remove('scale-95');
+                els.resultModal.querySelector('.modal-content').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModals() {
+            [els.resultModal, els.notFoundModal].forEach(modal => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modal.querySelector('.modal-content').classList.remove('scale-100');
+                modal.querySelector('.modal-content').classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 200);
+            });
+        }
+
+        els.searchBtn.addEventListener('click', () => {
+            const inputVal = els.searchInput.value.trim();
+            if (!inputVal) return;
+
+            const searchPhone = normalizeTo593(inputVal);
+            els.searchInput.value = '';
+            
+            // Búsqueda en la base de datos local
+            const record = appState.contacts.find(c => c.phone === searchPhone);
+
+            if (record) {
+                showResultModal(record);
+            } else {
+                // NO EXISTE
+                document.getElementById('not-found-phone').textContent = inputVal;
+                els.notFoundModal.classList.remove('hidden');
+                setTimeout(() => {
+                    els.notFoundModal.classList.remove('opacity-0', 'pointer-events-none');
+                    els.notFoundModal.querySelector('.modal-content').classList.remove('scale-95');
+                    els.notFoundModal.querySelector('.modal-content').classList.add('scale-100');
+                }, 10);
+            }
+        });
+
+        // Eventos de cierre de modales
+        els.closeResultModal.addEventListener('click', closeModals);
+        els.resultModalBg.addEventListener('click', closeModals);
+        els.closeNotFound.addEventListener('click', closeModals);
+        els.notFoundModalBg.addEventListener('click', closeModals);
+
+        els.searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') els.searchBtn.click();
+        });
+
+        // --- DIRECTORIO Y FILTROS ---
+        function updateFilters() {
+            const campaigns = new Set();
+            const cities = new Set();
+            
+            appState.contacts.forEach(c => {
+                if (c.campaign) campaigns.add(c.campaign);
+                if (c.city) cities.add(c.city);
+            });
+
+            els.filterCampaign.innerHTML = '<option value="all">Todas las Campañas</option>';
+            campaigns.forEach(camp => {
+                els.filterCampaign.innerHTML += `<option value="${camp}">${camp}</option>`;
+            });
+
+            els.filterCity.innerHTML = '<option value="all">Todas las Ciudades</option>';
+            cities.forEach(city => {
+                els.filterCity.innerHTML += `<option value="${city}">${city}</option>`;
+            });
+        }
+
+        function renderDirectory() {
+            const selCamp = els.filterCampaign.value;
+            const selCity = els.filterCity.value;
+
+            let filtered = appState.contacts;
+            if (selCamp !== 'all') filtered = filtered.filter(c => c.campaign === selCamp);
+            if (selCity !== 'all') filtered = filtered.filter(c => c.city === selCity);
+
+            els.directoryTbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                els.directoryTbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-slate-500">No hay contactos registrados. Sube un archivo en 'Importar Datos'.</td></tr>`;
+                return;
+            }
+
+            const displayList = filtered.slice(0, 100);
+
+            displayList.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors group";
+                
+                const hasDetails = c.detalle && Object.keys(c.detalle).length > 0;
+                
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-mono font-bold text-slate-900">${c.phone}</td>
-                    <td class="px-6 py-4 text-slate-700 font-bold">${c.name}</td>
-                    <td class="px-6 py-4 text-slate-500 text-xs font-bold"><span class="bg-slate-100 px-2.5 py-1 rounded-md">${c.campaign}</span></td>
-                    <td class="px-6 py-4 text-center">
-                        <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-extrabold ${badgeClass}">
-                            <span class="w-1.5 h-1.5 rounded-full ${dotClass}"></span>
-                            <span>${c.label}</span>
-                        </span>
+                    <td class="px-6 py-4 font-mono font-bold text-slate-800">${c.phone}</td>
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-slate-900">${c.name}</div>
+                        ${hasDetails ? `<div class="text-[10px] text-blue-500 font-semibold mt-0.5"><i class="fa-solid fa-list-ul mr-1"></i>+ Datos extra</div>` : ''}
                     </td>
-                    <td class="px-6 py-4 text-center">
-                        <a href="${formatWaUrl(c.phone)}" target="_blank" class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto hover:bg-[#25D366] hover:text-white transition-colors shadow-sm group-hover:shadow">
+                    <td class="px-6 py-4 text-slate-500 font-medium text-xs max-w-[150px] truncate" title="${c.codigo}">${c.codigo || '-'}</td>
+                    <td class="px-6 py-4">
+                        <span class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs font-semibold border border-slate-200 uppercase">${c.city}</span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500 truncate max-w-[150px]">${c.campaign}</td>
+                    <td class="px-6 py-4 text-right">
+                        <a href="${formatWaUrl(c.phone)}" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-50 text-green-600 hover:bg-green-500 hover:text-white transition-colors">
                             <i class="fa-brands fa-whatsapp"></i>
                         </a>
                     </td>
                 `;
-                tbody.appendChild(tr);
+                els.directoryTbody.appendChild(tr);
             });
-        }
-
-        function exportFilteredCsv() {
-            if (appState.contacts.length === 0) {
-                showToast('No hay datos para exportar', 'error');
-                return;
+            
+            if(filtered.length > 100) {
+                 const tr = document.createElement('tr');
+                 tr.innerHTML = `<td colspan="6" class="px-6 py-3 text-center text-xs font-semibold text-slate-400 bg-slate-50">Mostrando 100 de ${filtered.length} registros</td>`;
+                 els.directoryTbody.appendChild(tr);
             }
-            const headers = "Telefono,Nombre,Ciudad,Campania\n";
-            const rows = appState.contacts.map(c => `"${c.phone}","${c.name}","${c.label}","${c.campaign}"`).join("\n");
-            const blob = new Blob([headers + rows], { type: 'text/csv' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `leads_geolookup.csv`;
-            a.click();
         }
 
-        function downloadTemplateCsv() {
-            // El BOM (\uFEFF) ayuda a que Excel abra el archivo directamente reconociendo tildes o caracteres UTF-8
-            const bom = "\uFEFF"; 
-            const headers = "Telefono,Nombre,Ciudad\n";
-            const rows = "0991234567,Juan Perez,Santo Domingo\n0987654321,Maria Lopez,Manta\n0961112233,Carlos Zambrano,Portoviejo";
-            
-            const blob = new Blob([bom + headers + rows], { type: 'text/csv;charset=utf-8;' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "plantilla_importacion_leads.csv";
-            
-            document.body.appendChild(a); // Requerido para Firefox
-            a.click();
-            document.body.removeChild(a);
-            
-            showToast('Plantilla descargada con éxito', 'success');
-        }
+        els.filterCampaign.addEventListener('change', renderDirectory);
+        els.filterCity.addEventListener('change', renderDirectory);
 
-        function showToast(msg, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            
-            let colors = type === 'success' 
-                ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' 
-                : (type === 'error' ? 'bg-red-600 text-white shadow-xl shadow-red-600/20' : 'bg-white text-slate-800 shadow-xl border border-slate-200');
-            
-            toast.className = `p-4 rounded-2xl text-sm font-bold transition-all transform translate-x-full ${colors} flex items-center space-x-3`;
-            toast.innerHTML = `
-                <i class="${type === 'success' ? 'fa-solid fa-circle-check text-emerald-400' : (type === 'error' ? 'fa-solid fa-circle-xmark text-white' : 'fa-solid fa-circle-info text-blue-500')} text-lg"></i>
-                <span>${msg}</span>
-            `;
-            
-            container.appendChild(toast);
-            
-            // Animate in
-            setTimeout(() => {
-                toast.classList.remove('translate-x-full');
-            }, 10);
+        // Generar plantilla de Excel
+        els.downloadTemplate.addEventListener('click', (e) => {
+            e.preventDefault();
+            const csvContent = "Telefono,Ciudad,Codigo,Nombre\n+593 98 510 0814,La Concordia,2350858623.DED6,Paola Sanchez\n+593 99 123 4567,Santo Domingo,Z4-01,Juan Perez\n+593 98 765 4321,Manta,Z4-02,Maria Lopez";
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "plantilla_importacion.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 
-            // Animate out
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                toast.classList.add('opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+        // --- SQL SUPABASE ---
+        const sqlText = `-- Crear la tabla principal
+CREATE TABLE IF NOT EXISTS campanias_contactos (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    telefono TEXT NOT NULL,
+    nombre TEXT,
+    ciudad TEXT,
+    clasificacion TEXT,
+    campania_nombre TEXT,
+    codigo TEXT,
+    detalle JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- Habilitar permisos de lectura y escritura (RLS)
+ALTER TABLE campanias_contactos ENABLE ROW LEVEL SECURITY;
+
+-- Crear política para permitir guardar y leer desde la App Web
+CREATE POLICY "Permitir todo a anon" ON campanias_contactos 
+    FOR ALL USING (true) WITH CHECK (true);`;
+
+        els.sqlCodeArea.value = sqlText;
+
+        window.copySql = function() {
+            try {
+                // Crear un elemento de texto temporal para copiar
+                const tempTextArea = document.createElement("textarea");
+                tempTextArea.value = sqlText;
+                // Moverlo fuera de la pantalla para que no sea visible
+                tempTextArea.style.position = "absolute";
+                tempTextArea.style.left = "-999999px";
+                document.body.appendChild(tempTextArea);
+                
+                // Seleccionar y copiar
+                tempTextArea.select();
+                const successful = document.execCommand('copy');
+                
+                // Eliminar el elemento temporal
+                document.body.removeChild(tempTextArea);
+                
+                if (successful) {
+                    showToast("Código SQL copiado al portapapeles", 'success');
+                } else {
+                    showToast("No se pudo copiar automáticamente. Selecciónalo manualmente.", 'error');
+                }
+            } catch (err) {
+                console.error("Error copiando", err);
+                showToast("No se pudo copiar automáticamente. Selecciónalo manualmente.", 'error');
+            }
         }
     </script>
 </body>
